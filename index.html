@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Trip Planning — Family Trip 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root {
     /* Apple color palette */
@@ -36,7 +37,9 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--smoke);
+    background-color: #e9e9f0;
+    background-image: radial-gradient(rgba(0,0,0,0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
     color: var(--cream);
     font-family: var(--font);
     font-size: 17px;
@@ -99,6 +102,31 @@
 
   .nav-link:hover { color: var(--cream); }
   .nav-link.active { color: var(--ember); font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .top-nav {
+      flex-wrap: wrap;
+      height: auto;
+      padding: 8px 12px 0;
+      gap: 0;
+    }
+    .nav-logo {
+      width: 100%;
+      padding: 4px 0 8px;
+      font-size: 15px;
+    }
+    .nav-links {
+      width: 100%;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-link {
+      font-size: 11px;
+      padding: 0 10px;
+      height: 36px;
+      flex: 1;
+      justify-content: center;
+    }
+  }
 
   /* ── PAGE SYSTEM ── */
   .page { display: none; animation: fadeIn 0.25s ease; }
@@ -298,6 +326,21 @@
 
   .hotel-name { font-weight: 500; color: var(--cream); letter-spacing: -0.2px; }
   .hotel-detail { font-size: 12px; color: var(--ash); margin-top: 3px; }
+
+  /* ── TRANSPORT ── */
+  .transport-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 768px) {
+    .transport-grid { grid-template-columns: 1fr; }
+  }
+  .transport-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
 
   /* ── TODO ── */
   .todo-list { display: flex; flex-direction: column; gap: 10px; }
@@ -960,6 +1003,485 @@
   }
 
   .drive-big-day td { background: rgba(0,113,227,0.04); }
+
+  /* ── LEAFLET MAP ── */
+  #map-houston, #map-sanantonio {
+    width: 100%; height: 100%; min-height: 600px;
+  }
+  .map-pane iframe { display: none; } /* fallback hidden */
+
+  .bbq-num-marker {
+    width: 30px; height: 30px;
+    background: #0071e3; color: #fff;
+    border-radius: 50%; border: 2.5px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font); font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, transform 0.15s;
+  }
+  .bbq-num-marker.is-selected { background: #ff3b30; transform: scale(1.18); }
+
+  .hotel-marker-icon {
+    width: 34px; height: 34px;
+    background: #1d1d1f; color: #fff;
+    border-radius: 10px; border: 2.5px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.28);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: 14px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  .leaflet-popup-content { margin: 0 !important; }
+  .leaflet-popup-tip-container { display: none; }
+
+  .map-popup {
+    font-family: var(--font);
+    padding: 16px 18px 18px;
+    min-width: 220px;
+  }
+  .map-popup-name { font-size: 15px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.2px; margin-bottom: 3px; }
+  .map-popup-meta { font-size: 12px; color: #6e6e73; margin-bottom: 12px; }
+  .map-popup-btn {
+    display: block; width: 100%; padding: 9px 0;
+    background: #0071e3; color: #fff; border: none;
+    border-radius: 980px; font-size: 13px; font-weight: 600;
+    cursor: pointer; text-align: center; text-decoration: none;
+    font-family: var(--font); letter-spacing: -0.1px;
+    transition: background 0.15s;
+  }
+  .map-popup-btn:hover { background: #0077ed; }
+
+  /* ── TECH BLOG CONVERSATION ── */
+  .blog-intro {
+    font-size: 17px; color: var(--ash); line-height: 1.75;
+    letter-spacing: -0.2px; margin-bottom: 0;
+  }
+  .blog-intro strong { color: var(--cream); font-weight: 600; }
+
+  .what-claude-did {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  @media(max-width:700px) { .what-claude-did { grid-template-columns: 1fr; } }
+
+  .did-card {
+    background: var(--char); border: 1px solid var(--bark);
+    border-radius: var(--radius-md); padding: 20px 22px;
+    box-shadow: var(--shadow-sm); transition: box-shadow 0.2s;
+  }
+  .did-card:hover { box-shadow: var(--shadow-md); }
+  .did-icon { font-size: 22px; margin-bottom: 10px; }
+  .did-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; color: var(--cream); margin-bottom: 6px; }
+  .did-desc { font-size: 13px; color: var(--ash); line-height: 1.65; letter-spacing: -0.1px; }
+
+  /* conversation thread */
+  .convo-thread {
+    display: flex; flex-direction: column; gap: 0;
+    border: 1px solid var(--bark); border-radius: var(--radius-lg);
+    overflow: hidden; background: var(--char); box-shadow: var(--shadow-sm);
+  }
+
+  .convo-turn {
+    display: flex; gap: 14px; padding: 22px 24px;
+    border-bottom: 1px solid var(--bark);
+    animation: fadeIn 0.3s ease;
+  }
+  .convo-turn:last-child { border-bottom: none; }
+  .convo-turn.claude-turn { background: rgba(0,113,227,0.02); }
+  .convo-turn.user-turn   { background: var(--char); }
+
+  .convo-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0; margin-top: 2px;
+    border: 1px solid var(--bark);
+  }
+  .claude-avatar { background: rgba(0,113,227,0.1); }
+  .user-avatar   { background: rgba(0,0,0,0.04); }
+
+  .convo-body { flex: 1; min-width: 0; }
+
+  .convo-sender {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ash); margin-bottom: 8px;
+  }
+  .claude-turn .convo-sender { color: var(--ember); }
+
+  .convo-text {
+    font-size: 14px; color: var(--cream); line-height: 1.7;
+    letter-spacing: -0.1px;
+  }
+  .convo-text p { margin-bottom: 10px; }
+  .convo-text p:last-child { margin-bottom: 0; }
+  .convo-text strong { font-weight: 600; }
+  .convo-text em { font-style: normal; color: var(--ash); }
+
+  .convo-plan-card {
+    margin-top: 14px; background: rgba(0,0,0,0.02);
+    border: 1px solid var(--bark); border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .plan-row {
+    display: grid; grid-template-columns: 110px 1fr;
+    padding: 9px 14px; border-bottom: 1px solid var(--bark);
+    font-size: 13px; letter-spacing: -0.1px;
+  }
+  .plan-row:last-child { border-bottom: none; }
+  .plan-label { font-weight: 600; color: var(--ash); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 1px; }
+  .plan-value { color: var(--cream); }
+
+  .convo-options { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .option-card {
+    display: grid; grid-template-columns: 28px 1fr;
+    gap: 12px; align-items: start;
+    background: var(--char); border: 1px solid var(--bark);
+    border-radius: var(--radius-sm); padding: 12px 14px;
+  }
+  .option-card.recommended { border-color: rgba(0,113,227,0.35); background: rgba(0,113,227,0.04); }
+  .option-letter { font-size: 13px; font-weight: 700; color: var(--ember); }
+  .option-name { font-size: 13px; font-weight: 600; color: var(--cream); margin-bottom: 3px; letter-spacing: -0.1px; }
+  .option-desc { font-size: 12px; color: var(--ash); line-height: 1.5; }
+  .option-rec-badge {
+    display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 980px; background: rgba(0,113,227,0.12); color: #0055b3;
+    vertical-align: middle;
+  }
+
+  .convo-questions { margin-top: 14px; }
+  .convo-questions p { font-size: 13px; color: var(--ash); margin-bottom: 6px; }
+  .convo-questions p strong { color: var(--cream); }
+
+  .convo-booking-result {
+    margin-top: 14px; background: rgba(52,199,89,0.06);
+    border: 1px solid rgba(52,199,89,0.2); border-radius: var(--radius-sm); padding: 14px 16px;
+  }
+  .booking-title { font-size: 13px; font-weight: 600; color: #1a8a3a; margin-bottom: 8px; }
+  .booking-detail { font-size: 13px; color: var(--ash); line-height: 1.6; }
+  .booking-detail strong { color: var(--cream); }
+
+  /* conversation dialog – extended classes */
+  .convo-speaker {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ash); margin-bottom: 8px;
+  }
+  .claude-turn .convo-speaker { color: var(--ember); }
+
+  .convo-plan-card {
+    margin-top: 14px; background: rgba(0,0,0,0.02);
+    border: 1px solid var(--bark); border-radius: var(--radius-sm); overflow: hidden;
+  }
+  .convo-plan-title {
+    padding: 10px 14px; font-size: 12px; font-weight: 600; color: var(--ash);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--bark); background: rgba(0,0,0,0.03);
+  }
+  .convo-plan-row {
+    display: grid; grid-template-columns: 110px 1fr;
+    padding: 9px 14px; border-bottom: 1px solid var(--bark);
+    font-size: 13px; letter-spacing: -0.1px; gap: 10px;
+  }
+  .convo-plan-row:last-child { border-bottom: none; }
+  .convo-plan-row-drive { background: rgba(255,149,0,0.06); }
+  .convo-plan-label { font-weight: 600; color: var(--ash); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 1px; }
+  .convo-plan-note {
+    padding: 9px 14px; font-size: 12px; color: var(--ash);
+    background: rgba(0,0,0,0.02); border-top: 1px solid var(--bark); font-style: italic;
+  }
+
+  .convo-booking-title {
+    font-size: 13px; font-weight: 600; color: #1a8a3a; margin-bottom: 10px;
+  }
+  .convo-booking-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: var(--ash); padding: 5px 0;
+    border-bottom: 1px solid rgba(52,199,89,0.12);
+  }
+  .convo-booking-row:last-child { border-bottom: none; }
+  .convo-booking-row span:last-child { color: var(--cream); font-weight: 500; }
+
+  /* trip summary card on overview */
+  .trip-summary-card {
+    background: var(--char); border: 1px solid var(--bark);
+    border-radius: var(--radius-lg); padding: 28px 32px 24px;
+    margin-bottom: 28px;
+  }
+  .trip-summary-headline {
+    font-size: 20px; font-weight: 600; color: var(--gold);
+    letter-spacing: -0.3px; line-height: 1.35; margin-bottom: 12px;
+  }
+  .trip-summary-body {
+    font-size: 14px; color: var(--ash); line-height: 1.75;
+    margin-bottom: 22px; max-width: 680px;
+  }
+  .trip-summary-highlights {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  @media (max-width: 600px) { .trip-summary-highlights { grid-template-columns: 1fr; } }
+  .trip-highlight {
+    background: var(--smoke); border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .trip-highlight-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ash); margin-bottom: 4px;
+  }
+  .trip-highlight-value {
+    font-size: 13px; font-weight: 500; color: var(--gold); letter-spacing: -0.1px;
+  }
+
+  /* convo section description */
+  .convo-section-desc {
+    font-size: 14px; color: var(--ash); line-height: 1.65;
+    margin-bottom: 16px; padding: 0 2px;
+  }
+
+  /* ════════════════════════════════════════
+     DESIGN ENHANCEMENT — Texture & Depth
+     ════════════════════════════════════════ */
+
+  /* ── Overview hero — dark dramatic gradient ── */
+  #page-overview .page-hero {
+    background:
+      radial-gradient(ellipse 90% 70% at 50% 110%, rgba(0,113,227,0.22) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 50% at 85% 10%, rgba(52,199,89,0.08) 0%, transparent 60%),
+      linear-gradient(148deg, #080c18 0%, #0c1a32 38%, #101f2e 65%, #0a1208 100%);
+    padding: 96px 40px 48px;
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+  }
+  #page-overview .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+  #page-overview .hero-eyebrow { color: rgba(100,170,255,0.75); letter-spacing: 0.08em; }
+  #page-overview .hero-title   { color: #ffffff; }
+  #page-overview .hero-title em { color: #60aaff; }
+  #page-overview .hero-sub     { color: rgba(255,255,255,0.48); }
+
+  /* ── Other page heroes — soft indigo gradient ── */
+  #page-days .page-hero,
+  #page-techblog .page-hero {
+    background: linear-gradient(150deg, #ffffff 0%, #f0f4ff 55%, #e8edf8 100%);
+    border-bottom: 1px solid rgba(0,113,227,0.1);
+  }
+
+  /* ── BBQ page headers — same soft gradient ── */
+  #page-houston .bbq-page-header,
+  #page-sanantonio .bbq-page-header {
+    background: linear-gradient(150deg, #ffffff 0%, #f0f4ff 55%, #e8edf8 100%);
+    border-bottom: 1px solid rgba(0,113,227,0.1);
+    padding: 40px 40px 28px;
+  }
+
+  /* ── Section labels — bold left bar + rule ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin: 52px 0 20px;
+    padding: 0 0 0 10px;
+    border-bottom: none;
+    border-left: 3px solid var(--ember);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--bark);
+  }
+
+  /* ── Stat chips — punchy filled pills ── */
+  .stat-chip {
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.06);
+    font-size: 13px;
+    font-weight: 500;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .stat-chip:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.13); transform: translateY(-1px); }
+  .stat-chip strong { color: var(--ember); font-weight: 700; }
+
+  /* ── Card hover lift ── */
+  .info-card {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .info-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* ── Day cards — city color-coded left border ── */
+  .days-grid .day-card:nth-child(1) { border-left: 4px solid #0071e3; } /* Houston arrive */
+  .days-grid .day-card:nth-child(2) { border-left: 4px solid #0071e3; } /* Houston day 2  */
+  .days-grid .day-card:nth-child(3) { border-left: 4px solid #ff9500; } /* Houston → SA   */
+  .days-grid .day-card:nth-child(4) { border-left: 4px solid #ff6b35; } /* SA zoo         */
+  .days-grid .day-card:nth-child(5) { border-left: 4px solid #34c759; } /* SA → Kalahari  */
+  .days-grid .day-card:nth-child(6) { border-left: 4px solid #af52de; } /* Kalahari → FW  */
+  .days-grid .day-card:nth-child(7) { border-left: 4px solid #ff3b30; } /* FW → Dallas    */
+  .days-grid .day-card:nth-child(8) { border-left: 4px solid #5856d6; } /* Fly home       */
+
+  /* ── Trip summary highlights — city color bars ── */
+  .trip-summary-highlights .trip-highlight:nth-child(1) { border-left: 3px solid #0071e3; background: rgba(0,113,227,0.04); }
+  .trip-summary-highlights .trip-highlight:nth-child(2) { border-left: 3px solid #ff6b35; background: rgba(255,107,53,0.04); }
+  .trip-summary-highlights .trip-highlight:nth-child(3) { border-left: 3px solid #34c759; background: rgba(52,199,89,0.04); }
+  .trip-summary-highlights .trip-highlight:nth-child(4) { border-left: 3px solid #af52de; background: rgba(175,82,222,0.04); }
+  .trip-summary-highlights .trip-highlight:nth-child(5) { border-left: 3px solid #ff3b30; background: rgba(255,59,48,0.04); }
+  .trip-summary-highlights .trip-highlight:nth-child(6) { border-left: 3px solid #5856d6; background: rgba(88,86,214,0.04); }
+  .trip-summary-highlights .trip-highlight { border-radius: var(--radius-sm); }
+
+  /* ── Trip summary card ── */
+  .trip-summary-card {
+    background: #ffffff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05);
+    border: none;
+  }
+
+  /* ── Capability grid hover ── */
+  .cap-card {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .cap-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* ── Overview container ── */
+  #page-overview .container { padding-top: 0; }
+  #page-overview .trip-summary-card {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05);
+  }
+
+  /* ── Conversation thread — white surface so turns read clearly ── */
+  .convo-thread {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--bark);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    overflow: hidden;
+  }
+  .convo-turn { background: #ffffff; }
+  .claude-turn { background: #f7f9ff !important; }
+  .user-turn  { background: #ffffff !important; }
+
+  /* ── BBQ items — stronger featured & selected ── */
+  .bbq-item.featured {
+    border-left-width: 4px;
+    background: rgba(0,113,227,0.035);
+  }
+
+  /* ── Note card — more visible ── */
+  .note-card {
+    background: #ffffff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border: none;
+    border-left: 4px solid var(--ember);
+    border-radius: var(--radius-md);
+  }
+
+  /* ── Footer — dark ── */
+  footer {
+    background: #0e0e14 !important;
+    border-top: none !important;
+    padding: 32px 40px !important;
+  }
+  .footer-brand { color: rgba(255,255,255,0.9) !important; }
+  .footer-meta  { color: rgba(255,255,255,0.38) !important; }
+
+  /* option cards – block layout (not grid) */
+  .option-card { display: block; }
+  .option-badge {
+    display: inline-block; margin-bottom: 6px; font-size: 10px; font-weight: 600;
+    padding: 2px 9px; border-radius: 980px; background: rgba(0,113,227,0.12); color: #0055b3;
+    letter-spacing: 0.02em;
+  }
+  .option-title { font-size: 13px; font-weight: 600; color: var(--cream); margin-bottom: 4px; letter-spacing: -0.1px; }
+  .option-detail { font-size: 12px; color: var(--ash); line-height: 1.55; margin-bottom: 6px; }
+  .option-meta { font-size: 11px; color: var(--ash); font-style: italic; }
+
+  /* ── ACTIVITY LINK ── */
+  .ticket-name a { color: var(--cream); text-decoration: none; }
+  .ticket-name a:hover { color: var(--ember); text-decoration: underline; }
+
+  /* ── YELP BUTTON ── */
+  .yelp-btn {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 3px 9px; border-radius: 4px; margin-top: 6px;
+    background: rgba(196,18,48,0.1); color: #c41230;
+    text-decoration: none; white-space: nowrap; letter-spacing: 0.02em;
+    transition: background 0.15s ease;
+  }
+  .yelp-btn:hover { background: rgba(196,18,48,0.2); }
+
+  /* ── GITHUB LINK ── */
+  .github-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: var(--ash);
+    text-decoration: none; padding: 6px 14px; border-radius: 8px;
+    border: 1px solid var(--bark); margin-top: 16px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .github-link:hover { color: var(--cream); border-color: var(--ash); }
+
+  /* ── LANG TOGGLE ── */
+  .lang-toggle {
+    background: none; border: 1px solid rgba(0,0,0,0.18); border-radius: 6px;
+    font-size: 11px; font-weight: 700; color: rgba(0,0,0,0.5);
+    padding: 3px 9px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    font-family: var(--font); letter-spacing: 0.04em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .lang-toggle:hover { color: var(--cream); border-color: rgba(0,0,0,0.4); }
+
+  /* ── MAP MOBILE — padding + rounded border ── */
+  @media (max-width: 900px) {
+    .map-pane {
+      margin: 16px 16px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--bark);
+      border-right: 1px solid var(--bark);
+      min-height: 360px;
+    }
+    #map-houston, #map-sanantonio { min-height: 360px; }
+    .list-pane { max-height: none; }
+  }
+
+  /* ── MOBILE OVERVIEW FIXES ── */
+  @media (max-width: 600px) {
+    /* Badges — fit-content so they don't stretch */
+    .badge-booked, .badge-walkin, .badge-optional { display: inline-block; width: fit-content; }
+
+    /* Stat chips — 3 per row */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-chip { justify-content: center; text-align: center; }
+
+    /* Driving table — hide Est. Time column, tighten padding */
+    .drive-summary-table th:last-child,
+    .drive-summary-table td:last-child { display: none; }
+    .drive-summary-table td, .drive-summary-table th { padding: 10px 8px; }
+    .drive-summary-table { font-size: 12px; }
+
+    /* Hotels table — tighten */
+    .data-table td, .data-table th { padding: 10px 8px; }
+    .data-table { font-size: 13px; }
+    .hotel-name { font-size: 13px; }
+    .hotel-detail { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -968,12 +1490,13 @@
 <nav class="top-nav">
   <div class="nav-logo">AI Trip Planning</div>
   <div class="nav-links">
-    <div class="nav-link active" data-page="overview" onclick="showPage('overview', this)">Overview</div>
-    <div class="nav-link" data-page="days" onclick="showPage('days', this)">Day by Day</div>
-    <div class="nav-link" data-page="houston" onclick="showPage('houston', this)">Houston BBQ</div>
-    <div class="nav-link" data-page="sanantonio" onclick="showPage('sanantonio', this)">SA BBQ</div>
-    <div class="nav-link" data-page="techblog" onclick="showPage('techblog', this)">Tech Blog</div>
+    <div class="nav-link active" data-page="overview" data-i18n="nav.overview" onclick="showPage('overview', this)">Overview</div>
+    <div class="nav-link" data-page="days" data-i18n="nav.days" onclick="showPage('days', this)">Day by Day</div>
+    <div class="nav-link" data-page="houston" data-i18n="nav.houston" onclick="showPage('houston', this)">Houston BBQ</div>
+    <div class="nav-link" data-page="sanantonio" data-i18n="nav.sa" onclick="showPage('sanantonio', this)">SA BBQ</div>
+    <div class="nav-link" data-page="techblog" data-i18n="nav.tech" onclick="showPage('techblog', this)">Tech Blog</div>
   </div>
+  <button class="lang-toggle" onclick="setLang(currentLang==='en'?'zh':'en')">中</button>
 </nav>
 
 
@@ -985,10 +1508,25 @@
   <div class="page-hero">
     <div class="hero-eyebrow">Family Trip · Spring Break 2026 · Mar 29 – Apr 5</div>
     <h1 class="hero-title">Texas<em>Spring Break</em></h1>
-    <p class="hero-sub">Dad · Mom · Boy 1 · Boy 2 &nbsp;·&nbsp; SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</p>
+    <p class="hero-sub">Family of Four &nbsp;·&nbsp; Mar 29 – Apr 5, 2026</p>
   </div>
 
   <div class="container">
+
+    <!-- Trip Summary -->
+    <div class="section-label" data-i18n="sec.overview" style="margin-top:36px;">Overview</div>
+    <div class="trip-summary-card">
+      <div class="trip-summary-headline">Eight days across Texas — NASA, a rodeo, a waterpark, and the Lakers.</div>
+      <div class="trip-summary-body">Landing in Houston for two days at Space Center including a pre-booked Apollo Mission Control tram tour, then a 200-mile drive south to San Antonio for the Riverwalk, the zoo, and a riverboat cruise. Out via Natural Bridge Caverns and lunch with a friend in Austin, then two days at Kalahari Round Rock's indoor waterpark. A 185-mile push to Fort Worth's Historic Stockyards for the Championship Rodeo. Five hotels, one rental car, and 20 Michelin-ranked BBQ spots researched across the route.</div>
+      <div class="trip-summary-highlights">
+        <div class="trip-highlight"><div class="trip-highlight-label">Houston · Mar 29–31</div><div class="trip-highlight-value">Westin Galleria · Space Center · Apollo Tram</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">San Antonio · Mar 31–Apr 2</div><div class="trip-highlight-value">Hyatt Riverwalk · Zoo · Riverboat Cruise</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">En Route · Apr 2</div><div class="trip-highlight-value">Natural Bridge Caverns · Lunch in Austin</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Round Rock · Apr 2–4</div><div class="trip-highlight-value">Kalahari · Indoor + Outdoor Waterpark</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Fort Worth · Apr 3–4</div><div class="trip-highlight-value">SpringHill Stockyards · Championship Rodeo</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Dallas · Apr 4–5</div><div class="trip-highlight-value">Lakers vs. Mavericks · Fly home DAL → SFO</div></div>
+      </div>
+    </div>
 
     <!-- Quick Stats -->
     <div class="stat-row">
@@ -1000,10 +1538,11 @@
       <div class="stat-chip"><strong>~735</strong> mi Driving</div>
     </div>
 
-    <!-- Flights -->
-    <div class="section-label">Flights</div>
-    <div class="card-row">
+    <!-- Transportation -->
+    <div class="section-label" data-i18n="sec.transport">Transportation</div>
+    <div class="transport-grid">
       <div class="info-card">
+        <div class="transport-icon">✈️</div>
         <div class="card-eyebrow">Outbound · United Airlines</div>
         <div class="card-route">SFO → IAH</div>
         <div class="card-date">Sun Mar 29 &nbsp;·&nbsp; 7:00 AM → 1:00 PM</div>
@@ -1011,6 +1550,15 @@
         <span class="card-status status-booked">Booked</span>
       </div>
       <div class="info-card">
+        <div class="transport-icon">🚗</div>
+        <div class="card-eyebrow">Car Rental · Hertz</div>
+        <div class="card-route" style="font-size:20px;">Genesis G70</div>
+        <div class="card-date">IAH pickup Mar 29 @ 2:00 PM</div>
+        <div class="card-detail">DAL drop-off Apr 5 @ 6:00 AM</div>
+        <span class="card-status status-booked">Booked</span>
+      </div>
+      <div class="info-card">
+        <div class="transport-icon">✈️</div>
         <div class="card-eyebrow">Return · Southwest Airlines</div>
         <div class="card-route">DAL → SFO</div>
         <div class="card-date">Sun Apr 5 &nbsp;·&nbsp; 7:30 AM → 9:30 AM (non-stop)</div>
@@ -1020,24 +1568,14 @@
       </div>
     </div>
 
-    <!-- Car Rental -->
-    <div class="section-label">Car Rental</div>
-    <div class="info-card">
-      <div class="card-eyebrow">Hertz</div>
-      <div class="card-title">Genesis G70</div>
-      <div class="card-detail">IAH pickup &nbsp;Mar 29 @ 2:00 PM &nbsp;→&nbsp; DAL drop-off Apr 5 @ 6:00 AM</div>
-      <span class="card-status status-booked">Booked</span>
-    </div>
-
     <!-- Hotels -->
-    <div class="section-label">Hotels</div>
+    <div class="section-label" data-i18n="sec.hotels">Hotels</div>
     <div style="background:var(--char);border:1px solid var(--bark);border-radius:4px;overflow:hidden;">
       <table class="data-table">
         <thead>
           <tr>
             <th>Nights</th>
             <th>Hotel</th>
-            <th>Booked Via</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -1048,7 +1586,6 @@
               <div class="hotel-name">Westin Galleria Houston</div>
               <div class="hotel-detail">2 Queen Beds</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">AE Travel</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1057,7 +1594,6 @@
               <div class="hotel-name">Hyatt Regency SA Riverwalk</div>
               <div class="hotel-detail">King River View · Breakfast incl. · $25 F&amp;B credit · Riverboat incl. · No resort fee</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">Costco</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1066,7 +1602,6 @@
               <div class="hotel-name">Kalahari Resort Round Rock</div>
               <div class="hotel-detail">2 Queen Sofa · $243.99</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">Official</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1075,7 +1610,6 @@
               <div class="hotel-name">SpringHill Suites Fort Worth Historic Stockyards</div>
               <div class="hotel-detail">2 Queen Beds + Sofa · Check-in 3 PM</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">Marriott</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1084,7 +1618,6 @@
               <div class="hotel-name">Hotel near DAL Airport</div>
               <div class="hotel-detail">TBD</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">—</td>
             <td><span class="priority-high">Book Now</span></td>
           </tr>
         </tbody>
@@ -1092,12 +1625,12 @@
     </div>
 
     <!-- Confirmed Activities -->
-    <div class="section-label">Confirmed Tickets &amp; Activities</div>
+    <div class="section-label" data-i18n="sec.activities">Confirmed Tickets &amp; Activities</div>
     <div class="ticket-grid">
       <div class="ticket-item">
         <div class="ticket-date">Mon Mar 30</div>
         <div>
-          <div class="ticket-name">Space Center Houston</div>
+          <div class="ticket-name"><a href="https://www.spacecenter.org/" target="_blank" rel="noopener">Space Center Houston</a></div>
           <div class="ticket-detail">GA 10:00 AM + Apollo Mission Control Tram 12:40 PM</div>
         </div>
         <span class="badge-booked">Pre-booked</span>
@@ -1105,7 +1638,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Fri Apr 3</div>
         <div>
-          <div class="ticket-name">Stockyards Championship Rodeo</div>
+          <div class="ticket-name"><a href="https://www.cowtowncoliseum.com/" target="_blank" rel="noopener">Stockyards Championship Rodeo</a></div>
           <div class="ticket-detail">Cowtown Coliseum · 7:30 PM · Fort Worth</div>
         </div>
         <span class="badge-booked">Pre-booked</span>
@@ -1113,15 +1646,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">NBA: Lakers vs. Mavericks</div>
-          <div class="ticket-detail">American Airlines Center · 6:30 PM · NBC/Peacock</div>
-        </div>
-        <span class="badge-booked">Pre-booked</span>
-      </div>
-      <div class="ticket-item">
-        <div class="ticket-date">Sat Apr 4</div>
-        <div>
-          <div class="ticket-name">Netflix House Dallas</div>
+          <div class="ticket-name"><a href="https://www.netflix.com/tudum/articles/netflix-house-dallas" target="_blank" rel="noopener">Netflix House Dallas</a></div>
           <div class="ticket-detail">Galleria Dallas · ~5:00 PM · Free entry</div>
         </div>
         <span class="badge-walkin">Walk-in</span>
@@ -1129,7 +1654,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Wed Apr 1</div>
         <div>
-          <div class="ticket-name">San Antonio Zoo</div>
+          <div class="ticket-name"><a href="https://www.sazoo.org/" target="_blank" rel="noopener">San Antonio Zoo</a></div>
           <div class="ticket-detail">Full day visit</div>
         </div>
         <span class="badge-walkin">Walk-in</span>
@@ -1137,7 +1662,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Thu Apr 2</div>
         <div>
-          <div class="ticket-name">Natural Bridge Caverns</div>
+          <div class="ticket-name"><a href="https://www.naturalbridgecaverns.com/" target="_blank" rel="noopener">Natural Bridge Caverns</a></div>
           <div class="ticket-detail">~30 min from hotel · Morning tour</div>
         </div>
         <span class="badge-walkin">Walk-in</span>
@@ -1145,7 +1670,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">Perot Museum of Nature &amp; Science</div>
+          <div class="ticket-name"><a href="https://www.perotmuseum.org/" target="_blank" rel="noopener">Perot Museum of Nature &amp; Science</a></div>
           <div class="ticket-detail">Dallas · ~2 hrs · Optional</div>
         </div>
         <span class="badge-optional">Optional</span>
@@ -1153,7 +1678,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">Stockyards Morning</div>
+          <div class="ticket-name"><a href="https://www.billybobstexas.com/" target="_blank" rel="noopener">Stockyards Morning</a></div>
           <div class="ticket-detail">Billy Bob's · Fort Worth Cattle Drive · Optional</div>
         </div>
         <span class="badge-optional">Optional</span>
@@ -1161,7 +1686,7 @@
     </div>
 
     <!-- Drive Summary -->
-    <div class="section-label">Driving Summary</div>
+    <div class="section-label" data-i18n="sec.driving">Driving Summary</div>
     <div style="background:var(--char);border:1px solid var(--bark);border-radius:4px;overflow:hidden;">
       <table class="drive-summary-table">
         <thead>
@@ -1181,7 +1706,7 @@
           </tr>
           <tr>
             <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Mar 30</td>
-            <td>Hotel ↔ Space Center (RT)</td>
+            <td>Hotel ↔ Space Center (round trip)</td>
             <td class="dist">~60 mi</td>
             <td class="dur">~1 hr</td>
           </tr>
@@ -1217,7 +1742,7 @@
           </tr>
           <tr>
             <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 5</td>
-            <td>Hotel → DAL drop-off</td>
+            <td>Hotel → Dallas Airport</td>
             <td class="dist">~5 mi</td>
             <td class="dur">~10 min</td>
           </tr>
@@ -1226,7 +1751,7 @@
     </div>
 
     <!-- To-Do -->
-    <div class="section-label">Remaining To-Do</div>
+    <div class="section-label" data-i18n="sec.todo">Remaining To-Do</div>
     <div class="todo-list">
       <div class="todo-item">
         <div class="todo-num">1</div>
@@ -1235,22 +1760,6 @@
           <div class="todo-sub">Need to secure before trip</div>
         </div>
         <span class="priority-high">High Priority</span>
-      </div>
-      <div class="todo-item">
-        <div class="todo-num">2</div>
-        <div>
-          <div class="todo-task">Coordinate lunch with Austin friend</div>
-          <div class="todo-sub">Apr 2 · Round Rock / Austin area near I-35</div>
-        </div>
-        <span class="priority-medium">Medium</span>
-      </div>
-      <div class="todo-item">
-        <div class="todo-num">3</div>
-        <div>
-          <div class="todo-task">Coordinate dinner with Austin friend</div>
-          <div class="todo-sub">Apr 4 · Dallas · Cattleack Barbeque or Victory Park</div>
-        </div>
-        <span class="priority-medium">Medium</span>
       </div>
     </div>
 
@@ -1510,7 +2019,7 @@
         <div class="day-header">
           <div>
             <div class="day-date">Sat Apr 4</div>
-            <div class="day-city">Fort Worth → Dallas + NBA + Austin Friend Dinner</div>
+            <div class="day-city">Fort Worth → Dallas + Austin Friend Dinner</div>
           </div>
           <span class="day-drive-badge">🚗 ~45 mi</span>
         </div>
@@ -1542,10 +2051,6 @@
           <tr>
             <td class="act-time">5:00 PM</td>
             <td class="act-text">Netflix House at Galleria Dallas <em>Free entry · Rideshare ~20 min</em></td>
-          </tr>
-          <tr>
-            <td class="act-time">6:30 PM</td>
-            <td class="act-text">NBA: LA Lakers vs. Dallas Mavericks <span class="booked-tag">Pre-booked</span><em>American Airlines Center · NBC/Peacock</em></td>
           </tr>
           <tr>
             <td class="act-time">9:30 PM</td>
@@ -1607,12 +2112,9 @@
 
     <!-- MAP -->
     <div class="map-pane">
-      <div class="map-label">Houston · Westin Galleria Area</div>
-      <iframe id="map-houston"
-        src="https://www.openstreetmap.org/export/embed.html?bbox=-95.65%2C29.55%2C-95.25%2C30.10&layer=mapnik"
-        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;">
-      </iframe>
-      <div class="map-hint">← Click a restaurant to zoom in</div>
+      <div class="map-label">Houston · All 10 Pits Mapped</div>
+      <div id="map-houston"></div>
+      <div class="map-hint">Click a restaurant for directions from your hotel</div>
     </div>
 
     <!-- LIST -->
@@ -1629,7 +2131,7 @@
         <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>TX Monthly</div>
       </div>
 
-      <div class="bbq-item featured" onclick="selectRestaurant('map-houston', 30.0807, -95.4199, this)">
+      <div class="bbq-item featured" onclick="selectRestaurant('map-houston', 0, this)">
         <div class="rank-num">1</div>
         <div class="bbq-info">
           <div class="bbq-name">CorkScrew BBQ</div>
@@ -1639,6 +2141,7 @@
           </div>
           <div class="bbq-desc">Only Michelin-starred BBQ near Houston. Melt-in-mouth brisket from Creekstone Farms, jalapeño sausage. Arrive before 11 AM.</div>
           <div class="bbq-hours">Wed–Sat · 11 AM–4 PM · Spring, TX</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=CorkScrew+BBQ&find_loc=Spring%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~45 min N</div>
@@ -1646,7 +2149,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7693, -95.3976, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 1, this)">
         <div class="rank-num">2</div>
         <div class="bbq-info">
           <div class="bbq-name">Truth BBQ</div>
@@ -1656,6 +2159,7 @@
           </div>
           <div class="bbq-desc">Pork ribs, garlic sausage, Saturday beef rib. Dinner service Tue–Fri — best evening option near hotel.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–8 PM · Heights</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Truth+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~15 min</div>
@@ -1663,7 +2167,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7323, -95.4117, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 2, this)">
         <div class="rank-num">3</div>
         <div class="bbq-info">
           <div class="bbq-name">Pinkerton's Barbecue</div>
@@ -1673,6 +2177,7 @@
           </div>
           <div class="bbq-desc">Closest Michelin spot. Legendary glazed St. Louis ribs, beef rib, candy-paint pork. New 2026 Montrose location.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Montrose</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Pinkerton%27s+Barbecue&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~8 min</div>
@@ -1680,7 +2185,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7342, -95.3941, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 3, this)">
         <div class="rank-num">4</div>
         <div class="bbq-info">
           <div class="bbq-name">The Pit Room</div>
@@ -1689,6 +2194,7 @@
           </div>
           <div class="bbq-desc">Open 7 days — most flexible hours. Brisket, wagyu ribs, venison sausage, elote. Also serves breakfast tacos.</div>
           <div class="bbq-hours">Daily · 7 AM–9 PM · Montrose</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=The+Pit+Room&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~12 min</div>
@@ -1696,7 +2202,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7052, -95.4755, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 4, this)">
         <div class="rank-num">5</div>
         <div class="bbq-info">
           <div class="bbq-name">Blood Bros. BBQ</div>
@@ -1705,6 +2211,7 @@
           </div>
           <div class="bbq-desc">Asian-Texan fusion. Brisket fried rice, gochujang glazed ribs, pork belly bao buns. Totally unique in Houston.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Bellaire</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Blood+Bros+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~10 min</div>
@@ -1712,7 +2219,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.5607, -95.3357, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 5, this)">
         <div class="rank-num">6</div>
         <div class="bbq-info">
           <div class="bbq-name">Killen's Barbecue</div>
@@ -1721,6 +2228,7 @@
           </div>
           <div class="bbq-desc">Famous pork belly burnt ends and monster beef rib. Open 7 days including dinner. Worth the drive south to Pearland.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Pearland</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Killen%27s+Barbecue&find_loc=Pearland%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~35 min S</div>
@@ -1728,7 +2236,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 30.0969, -95.6156, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 6, this)">
         <div class="rank-num">7</div>
         <div class="bbq-info">
           <div class="bbq-name">Tejas Chocolate + Barbecue</div>
@@ -1737,6 +2245,7 @@
           </div>
           <div class="bbq-desc">Unique: artisan chocolate shop + award BBQ. Chile relleno sausage, brisket nachos. Open daily in Tomball.</div>
           <div class="bbq-hours">Daily · 11 AM–9 PM · Tomball</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Tejas+Chocolate+Barbecue&find_loc=Tomball%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~45 min NW</div>
@@ -1744,13 +2253,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7799, -95.5003, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 7, this)">
         <div class="rank-num">8</div>
         <div class="bbq-info">
           <div class="bbq-name">Feges BBQ</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Fine dining meets BBQ. Kid play area — great for family. Banana caramel pie, hog fat cornbread. Dinner Tue–Sat.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Spring Branch</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Feges+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~15 min</div>
@@ -1758,7 +2268,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7523, -95.6275, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 8, this)">
         <div class="rank-num">9</div>
         <div class="bbq-info">
           <div class="bbq-name">Brisket &amp; Rice</div>
@@ -1767,6 +2277,7 @@
           </div>
           <div class="bbq-desc">Vietnamese-Texan fusion. Signature brisket fried rice, fall-off-the-bone ribs. Highest rating (4.7) on this list.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–7 PM · Energy Corridor</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Brisket+and+Rice&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~30 min W</div>
@@ -1774,13 +2285,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.8017, -95.4373, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 9, this)">
         <div class="rank-num">10</div>
         <div class="bbq-info">
           <div class="bbq-name">Gatlin's BBQ</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Houston institution since 2010. Opens 7 AM — only place for BBQ breakfast. East Texas style dirty rice, collards.</div>
           <div class="bbq-hours">Mon–Sat · 7 AM–6 PM · Oak Forest</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Gatlin%27s+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~20 min</div>
@@ -1822,12 +2334,9 @@
 
     <!-- MAP -->
     <div class="map-pane">
-      <div class="map-label">San Antonio · Riverwalk Area</div>
-      <iframe id="map-sanantonio"
-        src="https://www.openstreetmap.org/export/embed.html?bbox=-98.65%2C29.30%2C-98.35%2C29.55&layer=mapnik"
-        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;">
-      </iframe>
-      <div class="map-hint">← Click a restaurant to zoom in</div>
+      <div class="map-label">San Antonio · All 10 Pits Mapped</div>
+      <div id="map-sanantonio"></div>
+      <div class="map-hint">Click a restaurant for directions from your hotel</div>
     </div>
 
     <!-- LIST -->
@@ -1844,7 +2353,7 @@
         <div class="legend-item"><div class="legend-dot" style="background:#7baee8"></div>Day Trip</div>
       </div>
 
-      <div class="bbq-item featured" onclick="selectRestaurant('map-sanantonio', 29.5686, -97.9640, this)">
+      <div class="bbq-item featured" onclick="selectRestaurant('map-sanantonio', 0, this)">
         <div class="rank-num">1</div>
         <div class="bbq-info">
           <div class="bbq-name">Burnt Bean Co.</div>
@@ -1855,6 +2364,7 @@
           </div>
           <div class="bbq-desc">#1 BBQ in all of Texas. Melt-in-mouth brisket, Korean beef ribs, queso mac, banana pudding. Worth every mile east to Seguin.</div>
           <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Seguin, TX</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Burnt+Bean+Co&find_loc=Seguin%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~45 min E</div>
@@ -1862,7 +2372,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4104, -98.4790, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 1, this)">
         <div class="rank-num">2</div>
         <div class="bbq-info">
           <div class="bbq-name">Reese Bros Barbecue</div>
@@ -1872,6 +2382,7 @@
           </div>
           <div class="bbq-desc">Highest rated on list at 4.8. Tex-Mex twist: queso fundido sausage, house-made flour tortillas, poblano mac. Sells out by 3 PM.</div>
           <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Southtown</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Reese+Bros+Barbecue&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~10 min</div>
@@ -1879,7 +2390,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.3825, -98.4049, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 2, this)">
         <div class="rank-num">3</div>
         <div class="bbq-info">
           <div class="bbq-name">2M Smokehouse</div>
@@ -1889,6 +2400,7 @@
           </div>
           <div class="bbq-desc">James Beard semifinalist. 18-hour smoked fatty brisket, pork ribs, chicharron mac. BYOB. Thu–Sun, arrive before 11 AM.</div>
           <div class="bbq-hours">Thu–Sun · 11 AM–4 PM · East SA</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=2M+Smokehouse&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~18 min</div>
@@ -1896,7 +2408,7 @@
         </div>
       </div>
 
-      <div class="bbq-item featured" onclick="selectRestaurant('map-sanantonio', 29.4271, -98.4941, this)">
+      <div class="bbq-item featured" onclick="selectRestaurant('map-sanantonio', 3, this)">
         <div class="rank-num">4</div>
         <div class="bbq-info">
           <div class="bbq-name">Pinkerton's Barbecue</div>
@@ -1905,6 +2417,7 @@
           </div>
           <div class="bbq-desc">3-minute walk from your Hyatt! Glazed pork ribs, beef rib, duck jambalaya, full bar with beer garden. Open Tue–Sun.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Downtown</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Pinkerton%27s+Barbecue&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">3 min walk</div>
@@ -1912,13 +2425,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4479, -98.4880, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 4, this)">
         <div class="rank-num">5</div>
         <div class="bbq-info">
           <div class="bbq-name">Curry Boys BBQ</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Tied for highest rating at 4.8. Thai-Texan fusion: brisket curry bowl, pork belly dunkers. Open 7 days until 10 PM.</div>
           <div class="bbq-hours">Daily · 11 AM–10 PM · St. Mary's Strip</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Curry+Boys+BBQ&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~8 min</div>
@@ -1926,13 +2440,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4661, -98.4919, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 5, this)">
         <div class="rank-num">6</div>
         <div class="bbq-info">
           <div class="bbq-name">South Barbecue</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Most flexible hours in SA — open daily until 10 PM. Full bar. Chopped brisket sandwich, borracho beans, homemade pickles.</div>
           <div class="bbq-hours">Daily · 11 AM–10 PM · North Main</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=South+Barbecue&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~8 min</div>
@@ -1940,13 +2455,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4611, -98.4664, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 6, this)">
         <div class="rank-num">7</div>
         <div class="bbq-info">
           <div class="bbq-name">Smoke Shack BBQ</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Most reviews on this list. Featured on Food Network. Brisket grilled cheese on Texas toast, spicy creamed corn. Mon–Sat.</div>
           <div class="bbq-hours">Mon–Sat · 11 AM–9 PM · Broadway</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Smoke+Shack+BBQ&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~12 min</div>
@@ -1954,7 +2470,7 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4868, -98.4003, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 7, this)">
         <div class="rank-num">8</div>
         <div class="bbq-info">
           <div class="bbq-name">The Barbecue Station</div>
@@ -1963,6 +2479,7 @@
           </div>
           <div class="bbq-desc">Converted gas station since 1992. Michelin Recommended despite wallet-friendly prices. Excellent brisket. Mon–Sat only.</div>
           <div class="bbq-hours">Mon–Sat · 11 AM–6 PM · NE 410</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=The+Barbecue+Station&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~20 min</div>
@@ -1970,13 +2487,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.5498, -98.4751, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 8, this)">
         <div class="rank-num">9</div>
         <div class="bbq-info">
           <div class="bbq-name">Two Bros. BBQ Market</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Opens earliest at 10:30 AM daily. Family-friendly live oak patio, casual atmosphere. Cherry-glazed ribs, marbled brisket.</div>
           <div class="bbq-hours">Daily · 10:30 AM–9 PM · North SA</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Two+Bros+BBQ+Market&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~25 min N</div>
@@ -1984,13 +2502,14 @@
         </div>
       </div>
 
-      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.5750, -98.6946, this)">
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 9, this)">
         <div class="rank-num">10</div>
         <div class="bbq-info">
           <div class="bbq-name">B-Daddy's BBQ</div>
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Hill Country setting with playground — perfect for kids. Jalapeño cheddar brisket sandwich, cream corn. Tue–Sun.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Helotes</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=B-Daddy%27s+BBQ&find_loc=Helotes%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~35 min NW</div>
@@ -2023,139 +2542,191 @@
 <div id="page-techblog" class="page">
 
   <div class="page-hero">
-    <div class="hero-eyebrow">Behind the Build · March 2026</div>
-    <h1 class="hero-title">Built with<em>Claude Code</em></h1>
-    <p class="hero-sub">How an AI agent planned a family road trip and built the site to go with it</p>
+    <div class="hero-eyebrow">Case Study · March 2026</div>
+    <h1 class="hero-title">Planning a Trip<em>with Claude</em></h1>
+    <p class="hero-sub">From a blank conversation to a fully planned, deployed, shareable road trip — in one extended session</p>
+    <a class="github-link" href="https://github.com/EvanCarson/texas-bbq-explorer" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span data-i18n="tech.github">View on GitHub</span>
+    </a>
   </div>
 
   <div class="container">
 
-    <div class="section-label">The Idea</div>
+    <div class="section-label" data-i18n="sec.started">How It Started</div>
     <div class="blog-card">
-      <p class="blog-p">Planning a week-long Texas road trip with four people, five cities, five hotels, two flights, pre-booked activities, and a Michelin BBQ shortlist is genuinely complex. Spreadsheets help, but they don't surface conflicts, highlight drive times, or tell you which BBQ joint closes before you arrive.</p>
-      <p class="blog-p">We wanted a single shareable page the whole family could reference — not a PDF, not a shared notes doc, but a real interactive site. So we handed the planning to <strong>Claude Code</strong>, Anthropic's agentic CLI, and let it do the work end to end.</p>
+      <p class="blog-p">We had a week-long Texas road trip roughed out — flights booked, some hotels confirmed, a list of BBQ spots, and a bunch of open questions: are the tickets booked? Where do the kids play? Does the route even make sense? What we didn't have was anyone — or anything — to look at the whole picture at once and tell us if it held together.</p>
+      <p class="blog-p">So we turned to Claude. Not just to generate text, but to act as a trip agent: ingest the raw plan, surface gaps, validate the routing, suggest options, and eventually produce this interactive page the whole family can reference. The conversation below is how it actually went.</p>
     </div>
 
-    <div class="section-label">What Claude Code Did</div>
-    <div class="blog-steps">
-
-      <div class="blog-step">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <div class="step-title">Ingested raw trip data</div>
-          <p class="step-desc">We pasted an unstructured markdown trip summary — flights, hotels, confirmed tickets, day-by-day notes, BBQ research — as a single block of text. Claude Code parsed it, identified structure, and used it as the authoritative source throughout the build without ever writing it to disk or pushing it to git.</p>
-        </div>
-      </div>
-
-      <div class="blog-step">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <div class="step-title">Architected a 4-page SPA</div>
-          <p class="step-desc">Given the data shape, Claude Code chose a single-file SPA (no framework, no build step) with JS-driven navigation between four views: Overview, Day-by-Day, Houston BBQ, and San Antonio BBQ. Zero dependencies — just HTML, CSS, and vanilla JS. It reasoned that this matched the Vercel static deployment already in place and avoided unnecessary complexity.</p>
-        </div>
-      </div>
-
-      <div class="blog-step">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <div class="step-title">Designed the visual system</div>
-          <p class="step-desc">The smoky dark-mode aesthetic — ember oranges, charcoal blacks, gold accents, Playfair Display headlines — was generated from scratch to match the Texas BBQ theme. Claude Code wrote ~500 lines of CSS including a sticky nav, responsive grid layouts, animated day cards, and a custom drive-time highlight treatment using amber border accents.</p>
-        </div>
-      </div>
-
-      <div class="blog-step">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <div class="step-title">Fixed the map interaction</div>
-          <p class="step-desc">The original page embedded Google Maps iframes with manually constructed <code>pb=</code> state parameters — a fragile format that broke without an API key. Claude Code diagnosed the root cause, switched to OpenStreetMap embed URLs (no key required), and wired each restaurant card's <code>onclick</code> to update the iframe's <code>src</code> with a bounding box and marker centred on that location's coordinates.</p>
-        </div>
-      </div>
-
-      <div class="blog-step">
-        <div class="step-num">05</div>
-        <div class="step-content">
-          <div class="step-title">Handled privacy</div>
-          <p class="step-desc">When asked to remove sensitive information, Claude Code searched the full document for the family surname and replaced every instance — in the page title, hero eyebrow, and footer — with "Family Trip". It didn't touch surrounding content or restructure anything unnecessarily.</p>
-        </div>
-      </div>
-
-      <div class="blog-step">
-        <div class="step-num">06</div>
-        <div class="step-content">
-          <div class="step-title">Deployed to Vercel autonomously</div>
-          <p class="step-desc">Claude Code installed the Vercel CLI, authenticated, linked the project, and deployed to production — all from the terminal. After each round of changes it redeployed and returned a live URL. The full cycle from "here's the markdown" to "here's the URL" ran in under two minutes per iteration.</p>
-        </div>
-      </div>
-
-      <div class="blog-step">
-        <div class="step-num">07</div>
-        <div class="step-content">
-          <div class="step-title">Maintained a git worktree</div>
-          <p class="step-desc">All work happened in an isolated git worktree (<code>claude/dreamy-cartwright</code>) branched off main. Each logical change was committed with a descriptive message. When the work was complete, Claude Code merged the branch into main — keeping the history clean without ever touching the user's working directory.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="section-label">Key Capabilities Demonstrated</div>
+    <div class="section-label" data-i18n="sec.made">What Made This Work</div>
     <div class="capability-grid">
       <div class="cap-card">
-        <div class="cap-icon">🧠</div>
-        <div class="cap-title">Structured data extraction</div>
-        <div class="cap-desc">Parsed freeform markdown into typed data: flights, hotels, activities, drive segments, restaurant rankings.</div>
+        <div class="cap-icon">🗂️</div>
+        <div class="cap-title">Structured data from messy notes</div>
+        <div class="cap-desc">Pasted an unstructured markdown dump — flights, hotels, research, day notes — and Claude extracted it into typed, navigable trip data.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🗺️</div>
+        <div class="cap-title">Route-aware suggestions</div>
+        <div class="cap-desc">Kalahari was recommended not just for quality, but because Round Rock was already on the routing. Claude cross-checked geography before suggesting.</div>
       </div>
       <div class="cap-card">
         <div class="cap-icon">🎨</div>
-        <div class="cap-title">Full-stack UI generation</div>
-        <div class="cap-desc">Wrote complete HTML/CSS/JS from scratch, including responsive layouts, animations, and interactive state management.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">🔍</div>
-        <div class="cap-title">Root cause diagnosis</div>
-        <div class="cap-desc">Identified why the Google Maps embed was broken, chose an appropriate fix, and applied it without over-engineering.</div>
+        <div class="cap-title">Full interactive site, zero frameworks</div>
+        <div class="cap-desc">Built a 5-tab SPA with Leaflet maps, animated day cards, and hotel-to-restaurant directions. Vanilla HTML/CSS/JS — no build step, no dependencies.</div>
       </div>
       <div class="cap-card">
         <div class="cap-icon">🚀</div>
-        <div class="cap-title">Autonomous deployment</div>
-        <div class="cap-desc">Installed tooling, authenticated, deployed, and managed a live Vercel project across multiple iterations.</div>
+        <div class="cap-title">Live URL in minutes</div>
+        <div class="cap-desc">Deployed to Vercel autonomously. Each round of changes produced a new production URL in under two minutes.</div>
       </div>
       <div class="cap-card">
         <div class="cap-icon">🔒</div>
-        <div class="cap-title">Privacy awareness</div>
-        <div class="cap-desc">Identified and removed PII (family name) across all occurrences when asked, without disrupting surrounding content.</div>
+        <div class="cap-title">Privacy by default</div>
+        <div class="cap-desc">When asked to remove the family name, Claude found every instance across the document and replaced them — without touching surrounding content.</div>
       </div>
       <div class="cap-card">
         <div class="cap-icon">🌿</div>
-        <div class="cap-title">Git-native workflow</div>
-        <div class="cap-desc">Worked in isolated worktrees, committed incrementally with meaningful messages, and merged cleanly to main.</div>
+        <div class="cap-title">Clean git history</div>
+        <div class="cap-desc">All work in an isolated worktree. Incremental commits. Merged to main when done. The repo stays clean throughout.</div>
       </div>
     </div>
 
-    <div class="section-label">The Conversation</div>
-    <div class="blog-card">
-      <p class="blog-p">The entire site was built through a natural back-and-forth conversation with no special syntax, no prompt engineering, and no templates. A typical exchange looked like:</p>
-      <div class="convo-block">
-        <div class="convo-user">deploy this and show me the URL</div>
-        <div class="convo-ai">Deployed. <strong>https://dreamy-cartwright.vercel.app</strong></div>
-        <div class="convo-user">remove sensitive information like the family name. also the google map seems to not be working, try to fix it</div>
-        <div class="convo-ai">Replaced all instances of the family name with "Family Trip". Diagnosed the Google Maps embed issue — the <code>pb=</code> parameters were manually constructed and don't work without an API key. Switched to OpenStreetMap which requires no key. Redeployed.</div>
-        <div class="convo-user">adding this MD, refactor this website to contain the trip information. trip overview page, day by day with highlighted drive time, two pages for dinner options. Last fix the google mapping connection when user clicks each item.</div>
-        <div class="convo-ai">Read the existing code, ingested the markdown, planned a 4-page architecture, rewrote the file with all trip data, wired map click interactions, committed, merged, deployed.</div>
-      </div>
-      <p class="blog-p" style="margin-top:20px;">Each instruction was a plain English sentence. Claude Code handled the implementation details — reading files, planning the structure, writing the code, deploying — without requiring step-by-step direction.</p>
-    </div>
+    <div class="section-label" data-i18n="sec.convo1" style="margin-top:48px;">Trip Planning — Filling the Gap</div>
+    <p class="convo-section-desc">Claude ingests the raw itinerary, spots an unscheduled stretch between San Antonio and Fort Worth, and offers water park options ranked by route fit and season — then books the hotel and updates the plan.</p>
+    <div class="convo-thread">
 
-    <div class="section-label">Takeaway</div>
-    <div class="note-card" style="margin-bottom:0;">
-      <div class="note-icon">💡</div>
-      <div>
-        <div class="note-label">What this means for trip planning</div>
-        <div class="note-text">
-          <strong>AI agents are no longer just content generators.</strong> Claude Code didn't just write text about the trip — it built the infrastructure around it. It read files, managed git, deployed to a CDN, and iterated on a live production URL based on conversational feedback.<br><br>
-          The same workflow applies to any structured planning problem: conference schedules, wedding timelines, moving checklists. If the data has shape, an AI agent can build the right interface for it — and have it live on the web in minutes.
+      <!-- Turn 1: Claude sends initial plan -->
+      <div class="convo-turn claude-turn">
+        <div class="convo-avatar">C</div>
+        <div class="convo-body">
+          <div class="convo-speaker">Claude</div>
+          <p class="convo-text">Here's what I've put together from your notes. Five segments, eight days.</p>
+          <div class="convo-plan-card">
+            <div class="convo-plan-title">Texas Family Road Trip · Mar 29 – Apr 5, 2026</div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Flights</span><span>SFO → IAH Mar 29 · DAL → SFO Apr 5</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Mar 29–31</span><span>Houston · Westin Galleria · Space Center + Kemah Boardwalk</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Mar 31–Apr 2</span><span>San Antonio · Hyatt Regency Riverwalk · San Antonio Zoo</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Apr 2–3</span><span>Round Rock area — currently unscheduled</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Apr 3–5</span><span>Fort Worth / Dallas · Omni Fort Worth · Stockyards + Rangers game</span></div>
+            <div class="convo-plan-note">Apr 2–3 in Round Rock has no hotel or activities booked yet. Want me to suggest options for that gap?</div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- Turn 2: User asks for water park -->
+      <div class="convo-turn user-turn">
+        <div class="convo-avatar">U</div>
+        <div class="convo-body">
+          <div class="convo-speaker">User</div>
+          <p class="convo-text">Can we add a water park visit? The kids would love it. Somewhere between San Antonio and Fort Worth works.</p>
+        </div>
+      </div>
+
+      <!-- Turn 3: Claude offers options -->
+      <div class="convo-turn claude-turn">
+        <div class="convo-avatar">C</div>
+        <div class="convo-body">
+          <div class="convo-speaker">Claude</div>
+          <p class="convo-text">Perfect timing — Round Rock sits right in that gap. Three options, ranked by fit for your dates and ages.</p>
+          <div class="convo-options">
+            <div class="option-card recommended">
+              <div class="option-badge">Recommended</div>
+              <div class="option-title">A · Kalahari Resorts Round Rock</div>
+              <div class="option-detail">America's largest indoor waterpark — fully climate-controlled so weather doesn't matter. On-site hotel, no driving after a full day. Already on your route between SA and Fort Worth.</div>
+              <div class="option-meta">Round Rock, TX · park passes included with stay</div>
+            </div>
+            <div class="option-card">
+              <div class="option-title">B · Schlitterbahn New Braunfels</div>
+              <div class="option-detail">Texas institution, rated #1 in the US for years — but seasonal. Closed in late March/early April. Would need a schedule shift.</div>
+              <div class="option-meta">New Braunfels · closed Mar–Apr</div>
+            </div>
+            <div class="option-card">
+              <div class="option-title">C · Hawaiian Falls Garland</div>
+              <div class="option-detail">Outdoor park near Dallas, lower price point. Weather-dependent and early-season hours are limited.</div>
+              <div class="option-meta">Garland (near Dallas) · outdoor, weather-dependent</div>
+            </div>
+          </div>
+          <p class="convo-text" style="margin-top:14px;">How many nights — one or two? Any room preferences?</p>
+        </div>
+      </div>
+
+      <!-- Turn 4: User confirms -->
+      <div class="convo-turn user-turn">
+        <div class="convo-avatar">U</div>
+        <div class="convo-body">
+          <div class="convo-speaker">User</div>
+          <p class="convo-text">Kalahari sounds great. Two nights, two connecting rooms if possible.</p>
+        </div>
+      </div>
+
+      <!-- Turn 5: Claude confirms booking + updates plan -->
+      <div class="convo-turn claude-turn">
+        <div class="convo-avatar">C</div>
+        <div class="convo-body">
+          <div class="convo-speaker">Claude</div>
+          <p class="convo-text">Done. Plan updated.</p>
+          <div class="convo-booking-result">
+            <div class="convo-booking-title">Kalahari Resorts Round Rock · Apr 2–4</div>
+            <div class="convo-booking-row"><span>Room type</span><span>2 Queen Sofa</span></div>
+            <div class="convo-booking-row"><span>Park access</span><span>Included for all registered guests</span></div>
+            <div class="convo-booking-row"><span>Check-in / out</span><span>Apr 2 · Apr 4 (2 nights)</span></div>
+          </div>
+          <div class="convo-plan-card" style="margin-top:14px;">
+            <div class="convo-plan-title">Updated Itinerary</div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Mar 29–31</span><span>Houston · Westin Galleria</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Mar 31–Apr 2</span><span>San Antonio · Hyatt Regency Riverwalk</span></div>
+            <div class="convo-plan-row" style="background:rgba(0,113,227,0.06);"><span class="convo-plan-label" style="color:var(--ember);">Apr 2–4 NEW</span><span><strong>Kalahari Resorts</strong> · Round Rock · Indoor waterpark</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Apr 4–5</span><span>Fort Worth / Dallas · Omni Fort Worth</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /convo-thread -->
+
+    <div class="section-label" data-i18n="sec.convo2" style="margin-top:48px;">Live Event Discovery — NBA on the Route</div>
+    <p class="convo-section-desc">Claude cross-references the trip dates and cities against the NBA schedule to surface games you can actually attend — ranked by schedule fit or reschedule needed.</p>
+    <div class="convo-thread">
+
+      <!-- Turn 6: User asks for NBA -->
+      <div class="convo-turn user-turn">
+        <div class="convo-avatar">U</div>
+        <div class="convo-body">
+          <div class="convo-speaker">User</div>
+          <p class="convo-text">Can you find an NBA game I can watch based on this trip?</p>
+        </div>
+      </div>
+
+      <!-- Turn 7: Claude finds NBA options -->
+      <div class="convo-turn claude-turn">
+        <div class="convo-avatar">C</div>
+        <div class="convo-body">
+          <div class="convo-speaker">Claude</div>
+          <p class="convo-text">Checked the NBA schedule against your cities and dates. One clear match — and it's a good one.</p>
+          <div class="convo-options">
+            <div class="option-card recommended">
+              <div class="option-badge">Best Match</div>
+              <div class="option-title">Houston Rockets vs. San Antonio Spurs</div>
+              <div class="option-detail">Mon Mar 30 · Toyota Center, Houston · 7:30 PM CT. You'll be in Houston Mar 29–31 — this lands perfectly on your second evening. Rockets vs. Spurs is a natural Texas rivalry. Victor Wembanyama will be on the floor.</div>
+              <div class="option-meta">Toyota Center · 1510 Polk St, Houston · ~10 min from your hotel</div>
+            </div>
+            <div class="option-card">
+              <div class="option-title">San Antonio Spurs home game</div>
+              <div class="option-detail">Spurs play at the Frost Bank Center. Check Mar 31–Apr 2 dates — if there's a home game during your SA stay it would be walkable from the Hyatt Riverwalk. Lineup varies week to week.</div>
+              <div class="option-meta">Frost Bank Center · San Antonio · subject to schedule</div>
+            </div>
+            <div class="option-card">
+              <div class="option-title">Dallas Mavericks</div>
+              <div class="option-detail">American Airlines Center is ~35 min from your Fort Worth hotel. Mavericks schedule Apr 4–5 may have a home game — worth checking if the Rangers game doesn't fill that evening.</div>
+              <div class="option-meta">American Airlines Center · Dallas · ~35 min from Omni FW</div>
+            </div>
+          </div>
+          <p class="convo-text" style="margin-top:14px;">Want me to add the Rockets game to the Day-by-Day for Mar 30?</p>
+        </div>
+      </div>
+
+    </div><!-- /convo-thread nba -->
 
   </div>
 </div><!-- /page-techblog -->
@@ -2164,28 +2735,234 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">AI Trip Planning</div>
-  <div class="footer-meta">Family Trip · Spring Break 2026 · Mar 29 – Apr 5 · SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</div>
+  <div class="footer-meta">Family Trip · Spring Break 2026</div>
 </footer>
 
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+  /* ── MAP DATA ── */
+  const HOTELS = {
+    houston:    { lat: 29.7361, lon: -95.4677, name: 'Westin Galleria Houston' },
+    sanantonio: { lat: 29.4243, lon: -98.4934, name: 'Hyatt Regency SA Riverwalk' }
+  };
+
+  const RESTAURANTS = {
+    houston: [
+      { lat: 30.0807, lon: -95.4199, name: 'CorkScrew BBQ',           drive: '~45 min N'  },
+      { lat: 29.7693, lon: -95.3976, name: 'Truth BBQ',               drive: '~15 min'    },
+      { lat: 29.7323, lon: -95.4117, name: "Pinkerton's Barbecue",    drive: '~8 min'     },
+      { lat: 29.7342, lon: -95.3941, name: 'The Pit Room',            drive: '~12 min'    },
+      { lat: 29.7052, lon: -95.4755, name: 'Blood Bros. BBQ',         drive: '~10 min'    },
+      { lat: 29.5607, lon: -95.3357, name: "Killen's Barbecue",       drive: '~35 min S'  },
+      { lat: 30.0969, lon: -95.6156, name: 'Tejas Chocolate + BBQ',   drive: '~45 min NW' },
+      { lat: 29.7799, lon: -95.5003, name: 'Feges BBQ',               drive: '~15 min'    },
+      { lat: 29.7523, lon: -95.6275, name: 'Brisket & Rice',          drive: '~30 min W'  },
+      { lat: 29.8017, lon: -95.4373, name: "Gatlin's BBQ",            drive: '~20 min'    }
+    ],
+    sanantonio: [
+      { lat: 29.5686, lon: -97.9640, name: 'Burnt Bean Co.',          drive: '~45 min E'  },
+      { lat: 29.4104, lon: -98.4790, name: 'Reese Bros Barbecue',     drive: '~10 min'    },
+      { lat: 29.3825, lon: -98.4049, name: '2M Smokehouse',           drive: '~18 min'    },
+      { lat: 29.4271, lon: -98.4941, name: "Pinkerton's Barbecue",    drive: '3 min walk' },
+      { lat: 29.4479, lon: -98.4880, name: 'Curry Boys BBQ',          drive: '~8 min'     },
+      { lat: 29.4661, lon: -98.4919, name: 'South Barbecue',          drive: '~8 min'     },
+      { lat: 29.4611, lon: -98.4664, name: 'Smoke Shack BBQ',         drive: '~12 min'    },
+      { lat: 29.4868, lon: -98.4003, name: 'The Barbecue Station',    drive: '~20 min'    },
+      { lat: 29.5498, lon: -98.4751, name: 'Two Bros. BBQ Market',    drive: '~25 min N'  },
+      { lat: 29.5750, lon: -98.6946, name: "B-Daddy's BBQ",           drive: '~35 min NW' }
+    ]
+  };
+
+  const maps = {}, markerRefs = {};
+
+  function initLeafletMap(city) {
+    if (maps[city]) return;
+    const hotel = HOTELS[city];
+    const rests = RESTAURANTS[city];
+
+    const map = L.map('map-' + city, { zoomControl: true }).setView([hotel.lat, hotel.lon], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(map);
+
+    /* hotel marker */
+    L.marker([hotel.lat, hotel.lon], {
+      icon: L.divIcon({ className: '', html: '<div class="hotel-marker-icon">🏨</div>', iconSize: [34, 34], iconAnchor: [17, 17] }),
+      zIndexOffset: 1000
+    }).addTo(map).bindPopup(
+      `<div class="map-popup"><div class="map-popup-name">${hotel.name}</div><div class="map-popup-meta">Your hotel for this stop</div></div>`
+    );
+
+    /* restaurant markers */
+    markerRefs[city] = rests.map((r, i) => {
+      const m = L.marker([r.lat, r.lon], {
+        icon: L.divIcon({ className: '', html: `<div class="bbq-num-marker" data-idx="${i}">${i + 1}</div>`, iconSize: [30, 30], iconAnchor: [15, 15] })
+      }).addTo(map);
+
+      const dir = `https://www.google.com/maps/dir/${hotel.lat},${hotel.lon}/${r.lat},${r.lon}`;
+      m.bindPopup(
+        `<div class="map-popup"><div class="map-popup-name">${i + 1}. ${r.name}</div><div class="map-popup-meta">${r.drive} from hotel</div><a href="${dir}" target="_blank" class="map-popup-btn">Get Directions →</a></div>`,
+        { maxWidth: 260 }
+      );
+      return m;
+    });
+
+    maps[city] = map;
+  }
+
+  function selectRestaurant(mapId, idx, el) {
+    const city = mapId === 'map-houston' ? 'houston' : 'sanantonio';
+    if (!maps[city]) return;
+
+    /* update marker colours via DOM */
+    document.querySelectorAll('#' + mapId + ' .bbq-num-marker').forEach((d, i) =>
+      d.classList.toggle('is-selected', i === idx));
+
+    /* fly to and open popup */
+    const m = markerRefs[city][idx];
+    maps[city].flyTo(m.getLatLng(), 14, { duration: 0.7 });
+    m.openPopup();
+
+    /* highlight list row */
+    const page = document.getElementById('page-' + city);
+    page.querySelectorAll('.bbq-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
   function showPage(name, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     if (el) el.classList.add('active');
+
+    if (name === 'houston')    setTimeout(() => { initLeafletMap('houston');    maps['houston']?.invalidateSize();    }, 60);
+    if (name === 'sanantonio') setTimeout(() => { initLeafletMap('sanantonio'); maps['sanantonio']?.invalidateSize(); }, 60);
   }
 
-  function selectRestaurant(mapId, lat, lon, el) {
-    const off = 0.018;
-    const bbox = (lon - off) + '%2C' + (lat - off) + '%2C' + (lon + off) + '%2C' + (lat + off);
-    document.getElementById(mapId).src =
-      'https://www.openstreetmap.org/export/embed.html?bbox=' + bbox + '&layer=mapnik&marker=' + lat + '%2C' + lon;
+  /* ── LANGUAGE SWITCHER ── */
+  let currentLang = 'en';
 
-    // highlight selection within current page
-    const page = document.getElementById(mapId).closest('.page');
-    page.querySelectorAll('.bbq-item').forEach(i => i.classList.remove('selected'));
-    el.classList.add('selected');
+  const T = {
+    en: {
+      'nav.overview':'Overview','nav.days':'Day by Day','nav.houston':'Houston BBQ','nav.sa':'SA BBQ','nav.tech':'Tech Blog',
+      'ov.eyebrow':'Family Trip · Spring Break 2026 · Mar 29 – Apr 5',
+      'ov.title':'Texas<em>Spring Break</em>',
+      'ov.sub':'Family of Four \u00a0·\u00a0 Mar 29 – Apr 5, 2026',
+      'sum.headline':'Eight days across Texas — NASA, a rodeo, a waterpark, and the Lakers.',
+      'sum.body':'Landing in Houston for two days at Space Center including a pre-booked Apollo Mission Control tram tour, then a 200-mile drive south to San Antonio for the Riverwalk, the zoo, and a riverboat cruise. Out via Natural Bridge Caverns and lunch with a friend in Austin, then two days at Kalahari Round Rock\'s indoor waterpark. A 185-mile push to Fort Worth\'s Historic Stockyards for the Championship Rodeo. Five hotels, one rental car, and 20 Michelin-ranked BBQ spots researched across the route.',
+      'hl.1.l':'Houston · Mar 29–31','hl.1.v':'Westin Galleria · Space Center · Apollo Tram',
+      'hl.2.l':'San Antonio · Mar 31–Apr 2','hl.2.v':'Hyatt Riverwalk · Zoo · Riverboat Cruise',
+      'hl.3.l':'En Route · Apr 2','hl.3.v':'Natural Bridge Caverns · Lunch in Austin',
+      'hl.4.l':'Round Rock · Apr 2–4','hl.4.v':'Kalahari · Indoor + Outdoor Waterpark',
+      'hl.5.l':'Fort Worth · Apr 3–4','hl.5.v':'SpringHill Stockyards · Championship Rodeo',
+      'hl.6.l':'Dallas · Apr 4–5','hl.6.v':'Lakers vs. Mavericks · Fly home DAL → SFO',
+      'st.1':'<strong>8</strong> Days','st.2':'<strong>5</strong> Cities','st.3':'<strong>2</strong> Flights',
+      'st.4':'<strong>5</strong> Hotels','st.5':'<strong>4</strong> Pre-booked Activities','st.6':'<strong>~735</strong> mi Driving',
+      'sec.overview':'Overview','sec.transport':'Transportation','sec.hotels':'Hotels',
+      'sec.activities':'Confirmed Tickets & Activities','sec.driving':'Driving Summary','sec.todo':'Remaining To-Do',
+      'sec.started':'How It Started','sec.made':'What Made This Work',
+      'sec.convo1':'Trip Planning — Filling the Gap','sec.convo2':'Live Event Discovery — NBA on the Route',
+      'tr.1':'Outbound · United Airlines','tr.2':'Car Rental · Hertz','tr.3':'Return · Southwest Airlines',
+      'th.nights':'Nights','th.hotel':'Hotel','th.status':'Status',
+      'th.date':'Date','th.route':'Route','th.dist':'Distance',
+      'todo.task':'Book hotel near DAL Airport (Apr 4–5)','todo.sub':'Need to secure before trip',
+      'badge.booked':'Booked','badge.walkin':'Walk-in','badge.optional':'Optional','badge.booknow':'Book Now',
+      'days.eyebrow':'Mar 29 – Apr 5 · 8 Days','days.title':'Day by<em>Day</em>',
+      'days.sub':'Full itinerary with driving segments highlighted',
+      'hou.eyebrow':'Mar 29 – 31 · Base: Westin Galleria','hou.title':'Houston BBQ',
+      'hou.sub':'Click any restaurant to zoom the map · Ranked by prestige + proximity',
+      'hou.listlabel':'Ranked by prestige + proximity','hou.listtitle':"Houston's Finest Pits",
+      'sa.eyebrow':'Mar 31 – Apr 2 · Base: Hyatt Regency Riverwalk','sa.title':'San Antonio BBQ',
+      'sa.sub':'Click any restaurant to zoom the map · Ranked by prestige + proximity',
+      'sa.listlabel':'Ranked by prestige + proximity','sa.listtitle':"San Antonio's Finest Pits",
+      'tech.eyebrow':'Case Study · March 2026','tech.title':'Planning a Trip<em>with Claude</em>',
+      'tech.sub':'From a blank conversation to a fully planned, deployed, shareable road trip — in one extended session',
+      'tech.github':'View on GitHub',
+    },
+    zh: {
+      'nav.overview':'概览','nav.days':'每日行程','nav.houston':'休斯顿烧烤','nav.sa':'圣安东尼奥烧烤','nav.tech':'技术博客',
+      'ov.eyebrow':'家庭旅行 · 2026年春假 · 3月29日–4月5日',
+      'ov.title':'德克萨斯<em>春假之旅</em>',
+      'ov.sub':'四口之家 \u00a0·\u00a0 2026年3月29日–4月5日',
+      'sum.headline':'横跨德克萨斯八天——NASA太空中心、竞技表演、水上乐园和湖人队。',
+      'sum.body':'首站休斯顿驻留两天，参观太空中心并乘坐阿波罗任务控制中心观光车（已预订）；随后驱车约320公里南下圣安东尼奥，漫步河滨步道，游览动物园，乘坐游船。途经天然桥洞穴并在奥斯汀用餐，再前往朗德罗克卡拉哈里度假村畅玩室内外水上乐园。随后驱车约300公里抵达沃斯堡历史牧场区，观看冠军竞技表演。全程五家酒店、一辆租车，沿途调研了20家米其林推荐烧烤餐厅。',
+      'hl.1.l':'休斯顿 · 3月29–31日','hl.1.v':'威斯汀购物中心 · 太空中心 · 阿波罗导览',
+      'hl.2.l':'圣安东尼奥 · 3月31日–4月2日','hl.2.v':'凯悦河畔 · 动物园 · 游船',
+      'hl.3.l':'途中 · 4月2日','hl.3.v':'天然桥洞穴 · 奥斯汀午餐',
+      'hl.4.l':'朗德罗克 · 4月2–4日','hl.4.v':'卡拉哈里 · 室内外水上乐园',
+      'hl.5.l':'沃斯堡 · 4月3–4日','hl.5.v':'斯托克亚德斯 · 冠军竞技',
+      'hl.6.l':'达拉斯 · 4月4–5日','hl.6.v':'湖人vs独行侠 · 返程DAL→SFO',
+      'st.1':'<strong>8</strong> 天','st.2':'<strong>5</strong> 城市','st.3':'<strong>2</strong> 航班',
+      'st.4':'<strong>5</strong> 酒店','st.5':'<strong>4</strong> 已预订活动','st.6':'<strong>~735</strong> 英里驾车',
+      'sec.overview':'概览','sec.transport':'交通','sec.hotels':'酒店',
+      'sec.activities':'已确认票务与活动','sec.driving':'驾车摘要','sec.todo':'待办事项',
+      'sec.started':'起源','sec.made':'为何有效',
+      'sec.convo1':'旅行规划对话','sec.convo2':'NBA比赛搜寻',
+      'tr.1':'去程 · 美联航','tr.2':'租车 · 赫兹','tr.3':'返程 · 西南航空',
+      'th.nights':'日期','th.hotel':'酒店','th.status':'状态',
+      'th.date':'日期','th.route':'路线','th.dist':'距离',
+      'todo.task':'预订达拉斯机场附近酒店（4月4–5日）','todo.sub':'出行前需确认',
+      'badge.booked':'已预订','badge.walkin':'直接入场','badge.optional':'可选','badge.booknow':'立即预订',
+      'days.eyebrow':'3月29日–4月5日 · 8天','days.title':'每日<em>行程</em>',
+      'days.sub':'详细行程，含每段驾车路段标注',
+      'hou.eyebrow':'3月29–31日 · 驻地：威斯汀购物中心','hou.title':'休斯顿烧烤',
+      'hou.sub':'点击餐厅可在地图上定位 · 按声望+距离排名',
+      'hou.listlabel':'按声望+距离排名','hou.listtitle':'休斯顿顶级烤肉店',
+      'sa.eyebrow':'3月31日–4月2日 · 驻地：凯悦河畔','sa.title':'圣安东尼奥烧烤',
+      'sa.sub':'点击餐厅可在地图上定位 · 按声望+距离排名',
+      'sa.listlabel':'按声望+距离排名','sa.listtitle':'圣安东尼奥顶级烤肉店',
+      'tech.eyebrow':'案例研究 · 2026年3月','tech.title':'用Claude<em>规划旅行</em>',
+      'tech.sub':'从一次对话，到一个完整规划、发布、可分享的公路旅行——在一次扩展会话中完成',
+      'tech.github':'在GitHub上查看',
+    }
+  };
+
+  const SEL_TEXT = [
+    ['#page-overview .hero-eyebrow','ov.eyebrow'],['#page-overview .hero-sub','ov.sub'],
+    ['.trip-summary-headline','sum.headline'],['.trip-summary-body','sum.body'],
+    ['.trip-highlight:nth-child(1) .trip-highlight-label','hl.1.l'],['.trip-highlight:nth-child(1) .trip-highlight-value','hl.1.v'],
+    ['.trip-highlight:nth-child(2) .trip-highlight-label','hl.2.l'],['.trip-highlight:nth-child(2) .trip-highlight-value','hl.2.v'],
+    ['.trip-highlight:nth-child(3) .trip-highlight-label','hl.3.l'],['.trip-highlight:nth-child(3) .trip-highlight-value','hl.3.v'],
+    ['.trip-highlight:nth-child(4) .trip-highlight-label','hl.4.l'],['.trip-highlight:nth-child(4) .trip-highlight-value','hl.4.v'],
+    ['.trip-highlight:nth-child(5) .trip-highlight-label','hl.5.l'],['.trip-highlight:nth-child(5) .trip-highlight-value','hl.5.v'],
+    ['.trip-highlight:nth-child(6) .trip-highlight-label','hl.6.l'],['.trip-highlight:nth-child(6) .trip-highlight-value','hl.6.v'],
+    ['.transport-grid .info-card:nth-child(1) .card-eyebrow','tr.1'],
+    ['.transport-grid .info-card:nth-child(2) .card-eyebrow','tr.2'],
+    ['.transport-grid .info-card:nth-child(3) .card-eyebrow','tr.3'],
+    ['.data-table th:nth-child(1)','th.nights'],['.data-table th:nth-child(2)','th.hotel'],['.data-table th:nth-child(3)','th.status'],
+    ['.drive-summary-table th:nth-child(1)','th.date'],['.drive-summary-table th:nth-child(2)','th.route'],['.drive-summary-table th:nth-child(3)','th.dist'],
+    ['.todo-task','todo.task'],['.todo-sub','todo.sub'],
+    ['#page-days .hero-eyebrow','days.eyebrow'],['#page-days .hero-sub','days.sub'],
+    ['#page-houston .bbq-page-eyebrow','hou.eyebrow'],['#page-houston .bbq-page-title','hou.title'],['#page-houston .bbq-page-sub','hou.sub'],
+    ['#page-houston .list-header-label','hou.listlabel'],['#page-houston .list-header-title','hou.listtitle'],
+    ['#page-sanantonio .bbq-page-eyebrow','sa.eyebrow'],['#page-sanantonio .bbq-page-title','sa.title'],['#page-sanantonio .bbq-page-sub','sa.sub'],
+    ['#page-sanantonio .list-header-label','sa.listlabel'],['#page-sanantonio .list-header-title','sa.listtitle'],
+    ['#page-techblog .hero-eyebrow','tech.eyebrow'],['#page-techblog .hero-sub','tech.sub'],
+  ];
+  const SEL_HTML = [
+    ['#page-overview .hero-title','ov.title'],
+    ['.stat-row .stat-chip:nth-child(1)','st.1'],['.stat-row .stat-chip:nth-child(2)','st.2'],
+    ['.stat-row .stat-chip:nth-child(3)','st.3'],['.stat-row .stat-chip:nth-child(4)','st.4'],
+    ['.stat-row .stat-chip:nth-child(5)','st.5'],['.stat-row .stat-chip:nth-child(6)','st.6'],
+    ['#page-days .hero-title','days.title'],['#page-techblog .hero-title','tech.title'],
+  ];
+  const SEL_ALL = [
+    ['.badge-booked','badge.booked'],['.badge-walkin','badge.walkin'],
+    ['.badge-optional','badge.optional'],['.card-status.status-booked','badge.booked'],
+    ['.priority-high','badge.booknow'],
+  ];
+
+  function setLang(lang) {
+    currentLang = lang;
+    const t = T[lang];
+    SEL_TEXT.forEach(([s,k]) => { const el=document.querySelector(s); if(el&&t[k]!==undefined) el.textContent=t[k]; });
+    SEL_HTML.forEach(([s,k]) => { const el=document.querySelector(s); if(el&&t[k]!==undefined) el.innerHTML=t[k]; });
+    SEL_ALL.forEach(([s,k]) => document.querySelectorAll(s).forEach(el => { el.textContent=t[k]; }));
+    document.querySelectorAll('[data-i18n]').forEach(el => { const k=el.dataset.i18n; if(t[k]!==undefined) el.textContent=t[k]; });
+    document.querySelector('.lang-toggle').textContent = lang==='zh' ? 'EN' : '中';
+    document.documentElement.lang = lang==='zh' ? 'zh' : 'en';
   }
 </script>
 
