@@ -302,6 +302,21 @@
   .hotel-name { font-weight: 500; color: var(--cream); letter-spacing: -0.2px; }
   .hotel-detail { font-size: 12px; color: var(--ash); margin-top: 3px; }
 
+  /* ── TRANSPORT ── */
+  .transport-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 768px) {
+    .transport-grid { grid-template-columns: 1fr; }
+  }
+  .transport-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
   /* ── TODO ── */
   .todo-list { display: flex; flex-direction: column; gap: 10px; }
 
@@ -1427,10 +1442,11 @@
       <div class="stat-chip"><strong>~735</strong> mi Driving</div>
     </div>
 
-    <!-- Flights -->
-    <div class="section-label">Flights</div>
-    <div class="card-row">
+    <!-- Transportation -->
+    <div class="section-label">Transportation</div>
+    <div class="transport-grid">
       <div class="info-card">
+        <div class="transport-icon">✈️</div>
         <div class="card-eyebrow">Outbound · United Airlines</div>
         <div class="card-route">SFO → IAH</div>
         <div class="card-date">Sun Mar 29 &nbsp;·&nbsp; 7:00 AM → 1:00 PM</div>
@@ -1438,6 +1454,15 @@
         <span class="card-status status-booked">Booked</span>
       </div>
       <div class="info-card">
+        <div class="transport-icon">🚗</div>
+        <div class="card-eyebrow">Car Rental · Hertz</div>
+        <div class="card-route" style="font-size:20px;">Genesis G70</div>
+        <div class="card-date">IAH pickup Mar 29 @ 2:00 PM</div>
+        <div class="card-detail">DAL drop-off Apr 5 @ 6:00 AM</div>
+        <span class="card-status status-booked">Booked</span>
+      </div>
+      <div class="info-card">
+        <div class="transport-icon">✈️</div>
         <div class="card-eyebrow">Return · Southwest Airlines</div>
         <div class="card-route">DAL → SFO</div>
         <div class="card-date">Sun Apr 5 &nbsp;·&nbsp; 7:30 AM → 9:30 AM (non-stop)</div>
@@ -1445,15 +1470,6 @@
         <div class="card-alert">Check-in: Apr 4 at 7:30 AM sharp (24 hrs before)</div>
         <span class="card-status status-booked">Booked</span>
       </div>
-    </div>
-
-    <!-- Car Rental -->
-    <div class="section-label">Car Rental</div>
-    <div class="info-card">
-      <div class="card-eyebrow">Hertz</div>
-      <div class="card-title">Genesis G70</div>
-      <div class="card-detail">IAH pickup &nbsp;Mar 29 @ 2:00 PM &nbsp;→&nbsp; DAL drop-off Apr 5 @ 6:00 AM</div>
-      <span class="card-status status-booked">Booked</span>
     </div>
 
     <!-- Hotels -->
@@ -1662,22 +1678,6 @@
           <div class="todo-sub">Need to secure before trip</div>
         </div>
         <span class="priority-high">High Priority</span>
-      </div>
-      <div class="todo-item">
-        <div class="todo-num">2</div>
-        <div>
-          <div class="todo-task">Coordinate lunch with Austin friend</div>
-          <div class="todo-sub">Apr 2 · Round Rock / Austin area near I-35</div>
-        </div>
-        <span class="priority-medium">Medium</span>
-      </div>
-      <div class="todo-item">
-        <div class="todo-num">3</div>
-        <div>
-          <div class="todo-task">Coordinate dinner with Austin friend</div>
-          <div class="todo-sub">Apr 4 · Dallas · Cattleack Barbeque or Victory Park</div>
-        </div>
-        <span class="priority-medium">Medium</span>
       </div>
     </div>
 
