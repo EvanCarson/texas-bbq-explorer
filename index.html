@@ -1162,6 +1162,42 @@
   .convo-booking-row:last-child { border-bottom: none; }
   .convo-booking-row span:last-child { color: var(--cream); font-weight: 500; }
 
+  /* trip summary card on overview */
+  .trip-summary-card {
+    background: var(--char); border: 1px solid var(--bark);
+    border-radius: var(--radius-lg); padding: 28px 32px 24px;
+    margin-bottom: 28px;
+  }
+  .trip-summary-headline {
+    font-size: 20px; font-weight: 600; color: var(--gold);
+    letter-spacing: -0.3px; line-height: 1.35; margin-bottom: 12px;
+  }
+  .trip-summary-body {
+    font-size: 14px; color: var(--ash); line-height: 1.75;
+    margin-bottom: 22px; max-width: 680px;
+  }
+  .trip-summary-highlights {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  @media (max-width: 600px) { .trip-summary-highlights { grid-template-columns: repeat(2, 1fr); } }
+  .trip-highlight {
+    background: var(--smoke); border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .trip-highlight-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ash); margin-bottom: 4px;
+  }
+  .trip-highlight-value {
+    font-size: 13px; font-weight: 500; color: var(--gold); letter-spacing: -0.1px;
+  }
+
+  /* convo section description */
+  .convo-section-desc {
+    font-size: 14px; color: var(--ash); line-height: 1.65;
+    margin-bottom: 16px; padding: 0 2px;
+  }
+
   /* option cards – block layout (not grid) */
   .option-card { display: block; }
   .option-badge {
@@ -1201,6 +1237,20 @@
   </div>
 
   <div class="container">
+
+    <!-- Trip Summary -->
+    <div class="trip-summary-card">
+      <div class="trip-summary-headline">A Texas road trip for four — planned, adjusted, and published with Claude.</div>
+      <div class="trip-summary-body">Eight days through five Texas cities: landing in Houston for Space Center and BBQ, heading south to San Antonio for the Riverwalk and the zoo, swinging through Round Rock for two days at Kalahari's indoor waterpark, and closing the loop in Fort Worth and Dallas for the Stockyards and a Rangers game. Two flights, five hotels, 735 miles of driving, and 20 Michelin-ranked BBQ spots researched — all organised into this interactive site through a single conversation with Claude.</div>
+      <div class="trip-summary-highlights">
+        <div class="trip-highlight"><div class="trip-highlight-label">Arrival</div><div class="trip-highlight-value">Mar 29 · SFO → IAH</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Houston</div><div class="trip-highlight-value">Mar 29–31 · Space Center · Kemah</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">San Antonio</div><div class="trip-highlight-value">Mar 31–Apr 2 · Zoo · Riverwalk</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Round Rock</div><div class="trip-highlight-value">Apr 2–4 · Kalahari Waterpark</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Fort Worth</div><div class="trip-highlight-value">Apr 4–5 · Stockyards · Rangers</div></div>
+        <div class="trip-highlight"><div class="trip-highlight-label">Departure</div><div class="trip-highlight-value">Apr 5 · DAL → SFO</div></div>
+      </div>
+    </div>
 
     <!-- Quick Stats -->
     <div class="stat-row">
@@ -2238,7 +2288,8 @@
 
     <div class="section-label">How It Started</div>
     <div class="blog-card">
-      <p class="blog-p">We had a week-long Texas road trip roughed out — flights booked, some hotels confirmed, a list of BBQ spots. What we didn't have was a single place to see it all. So we opened Claude Code and pasted in our notes. Here's how it went.</p>
+      <p class="blog-p">We had a week-long Texas road trip roughed out — flights booked, some hotels confirmed, a list of BBQ spots, and a bunch of open questions: are the tickets booked? Where do the kids play? Does the route even make sense? What we didn't have was anyone — or anything — to look at the whole picture at once and tell us if it held together.</p>
+      <p class="blog-p">So we turned to Claude. Not just to generate text, but to act as a trip agent: ingest the raw plan, surface gaps, validate the routing, suggest options, and eventually produce this interactive page the whole family can reference. The conversation below is how it actually went.</p>
     </div>
 
     <div class="section-label">What Made This Work</div>
@@ -2275,7 +2326,8 @@
       </div>
     </div>
 
-    <div class="section-label" style="margin-top:48px;">The Conversation</div>
+    <div class="section-label" style="margin-top:48px;">Trip Planning — Filling the Gap</div>
+    <p class="convo-section-desc">Claude ingests the raw itinerary, spots an unscheduled stretch between San Antonio and Fort Worth, and offers water park options ranked by route fit and season — then books the hotel and updates the plan.</p>
     <div class="convo-thread">
 
       <!-- Turn 1: Claude sends initial plan -->
@@ -2364,6 +2416,12 @@
         </div>
       </div>
 
+    </div><!-- /convo-thread -->
+
+    <div class="section-label" style="margin-top:48px;">Live Event Discovery — NBA on the Route</div>
+    <p class="convo-section-desc">Claude cross-references the trip dates and cities against the NBA schedule to surface games you can actually attend — ranked by schedule fit, not just proximity.</p>
+    <div class="convo-thread">
+
       <!-- Turn 6: User asks for NBA -->
       <div class="convo-turn user-turn">
         <div class="convo-avatar">U</div>
@@ -2401,7 +2459,7 @@
         </div>
       </div>
 
-    </div><!-- /convo-thread -->
+    </div><!-- /convo-thread nba -->
 
   </div>
 </div><!-- /page-techblog -->
