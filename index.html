@@ -103,6 +103,31 @@
   .nav-link:hover { color: var(--cream); }
   .nav-link.active { color: var(--ember); font-weight: 600; }
 
+  @media (max-width: 600px) {
+    .top-nav {
+      flex-wrap: wrap;
+      height: auto;
+      padding: 8px 12px 0;
+      gap: 0;
+    }
+    .nav-logo {
+      width: 100%;
+      padding: 4px 0 8px;
+      font-size: 15px;
+    }
+    .nav-links {
+      width: 100%;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-link {
+      font-size: 11px;
+      padding: 0 10px;
+      height: 36px;
+      flex: 1;
+      justify-content: center;
+    }
+  }
+
   /* ── PAGE SYSTEM ── */
   .page { display: none; animation: fadeIn 0.25s ease; }
   .page.active { display: block; }
@@ -1480,7 +1505,6 @@
           <tr>
             <th>Nights</th>
             <th>Hotel</th>
-            <th>Booked Via</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -1491,7 +1515,6 @@
               <div class="hotel-name">Westin Galleria Houston</div>
               <div class="hotel-detail">2 Queen Beds</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">AE Travel</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1500,7 +1523,6 @@
               <div class="hotel-name">Hyatt Regency SA Riverwalk</div>
               <div class="hotel-detail">King River View · Breakfast incl. · $25 F&amp;B credit · Riverboat incl. · No resort fee</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">Costco</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1509,7 +1531,6 @@
               <div class="hotel-name">Kalahari Resort Round Rock</div>
               <div class="hotel-detail">2 Queen Sofa · $243.99</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">Official</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1518,7 +1539,6 @@
               <div class="hotel-name">SpringHill Suites Fort Worth Historic Stockyards</div>
               <div class="hotel-detail">2 Queen Beds + Sofa · Check-in 3 PM</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">Marriott</td>
             <td><span class="badge-booked">Booked</span></td>
           </tr>
           <tr>
@@ -1527,7 +1547,6 @@
               <div class="hotel-name">Hotel near DAL Airport</div>
               <div class="hotel-detail">TBD</div>
             </td>
-            <td style="font-size:12px;color:var(--ash);">—</td>
             <td><span class="priority-high">Book Now</span></td>
           </tr>
         </tbody>
