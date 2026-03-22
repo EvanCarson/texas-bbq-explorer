@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Texas BBQ Explorer — Qian Family Trip 2026</title>
+<title>Texas BBQ Explorer — Family Trip 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -18,10 +18,10 @@
     --michelin: #e63946;
     --teal:     #2a7f74;
     --blue:     #1e4d8c;
+    --green:    #2d6a4f;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -33,7 +33,6 @@
     overflow-x: hidden;
   }
 
-  /* ── GRAIN OVERLAY ── */
   body::before {
     content: '';
     position: fixed;
@@ -44,15 +43,80 @@
     opacity: 0.35;
   }
 
-  /* ── HERO ── */
-  .hero {
-    position: relative;
-    padding: 80px 40px 60px;
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(26,20,16,0.96);
+    border-bottom: 1px solid var(--bark);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 52px;
+    gap: 16px;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0 20px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--ash);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .nav-link:hover { color: var(--cream); }
+  .nav-link.active { color: var(--ember); border-bottom-color: var(--ember); }
+
+  /* ── PAGE SYSTEM ── */
+  .page { display: none; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    padding: 52px 40px 44px;
     text-align: center;
+    position: relative;
     overflow: hidden;
   }
 
-  .hero::after {
+  .page-hero::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -66,87 +130,392 @@
     letter-spacing: 0.35em;
     text-transform: uppercase;
     color: var(--ember);
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeUp 0.6s ease 0.1s forwards;
+    margin-bottom: 16px;
   }
 
   .hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(42px, 8vw, 88px);
+    font-size: clamp(36px, 6vw, 72px);
     font-weight: 900;
     line-height: 0.9;
     letter-spacing: -0.02em;
     margin-bottom: 16px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease 0.25s forwards;
   }
 
-  .hero-title em {
-    font-style: italic;
-    color: var(--flame);
-    display: block;
-  }
+  .hero-title em { font-style: italic; color: var(--flame); display: block; }
 
   .hero-sub {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--ash);
-    letter-spacing: 0.08em;
-    opacity: 0;
-    animation: fadeUp 0.7s ease 0.4s forwards;
-    margin-bottom: 40px;
+    letter-spacing: 0.06em;
   }
 
-  /* ── CITY TOGGLE ── */
-  .city-toggle {
-    display: inline-flex;
-    gap: 0;
+  /* ── SECTION LABELS ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin: 40px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--bark);
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+  }
+
+  .stat-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border: 1px solid var(--bark);
+    border-radius: 2px;
+    color: var(--ash);
+    background: var(--char);
+  }
+
+  .stat-chip strong { color: var(--gold); }
+
+  /* ── CARD ROW ── */
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media(max-width:700px) { .card-row { grid-template-columns: 1fr; } }
+
+  /* ── INFO CARD ── */
+  .info-card {
+    background: var(--char);
     border: 1px solid var(--bark);
     border-radius: 4px;
-    overflow: hidden;
-    opacity: 0;
-    animation: fadeUp 0.7s ease 0.55s forwards;
-    margin-bottom: 16px;
+    padding: 20px 24px;
   }
 
-  .city-btn {
-    padding: 12px 32px;
+  .card-eyebrow {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .card-route {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .card-date {
+    font-size: 13px;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .card-detail {
+    font-size: 12px;
+    color: var(--ash);
+  }
+
+  .card-alert {
+    margin-top: 10px;
+    background: rgba(201,79,26,0.12);
+    border: 1px solid rgba(201,79,26,0.3);
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: var(--flame);
+  }
+
+  .card-status {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .status-booked { background: rgba(45,106,79,0.2); color: #52b788; border: 1px solid rgba(45,106,79,0.4); }
+  .status-tbd    { background: rgba(230,57,70,0.15); color: var(--michelin); border: 1px solid rgba(230,57,70,0.35); }
+
+  /* ── DATA TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .data-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: var(--char);
     color: var(--ash);
+    text-align: left;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--bark);
+    background: rgba(26,20,16,0.5);
+  }
+
+  .data-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(74,55,40,0.3);
+    color: var(--cream);
+    vertical-align: top;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .data-table tr:hover td { background: rgba(201,79,26,0.05); }
+
+  .hotel-name { font-weight: 500; color: var(--cream); }
+  .hotel-detail { font-size: 11px; color: var(--ash); margin-top: 2px; }
+
+  /* ── TODO ── */
+  .todo-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .todo-item {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    background: var(--char);
+    border: 1px solid var(--bark);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+
+  .todo-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--bark);
+  }
+
+  .todo-task { font-size: 13px; color: var(--cream); }
+  .todo-sub  { font-size: 11px; color: var(--ash); margin-top: 2px; }
+
+  .priority-high   { font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;background:rgba(230,57,70,.15);color:var(--michelin);border:1px solid rgba(230,57,70,.3);white-space:nowrap; }
+  .priority-medium { font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;background:rgba(212,168,83,.1);color:var(--gold);border:1px solid rgba(212,168,83,.25);white-space:nowrap; }
+
+  /* ── ACTIVITY TICKET ── */
+  .ticket-grid { display: flex; flex-direction: column; gap: 10px; }
+
+  .ticket-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    background: var(--char);
+    border: 1px solid var(--bark);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+
+  @media(max-width:600px) { .ticket-item { grid-template-columns: 1fr; } }
+
+  .ticket-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ember);
+  }
+
+  .ticket-name { font-size: 13px; font-weight: 500; color: var(--cream); }
+  .ticket-detail { font-size: 11px; color: var(--ash); margin-top: 2px; }
+
+  .badge-booked   { font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;background:rgba(45,106,79,.2);color:#52b788;border:1px solid rgba(45,106,79,.4);white-space:nowrap; }
+  .badge-walkin   { font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;background:rgba(42,127,116,.12);color:#5bbfb5;border:1px solid rgba(42,127,116,.25);white-space:nowrap; }
+  .badge-optional { font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;background:rgba(212,168,83,.1);color:var(--gold);border:1px solid rgba(212,168,83,.25);white-space:nowrap; }
+
+  /* ── DAY BY DAY ── */
+  .days-grid { display: flex; flex-direction: column; gap: 24px; margin-top: 32px; }
+
+  .day-card {
+    background: var(--char);
+    border: 1px solid var(--bark);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    background: rgba(26,20,16,0.6);
+    border-bottom: 1px solid var(--bark);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .day-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ember);
+  }
+
+  .day-city {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+
+  .day-drive-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    background: rgba(232,121,29,0.15);
+    border: 1px solid rgba(232,121,29,0.35);
+    color: var(--flame);
+    border-radius: 2px;
+  }
+
+  .activity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .activity-table td {
+    padding: 11px 22px;
+    border-bottom: 1px solid rgba(74,55,40,0.25);
+    vertical-align: top;
+    color: var(--cream);
+  }
+
+  .activity-table tr:last-child td { border-bottom: none; }
+
+  .act-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: var(--ash);
+    white-space: nowrap;
+    width: 90px;
+    padding-top: 13px;
+  }
+
+  .act-text { line-height: 1.5; }
+  .act-text em { font-style: normal; color: var(--ash); font-size: 11px; display: block; margin-top: 2px; }
+
+  /* Drive row highlight */
+  .drive-row td {
+    background: rgba(232,121,29,0.07);
+    border-bottom: 1px solid rgba(232,121,29,0.2) !important;
+    border-top: 1px solid rgba(232,121,29,0.15);
+    padding: 10px 22px;
+  }
+
+  .drive-row .act-time { color: var(--flame); }
+
+  .drive-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .drive-route {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--flame);
+    font-weight: 500;
+  }
+
+  .drive-stats {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ash);
+    letter-spacing: 0.05em;
+  }
+
+  .drive-icon { font-size: 14px; }
+
+  .booked-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: rgba(45,106,79,.2);
+    color: #52b788;
+    border: 1px solid rgba(45,106,79,.35);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── BBQ PAGE HEADER ── */
+  .bbq-page-header {
+    padding: 36px 40px 28px;
+    border-bottom: 1px solid var(--bark);
     position: relative;
+    overflow: hidden;
   }
 
-  .city-btn.active {
-    background: var(--ember);
+  .bbq-page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ember), var(--gold), var(--ember), transparent);
+  }
+
+  .bbq-page-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 6px;
+  }
+
+  .bbq-page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
     color: var(--cream);
   }
 
-  .city-btn:hover:not(.active) {
-    background: var(--bark);
-    color: var(--cream);
-  }
-
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .city-panel {
-    display: none;
-    animation: fadeIn 0.4s ease;
-  }
-
-  .city-panel.active {
-    display: block;
+  .bbq-page-sub {
+    font-size: 12px;
+    color: var(--ash);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
   }
 
   /* ── MAP + LIST SPLIT ── */
@@ -157,11 +526,8 @@
     min-height: 80vh;
   }
 
-  @media (max-width: 900px) {
-    .content-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
 
-  /* ── MAP EMBED ── */
   .map-pane {
     position: relative;
     background: var(--char);
@@ -179,8 +545,7 @@
 
   .map-label {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 16px; left: 16px;
     font-family: 'DM Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.25em;
@@ -194,6 +559,23 @@
     z-index: 10;
   }
 
+  .map-hint {
+    position: absolute;
+    bottom: 16px; left: 16px; right: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(26,20,16,0.8);
+    color: var(--ash);
+    padding: 6px 12px;
+    border: 1px solid var(--bark);
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+    z-index: 10;
+    text-align: center;
+  }
+
   /* ── RANKED LIST ── */
   .list-pane {
     background: var(--char);
@@ -201,8 +583,12 @@
     max-height: 80vh;
   }
 
+  .list-pane::-webkit-scrollbar { width: 4px; }
+  .list-pane::-webkit-scrollbar-track { background: var(--char); }
+  .list-pane::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 2px; }
+
   .list-header {
-    padding: 24px 20px 16px;
+    padding: 20px 20px 14px;
     border-bottom: 1px solid var(--bark);
     position: sticky;
     top: 0;
@@ -221,200 +607,9 @@
 
   .list-header-title {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--cream);
-  }
-
-  .bbq-item {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(74,55,40,0.4);
-    cursor: pointer;
-    transition: background 0.2s ease;
-    display: grid;
-    grid-template-columns: 36px 1fr auto;
-    gap: 12px;
-    align-items: start;
-  }
-
-  .bbq-item:hover {
-    background: rgba(201,79,26,0.08);
-  }
-
-  .bbq-item.featured {
-    background: rgba(212,168,83,0.06);
-    border-left: 3px solid var(--gold);
-  }
-
-  .rank-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--bark);
-    line-height: 1;
-    padding-top: 2px;
-  }
-
-  .bbq-item.featured .rank-num,
-  .bbq-item:nth-child(-n+3) .rank-num {
-    color: var(--gold);
-  }
-
-  .bbq-info { flex: 1; min-width: 0; }
-
-  .bbq-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--cream);
-    line-height: 1.2;
-    margin-bottom: 3px;
-  }
-
-  .bbq-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 5px;
-  }
-
-  .tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 2px 7px;
-    border-radius: 2px;
-  }
-
-  .tag-michelin {
-    background: rgba(230,57,70,0.15);
-    color: var(--michelin);
-    border: 1px solid rgba(230,57,70,0.3);
-  }
-
-  .tag-bib {
-    background: rgba(230,57,70,0.1);
-    color: #e8956d;
-    border: 1px solid rgba(230,57,70,0.2);
-  }
-
-  .tag-rec {
-    background: rgba(42,127,116,0.12);
-    color: #5bbfb5;
-    border: 1px solid rgba(42,127,116,0.25);
-  }
-
-  .tag-tm {
-    background: rgba(212,168,83,0.1);
-    color: var(--gold);
-    border: 1px solid rgba(212,168,83,0.25);
-  }
-
-  .tag-daytrip {
-    background: rgba(30,77,140,0.15);
-    color: #7baee8;
-    border: 1px solid rgba(30,77,140,0.3);
-  }
-
-  .bbq-desc {
-    font-size: 11.5px;
-    color: var(--ash);
-    line-height: 1.5;
-  }
-
-  .bbq-meta {
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .bbq-drive {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--flame);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    margin-bottom: 3px;
-  }
-
-  .bbq-rating {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--ash);
-  }
-
-  .bbq-rating span {
-    color: var(--gold);
-  }
-
-  .bbq-hours {
-    font-size: 10px;
-    color: var(--ash);
-    margin-top: 2px;
-  }
-
-  /* ── TRIP NOTE ── */
-  .trip-note {
-    margin: 40px 0;
-    padding: 0 24px;
-  }
-
-  .note-card {
-    background: linear-gradient(135deg, rgba(201,79,26,0.12), rgba(212,168,83,0.06));
-    border: 1px solid rgba(201,79,26,0.25);
-    border-radius: 6px;
-    padding: 24px 28px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 20px;
-    align-items: start;
-  }
-
-  .note-icon {
-    font-size: 28px;
-    line-height: 1;
-  }
-
-  .note-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--ember);
-    margin-bottom: 6px;
-  }
-
-  .note-text {
-    font-size: 13px;
-    color: var(--ash);
-    line-height: 1.7;
-  }
-
-  .note-text strong { color: var(--cream); font-weight: 500; }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--bark);
-    padding: 32px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .footer-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--gold);
-  }
-
-  .footer-meta {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--ash);
-    letter-spacing: 0.15em;
   }
 
   /* ── LEGEND ── */
@@ -422,7 +617,7 @@
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
-    padding: 12px 20px;
+    padding: 10px 20px;
     border-bottom: 1px solid var(--bark);
     background: rgba(26,20,16,0.6);
   }
@@ -437,481 +632,1251 @@
     letter-spacing: 0.05em;
   }
 
-  .legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── BBQ ITEMS ── */
+  .bbq-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(74,55,40,0.4);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 12px;
+    align-items: start;
   }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .bbq-item:hover { background: rgba(201,79,26,0.08); }
+
+  .bbq-item.featured {
+    background: rgba(212,168,83,0.06);
+    border-left: 3px solid var(--gold);
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  .bbq-item.selected {
+    background: rgba(201,79,26,0.16) !important;
+    outline: 2px solid var(--ember);
+    outline-offset: -2px;
   }
 
-  /* ── SCROLLBAR ── */
-  .list-pane::-webkit-scrollbar { width: 4px; }
-  .list-pane::-webkit-scrollbar-track { background: var(--char); }
-  .list-pane::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 2px; }
+  .rank-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--bark);
+    line-height: 1;
+    padding-top: 2px;
+  }
 
-  /* ── DIVIDER ── */
-  .section-divider {
-    text-align: center;
-    padding: 32px 0 0;
+  .bbq-item.featured .rank-num { color: var(--gold); }
+
+  .bbq-info { flex: 1; min-width: 0; }
+
+  .bbq-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .bbq-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .tag-michelin { background: rgba(230,57,70,0.15); color: var(--michelin); border: 1px solid rgba(230,57,70,0.3); }
+  .tag-bib      { background: rgba(230,57,70,0.1);  color: #e8956d;         border: 1px solid rgba(230,57,70,0.2); }
+  .tag-rec      { background: rgba(42,127,116,0.12); color: #5bbfb5;         border: 1px solid rgba(42,127,116,0.25); }
+  .tag-tm       { background: rgba(212,168,83,0.1);  color: var(--gold);     border: 1px solid rgba(212,168,83,0.25); }
+  .tag-daytrip  { background: rgba(30,77,140,0.15);  color: #7baee8;         border: 1px solid rgba(30,77,140,0.3); }
+
+  .bbq-desc  { font-size: 11.5px; color: var(--ash); line-height: 1.5; }
+  .bbq-hours { font-size: 10px; color: var(--ash); margin-top: 2px; }
+
+  .bbq-meta  { text-align: right; flex-shrink: 0; }
+
+  .bbq-drive {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--bark);
+    color: var(--flame);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    margin-bottom: 3px;
   }
 
-  .divider-line {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--bark), transparent);
-    margin: 12px 0 32px;
+  .bbq-rating { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ash); }
+  .bbq-rating span { color: var(--gold); }
+
+  /* ── TRIP NOTE ── */
+  .trip-note { margin: 32px 0; padding: 0 24px; }
+
+  .note-card {
+    background: linear-gradient(135deg, rgba(201,79,26,0.12), rgba(212,168,83,0.06));
+    border: 1px solid rgba(201,79,26,0.25);
+    border-radius: 6px;
+    padding: 22px 26px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: start;
   }
+
+  .note-icon { font-size: 26px; line-height: 1; }
+
+  .note-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 6px;
+  }
+
+  .note-text { font-size: 13px; color: var(--ash); line-height: 1.7; }
+  .note-text strong { color: var(--cream); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--bark);
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--gold); }
+  .footer-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ash); letter-spacing: 0.12em; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ── DRIVE SUMMARY TABLE ── */
+  .drive-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  .drive-summary-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash);
+    text-align: left;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--bark);
+    background: rgba(26,20,16,0.5);
+  }
+
+  .drive-summary-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(74,55,40,0.3);
+    color: var(--cream);
+  }
+
+  .drive-summary-table tr:last-child td { border-bottom: none; }
+
+  .drive-summary-table .dist {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--flame);
+  }
+
+  .drive-summary-table .dur {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ash);
+  }
+
+  .drive-big-day td { background: rgba(232,121,29,0.06); }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<header class="hero">
-  <p class="hero-eyebrow">Qian Family · Spring Break 2026 · Mar 29 – Apr 5</p>
-  <h1 class="hero-title">Texas BBQ<em>Explorer</em></h1>
-  <p class="hero-sub">Top 10 Ranked Pits · Houston & San Antonio · Michelin Verified</p>
-
-  <div class="city-toggle">
-    <button class="city-btn active" onclick="switchCity('houston')">Houston</button>
-    <button class="city-btn" onclick="switchCity('sanantonio')">San Antonio</button>
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-logo">Texas BBQ Explorer</div>
+  <div class="nav-links">
+    <div class="nav-link active" data-page="overview" onclick="showPage('overview', this)">Overview</div>
+    <div class="nav-link" data-page="days" onclick="showPage('days', this)">Day by Day</div>
+    <div class="nav-link" data-page="houston" onclick="showPage('houston', this)">Houston BBQ</div>
+    <div class="nav-link" data-page="sanantonio" onclick="showPage('sanantonio', this)">SA BBQ</div>
   </div>
-</header>
+</nav>
 
-<!-- HOUSTON PANEL -->
-<div id="panel-houston" class="city-panel active">
+
+<!-- ══════════════════════════════════════
+     PAGE: OVERVIEW
+══════════════════════════════════════ -->
+<div id="page-overview" class="page active">
+
+  <div class="page-hero">
+    <div class="hero-eyebrow">Family Trip · Spring Break 2026 · Mar 29 – Apr 5</div>
+    <h1 class="hero-title">Texas<em>Spring Break</em></h1>
+    <p class="hero-sub">Dad · Mom · Boy 1 · Boy 2 &nbsp;·&nbsp; SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</p>
+  </div>
+
   <div class="container">
-    <div class="content-grid">
 
-      <!-- MAP -->
-      <div class="map-pane">
-        <div class="map-label">From Westin Galleria · Houston</div>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m58!1m12!1m3!1d221943.88!2d-95.5!3d29.75!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m43!3e0!4m5!1s0x8640c0b8c7db5d05%3A0x4d2e1a89c0c2d2de!2sWestin%20Galleria%20Houston!3m2!1d29.736!2d-95.4677!4m5!1s0x8640c0cce39ac043%3A0x3a44a8e5a929b35a!2sCorkScrew%20BBQ%2C%20Spring%2C%20TX!3m2!1d30.0807!2d-95.4199!4m5!1s0x8640c0cc3c0ad441%3A0x36c9b09f9b9eade2!2sTruth%20BBQ%2C%20Houston%2C%20TX!3m2!1d29.769!2d-95.3976!4m5!1s0x8640c080d40bfd73%3A0xbc8b5711224487da!2sPinkerton%27s%20Barbecue%2C%20Houston%2C%20TX!3m2!1d29.7323!2d-95.4117!4m5!1s0x8640c07f87ac2481%3A0xca8a228a048a2fc3!2sThe%20Pit%20Room%2C%20Houston%2C%20TX!3m2!1d29.7342!2d-95.3941!4m5!1s0x8640c118dba1b33b%3A0x21fc3f5514f5d577!2sBlood%20Bros.%20BBQ%2C%20Bellaire%2C%20TX!3m2!1d29.7052!2d-95.4755!5e0!3m2!1sen!2sus!4v1710000000000"
-          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+    <!-- Quick Stats -->
+    <div class="stat-row">
+      <div class="stat-chip"><strong>8</strong> Days</div>
+      <div class="stat-chip"><strong>5</strong> Cities</div>
+      <div class="stat-chip"><strong>2</strong> Flights</div>
+      <div class="stat-chip"><strong>5</strong> Hotels</div>
+      <div class="stat-chip"><strong>4</strong> Pre-booked Activities</div>
+      <div class="stat-chip"><strong>~735</strong> mi Driving</div>
+    </div>
+
+    <!-- Flights -->
+    <div class="section-label">Flights</div>
+    <div class="card-row">
+      <div class="info-card">
+        <div class="card-eyebrow">Outbound · United Airlines</div>
+        <div class="card-route">SFO → IAH</div>
+        <div class="card-date">Sun Mar 29 &nbsp;·&nbsp; 7:00 AM → 1:00 PM</div>
+        <div class="card-detail">4 seats reserved · Row 32</div>
+        <span class="card-status status-booked">Booked</span>
       </div>
-
-      <!-- LIST -->
-      <div class="list-pane">
-        <div class="list-header">
-          <div class="list-header-label">Ranked by prestige + proximity</div>
-          <div class="list-header-title">Houston's Finest Pits</div>
-        </div>
-
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--michelin)"></div>Michelin Star</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#e8956d"></div>Bib Gourmand</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#5bbfb5"></div>Recommended</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>TX Monthly</div>
-        </div>
-
-        <!-- Items -->
-        <div class="bbq-item featured">
-          <div class="rank-num">1</div>
-          <div class="bbq-info">
-            <div class="bbq-name">CorkScrew BBQ</div>
-            <div class="bbq-tags">
-              <span class="tag tag-michelin">⭐ Michelin Star</span>
-              <span class="tag tag-tm">TX Monthly Top 50</span>
-            </div>
-            <div class="bbq-desc">Only Michelin-starred BBQ near Houston. Melt-in-mouth brisket from Creekstone Farms, jalapeño sausage. Arrive before 11 AM.</div>
-            <div class="bbq-hours">Wed–Sat · 11 AM–4 PM · Spring, TX</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~45 min N</div>
-            <div class="bbq-rating"><span>4.7</span> ★ · 4,344</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">2</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Truth BBQ</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-              <span class="tag tag-tm">TX Monthly #9</span>
-            </div>
-            <div class="bbq-desc">Pork ribs, garlic sausage, Saturday beef rib. Dinner service Tue–Fri — best evening option near hotel.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–8 PM · Heights</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~15 min</div>
-            <div class="bbq-rating"><span>4.5</span> ★ · 3,881</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">3</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Pinkerton's Barbecue</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-              <span class="tag tag-tm">TX Monthly Top 50</span>
-            </div>
-            <div class="bbq-desc">Closest Michelin spot. Legendary glazed St. Louis ribs, beef rib, candy-paint pork. New 2026 Montrose location.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Montrose</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~8 min</div>
-            <div class="bbq-rating"><span>4.5</span> ★ · 104</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">4</div>
-          <div class="bbq-info">
-            <div class="bbq-name">The Pit Room</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-            </div>
-            <div class="bbq-desc">Open 7 days — most flexible hours. Brisket, wagyu ribs, venison sausage, elote. Also serves breakfast tacos.</div>
-            <div class="bbq-hours">Daily · 7 AM–9 PM · Montrose</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~12 min</div>
-            <div class="bbq-rating"><span>4.5</span> ★ · 7,483</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">5</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Blood Bros. BBQ</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-            </div>
-            <div class="bbq-desc">Asian-Texan fusion. Brisket fried rice, gochujang glazed ribs, pork belly bao buns. Totally unique in Houston.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Bellaire</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~10 min</div>
-            <div class="bbq-rating"><span>4.3</span> ★ · 1,199</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">6</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Killen's Barbecue</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-            </div>
-            <div class="bbq-desc">Famous pork belly burnt ends and monster beef rib. Open 7 days including dinner. Worth the drive south to Pearland.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Pearland</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~35 min S</div>
-            <div class="bbq-rating"><span>4.4</span> ★ · 6,010</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">7</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Tejas Chocolate + Barbecue</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-            </div>
-            <div class="bbq-desc">Unique: artisan chocolate shop + award BBQ. Chile relleno sausage, brisket nachos. Open daily in Tomball.</div>
-            <div class="bbq-hours">Daily · 11 AM–9 PM · Tomball</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~45 min NW</div>
-            <div class="bbq-rating"><span>4.5</span> ★ · 1,543</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">8</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Feges BBQ</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Fine dining meets BBQ. Kid play area — great for family. Banana caramel pie, hog fat cornbread. Dinner Tue–Sat.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Spring Branch</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~15 min</div>
-            <div class="bbq-rating"><span>4.4</span> ★ · 865</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">9</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Brisket & Rice</div>
-            <div class="bbq-tags">
-              <span class="tag tag-rec">Michelin Rec</span>
-            </div>
-            <div class="bbq-desc">Vietnamese-Texan fusion. Signature brisket fried rice, fall-off-the-bone ribs. Highest rating (4.7) on this list.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–7 PM · Energy Corridor</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~30 min W</div>
-            <div class="bbq-rating"><span>4.7</span> ★ · 1,296</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">10</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Gatlin's BBQ</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Houston institution since 2010. Opens 7 AM — only place for BBQ breakfast. East Texas style dirty rice, collards.</div>
-            <div class="bbq-hours">Mon–Sat · 7 AM–6 PM · Oak Forest</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~20 min</div>
-            <div class="bbq-rating"><span>4.4</span> ★ · 2,932</div>
-          </div>
-        </div>
+      <div class="info-card">
+        <div class="card-eyebrow">Return · Southwest Airlines</div>
+        <div class="card-route">DAL → SFO</div>
+        <div class="card-date">Sun Apr 5 &nbsp;·&nbsp; 7:30 AM → 9:30 AM (non-stop)</div>
+        <div class="card-detail">Love Field · Dallas</div>
+        <div class="card-alert">Check-in: Apr 4 at 7:30 AM sharp (24 hrs before)</div>
+        <span class="card-status status-booked">Booked</span>
       </div>
     </div>
 
-    <!-- TRIP NOTE -->
-    <div class="trip-note">
-      <div class="note-card">
-        <div class="note-icon">🗓️</div>
+    <!-- Car Rental -->
+    <div class="section-label">Car Rental</div>
+    <div class="info-card">
+      <div class="card-eyebrow">Hertz</div>
+      <div class="card-title">Genesis G70</div>
+      <div class="card-detail">IAH pickup &nbsp;Mar 29 @ 2:00 PM &nbsp;→&nbsp; DAL drop-off Apr 5 @ 6:00 AM</div>
+      <span class="card-status status-booked">Booked</span>
+    </div>
+
+    <!-- Hotels -->
+    <div class="section-label">Hotels</div>
+    <div style="background:var(--char);border:1px solid var(--bark);border-radius:4px;overflow:hidden;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nights</th>
+            <th>Hotel</th>
+            <th>Booked Via</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);white-space:nowrap;">Mar 29–31</td>
+            <td>
+              <div class="hotel-name">Westin Galleria Houston</div>
+              <div class="hotel-detail">2 Queen Beds</div>
+            </td>
+            <td style="font-size:12px;color:var(--ash);">AE Travel</td>
+            <td><span class="badge-booked">Booked</span></td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);white-space:nowrap;">Mar 31–Apr 2</td>
+            <td>
+              <div class="hotel-name">Hyatt Regency SA Riverwalk</div>
+              <div class="hotel-detail">King River View · Breakfast incl. · $25 F&amp;B credit · Riverboat incl. · No resort fee</div>
+            </td>
+            <td style="font-size:12px;color:var(--ash);">Costco</td>
+            <td><span class="badge-booked">Booked</span></td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);white-space:nowrap;">Apr 2–3</td>
+            <td>
+              <div class="hotel-name">Kalahari Resort Round Rock</div>
+              <div class="hotel-detail">2 Queen Sofa · $243.99</div>
+            </td>
+            <td style="font-size:12px;color:var(--ash);">Official</td>
+            <td><span class="badge-booked">Booked</span></td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);white-space:nowrap;">Apr 3–4</td>
+            <td>
+              <div class="hotel-name">SpringHill Suites Fort Worth Historic Stockyards</div>
+              <div class="hotel-detail">2 Queen Beds + Sofa · Check-in 3 PM</div>
+            </td>
+            <td style="font-size:12px;color:var(--ash);">Marriott</td>
+            <td><span class="badge-booked">Booked</span></td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);white-space:nowrap;">Apr 4–5</td>
+            <td>
+              <div class="hotel-name">Hotel near DAL Airport</div>
+              <div class="hotel-detail">TBD</div>
+            </td>
+            <td style="font-size:12px;color:var(--ash);">—</td>
+            <td><span class="priority-high">Book Now</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Confirmed Activities -->
+    <div class="section-label">Confirmed Tickets &amp; Activities</div>
+    <div class="ticket-grid">
+      <div class="ticket-item">
+        <div class="ticket-date">Mon Mar 30</div>
         <div>
-          <div class="note-label">Your Houston Schedule — Mar 29–31</div>
-          <div class="note-text">
-            <strong>Best fit for Mon Mar 30 dinner</strong> (after Space Center): Truth BBQ — dinner service, 15 min from hotel, Bib Gourmand.<br>
-            <strong>Quick grab on Mar 29 arrival evening:</strong> Pinkerton's Montrose — 8 min, open until 9 PM Sunday.<br>
-            <strong>If you want the #1:</strong> CorkScrew is 45 min north — plan a dedicated morning trip Wed–Sat before 11 AM.
-          </div>
+          <div class="ticket-name">Space Center Houston</div>
+          <div class="ticket-detail">GA 10:00 AM + Apollo Mission Control Tram 12:40 PM</div>
         </div>
+        <span class="badge-booked">Pre-booked</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Fri Apr 3</div>
+        <div>
+          <div class="ticket-name">Stockyards Championship Rodeo</div>
+          <div class="ticket-detail">Cowtown Coliseum · 7:30 PM · Fort Worth</div>
+        </div>
+        <span class="badge-booked">Pre-booked</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Sat Apr 4</div>
+        <div>
+          <div class="ticket-name">NBA: Lakers vs. Mavericks</div>
+          <div class="ticket-detail">American Airlines Center · 6:30 PM · NBC/Peacock</div>
+        </div>
+        <span class="badge-booked">Pre-booked</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Sat Apr 4</div>
+        <div>
+          <div class="ticket-name">Netflix House Dallas</div>
+          <div class="ticket-detail">Galleria Dallas · ~5:00 PM · Free entry</div>
+        </div>
+        <span class="badge-walkin">Walk-in</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Wed Apr 1</div>
+        <div>
+          <div class="ticket-name">San Antonio Zoo</div>
+          <div class="ticket-detail">Full day visit</div>
+        </div>
+        <span class="badge-walkin">Walk-in</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Thu Apr 2</div>
+        <div>
+          <div class="ticket-name">Natural Bridge Caverns</div>
+          <div class="ticket-detail">~30 min from hotel · Morning tour</div>
+        </div>
+        <span class="badge-walkin">Walk-in</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Sat Apr 4</div>
+        <div>
+          <div class="ticket-name">Perot Museum of Nature &amp; Science</div>
+          <div class="ticket-detail">Dallas · ~2 hrs · Optional</div>
+        </div>
+        <span class="badge-optional">Optional</span>
+      </div>
+      <div class="ticket-item">
+        <div class="ticket-date">Sat Apr 4</div>
+        <div>
+          <div class="ticket-name">Stockyards Morning</div>
+          <div class="ticket-detail">Billy Bob's · Fort Worth Cattle Drive · Optional</div>
+        </div>
+        <span class="badge-optional">Optional</span>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- SAN ANTONIO PANEL -->
-<div id="panel-sanantonio" class="city-panel">
+    <!-- Drive Summary -->
+    <div class="section-label">Driving Summary</div>
+    <div style="background:var(--char);border:1px solid var(--bark);border-radius:4px;overflow:hidden;">
+      <table class="drive-summary-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Route</th>
+            <th>Distance</th>
+            <th>Est. Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Mar 29</td>
+            <td>IAH → Westin Galleria</td>
+            <td class="dist">~25 mi</td>
+            <td class="dur">~30 min</td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Mar 30</td>
+            <td>Hotel ↔ Space Center (RT)</td>
+            <td class="dist">~60 mi</td>
+            <td class="dur">~1 hr</td>
+          </tr>
+          <tr class="drive-big-day">
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Mar 31</td>
+            <td><strong>Houston → San Antonio</strong></td>
+            <td class="dist" style="color:var(--flame);">~200 mi</td>
+            <td class="dur" style="color:var(--flame);">~3 hrs</td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 1</td>
+            <td>Hotel ↔ SA Zoo</td>
+            <td class="dist">~5 mi</td>
+            <td class="dur">~10 min</td>
+          </tr>
+          <tr class="drive-big-day">
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 2</td>
+            <td><strong>SA → Caverns → Austin area → Kalahari</strong></td>
+            <td class="dist" style="color:var(--flame);">~90 mi</td>
+            <td class="dur" style="color:var(--flame);">~2 hrs</td>
+          </tr>
+          <tr class="drive-big-day">
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 3</td>
+            <td><strong>Kalahari → Fort Worth</strong></td>
+            <td class="dist" style="color:var(--flame);">~185 mi</td>
+            <td class="dur" style="color:var(--flame);">~2.5 hrs</td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 4</td>
+            <td>Fort Worth → Dallas → DAL hotel</td>
+            <td class="dist">~45 mi</td>
+            <td class="dur">~1 hr</td>
+          </tr>
+          <tr>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 5</td>
+            <td>Hotel → DAL drop-off</td>
+            <td class="dist">~5 mi</td>
+            <td class="dur">~10 min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- To-Do -->
+    <div class="section-label">Remaining To-Do</div>
+    <div class="todo-list">
+      <div class="todo-item">
+        <div class="todo-num">1</div>
+        <div>
+          <div class="todo-task">Book hotel near DAL Airport (Apr 4–5)</div>
+          <div class="todo-sub">Need to secure before trip</div>
+        </div>
+        <span class="priority-high">High Priority</span>
+      </div>
+      <div class="todo-item">
+        <div class="todo-num">2</div>
+        <div>
+          <div class="todo-task">Coordinate lunch with Austin friend</div>
+          <div class="todo-sub">Apr 2 · Round Rock / Austin area near I-35</div>
+        </div>
+        <span class="priority-medium">Medium</span>
+      </div>
+      <div class="todo-item">
+        <div class="todo-num">3</div>
+        <div>
+          <div class="todo-task">Coordinate dinner with Austin friend</div>
+          <div class="todo-sub">Apr 4 · Dallas · Cattleack Barbeque or Victory Park</div>
+        </div>
+        <span class="priority-medium">Medium</span>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /page-overview -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: DAY BY DAY
+══════════════════════════════════════ -->
+<div id="page-days" class="page">
+
+  <div class="page-hero">
+    <div class="hero-eyebrow">Mar 29 – Apr 5 · 8 Days</div>
+    <h1 class="hero-title">Day by<em>Day</em></h1>
+    <p class="hero-sub">Full itinerary with driving segments highlighted</p>
+  </div>
+
   <div class="container">
-    <div class="content-grid">
+    <div class="days-grid">
 
-      <!-- MAP -->
-      <div class="map-pane">
-        <div class="map-label">From Hyatt Regency · Riverwalk</div>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m58!1m12!1m3!1d220000!2d-98.5!3d29.45!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m43!3e0!4m5!1s0x865cf5b36e80fcb5%3A0xfe10f95f5b4c3b49!2sHyatt%20Regency%20San%20Antonio%20Riverwalk!3m2!1d29.4243!2d-98.4934!4m5!1s0x865c8657d79ebd07%3A0xe0c0c9bd32e58af!2sReese%20Bros%20Barbecue%2C%20San%20Antonio%2C%20TX!3m2!1d29.4104!2d-98.4790!4m5!1s0x865c8e5c5d7c374f%3A0xe12b44d5cc278040!2s2M%20Smokehouse%2C%20San%20Antonio%2C%20TX!3m2!1d29.3825!2d-98.4049!4m5!1s0x865c5fbeb2ff69c9%3A0xe895c547f693b329!2sPinkerton%27s%20Barbecue%20San%20Antonio%2C%20TX!3m2!1d29.4271!2d-98.4941!4m5!1s0x865cf5d2fc6b1b6b%3A0xfab248e912aa0dc6!2sCurry%20Boys%20BBQ%2C%20San%20Antonio%2C%20TX!3m2!1d29.4479!2d-98.4880!4m5!1s0x865c5d1d858c18b7%3A0xcdb6c9c31df1fc12!2sSmoke%20Shack%20BBQ%2C%20San%20Antonio%2C%20TX!3m2!1d29.4610!2d-98.4664!5e0!3m2!1sen!2sus!4v1710000000001"
-          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+      <!-- DAY 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Sun Mar 29</div>
+            <div class="day-city">Houston · Arrive</div>
+          </div>
+        </div>
+        <table class="activity-table">
+          <tr class="drive-row">
+            <td class="act-time">1:00 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">✈️</span><span class="drive-route">Arrive IAH</span><span class="drive-stats">United · SFO → IAH · lands 1:00 PM</span></div></td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">2:00 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">IAH → Westin Galleria</span><span class="drive-stats">~25 mi · ~30 min · Hertz Genesis G70 pickup @ 2:00 PM</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">3:00 PM</td>
+            <td class="act-text">Check in Westin Galleria Houston</td>
+          </tr>
+          <tr>
+            <td class="act-time">4:00–6:00 PM</td>
+            <td class="act-text">Children's Museum Houston <em>OR hotel pool</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">7:00 PM</td>
+            <td class="act-text">Dinner — Maggiano's (walkable) <em>OR Xiaolong Dumpling (authentic soup dumplings)</em></td>
+          </tr>
+        </table>
       </div>
 
-      <!-- LIST -->
-      <div class="list-pane">
-        <div class="list-header">
-          <div class="list-header-label">Ranked by prestige + proximity</div>
-          <div class="list-header-title">San Antonio's Finest Pits</div>
+      <!-- DAY 2 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Mon Mar 30</div>
+            <div class="day-city">Houston · Space Center</div>
+          </div>
+          <span class="day-drive-badge">🚗 ~60 mi round trip</span>
         </div>
-
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--michelin)"></div>Michelin Star</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#e8956d"></div>Bib Gourmand</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#5bbfb5"></div>Recommended</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#7baee8"></div>Day Trip</div>
-        </div>
-
-        <div class="bbq-item featured">
-          <div class="rank-num">1</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Burnt Bean Co.</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-              <span class="tag tag-tm">TX Monthly #1 State</span>
-              <span class="tag tag-daytrip">Day Trip</span>
-            </div>
-            <div class="bbq-desc">#1 BBQ in all of Texas. Melt-in-mouth brisket, Korean beef ribs, queso mac, banana pudding. Worth every mile east to Seguin.</div>
-            <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Seguin, TX</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~45 min E</div>
-            <div class="bbq-rating"><span>4.7</span> ★ · 1,682</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">2</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Reese Bros Barbecue</div>
-            <div class="bbq-tags">
-              <span class="tag tag-rec">Michelin Rec</span>
-              <span class="tag tag-tm">TX Monthly Top 50</span>
-            </div>
-            <div class="bbq-desc">Highest rated on list at 4.8. Tex-Mex twist: queso fundido sausage, house-made flour tortillas, poblano mac. Sells out by 3 PM.</div>
-            <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Southtown</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~10 min</div>
-            <div class="bbq-rating"><span>4.8</span> ★ · 736</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">3</div>
-          <div class="bbq-info">
-            <div class="bbq-name">2M Smokehouse</div>
-            <div class="bbq-tags">
-              <span class="tag tag-rec">Michelin Rec</span>
-              <span class="tag tag-tm">TX Monthly Top 50</span>
-            </div>
-            <div class="bbq-desc">James Beard semifinalist. 18-hour smoked fatty brisket, pork ribs, chicharron mac. BYOB. Thu–Sun, arrive before 11 AM.</div>
-            <div class="bbq-hours">Thu–Sun · 11 AM–4 PM · East SA</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~18 min</div>
-            <div class="bbq-rating"><span>4.4</span> ★ · 1,962</div>
-          </div>
-        </div>
-
-        <div class="bbq-item featured">
-          <div class="rank-num">4</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Pinkerton's Barbecue</div>
-            <div class="bbq-tags">
-              <span class="tag tag-bib">Bib Gourmand</span>
-            </div>
-            <div class="bbq-desc">3-minute walk from your Hyatt! Glazed pork ribs, beef rib, duck jambalaya, full bar with beer garden. Open Tue–Sun.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Downtown</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">3 min walk</div>
-            <div class="bbq-rating"><span>4.6</span> ★ · 3,967</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">5</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Curry Boys BBQ</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Tied for highest rating at 4.8. Thai-Texan fusion: brisket curry bowl, pork belly dunkers. Open 7 days until 10 PM.</div>
-            <div class="bbq-hours">Daily · 11 AM–10 PM · St. Mary's Strip</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~8 min</div>
-            <div class="bbq-rating"><span>4.8</span> ★ · 1,403</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">6</div>
-          <div class="bbq-info">
-            <div class="bbq-name">South Barbecue</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Most flexible hours in SA — open daily until 10 PM. Full bar. Chopped brisket sandwich, borracho beans, homemade pickles.</div>
-            <div class="bbq-hours">Daily · 11 AM–10 PM · North Main</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~8 min</div>
-            <div class="bbq-rating"><span>4.5</span> ★ · 694</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">7</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Smoke Shack BBQ</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Most reviews on this list. Featured on Food Network. Brisket grilled cheese on Texas toast, spicy creamed corn. Mon–Sat.</div>
-            <div class="bbq-hours">Mon–Sat · 11 AM–9 PM · Broadway</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~12 min</div>
-            <div class="bbq-rating"><span>4.4</span> ★ · 4,781</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">8</div>
-          <div class="bbq-info">
-            <div class="bbq-name">The Barbecue Station</div>
-            <div class="bbq-tags">
-              <span class="tag tag-rec">Michelin Rec</span>
-            </div>
-            <div class="bbq-desc">Converted gas station since 1992. Michelin Recommended despite wallet-friendly prices. Excellent brisket. Mon–Sat only.</div>
-            <div class="bbq-hours">Mon–Sat · 11 AM–6 PM · NE 410</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~20 min</div>
-            <div class="bbq-rating"><span>4.4</span> ★ · 2,450</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">9</div>
-          <div class="bbq-info">
-            <div class="bbq-name">Two Bros. BBQ Market</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Opens earliest at 10:30 AM daily. Family-friendly live oak patio, casual atmosphere. Cherry-glazed ribs, marbled brisket.</div>
-            <div class="bbq-hours">Daily · 10:30 AM–9 PM · North SA</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~25 min N</div>
-            <div class="bbq-rating"><span>4.2</span> ★ · 3,731</div>
-          </div>
-        </div>
-
-        <div class="bbq-item">
-          <div class="rank-num">10</div>
-          <div class="bbq-info">
-            <div class="bbq-name">B-Daddy's BBQ</div>
-            <div class="bbq-tags"></div>
-            <div class="bbq-desc">Hill Country setting with playground — perfect for kids. Jalapeño cheddar brisket sandwich, cream corn. Tue–Sun.</div>
-            <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Helotes</div>
-          </div>
-          <div class="bbq-meta">
-            <div class="bbq-drive">~35 min NW</div>
-            <div class="bbq-rating"><span>4.5</span> ★ · 1,941</div>
-          </div>
-        </div>
+        <table class="activity-table">
+          <tr class="drive-row">
+            <td class="act-time">9:00 AM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Hotel → Space Center Houston</span><span class="drive-stats">~30 mi · ~30 min</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">10:00 AM</td>
+            <td class="act-text">General Admission — Starship Gallery, Saturn V, exhibits</td>
+          </tr>
+          <tr>
+            <td class="act-time">12:40 PM</td>
+            <td class="act-text">Apollo Mission Control Tram Tour <span class="booked-tag">Pre-booked</span></td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">3:00 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Space Center → Hotel</span><span class="drive-stats">~30 mi · ~30 min</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">3:30 PM</td>
+            <td class="act-text">Return to hotel · Pool time</td>
+          </tr>
+          <tr>
+            <td class="act-time">7:00 PM</td>
+            <td class="act-text">Dinner — Truth BBQ <em>OR Pinkerton's BBQ (Texas Monthly Top 10)</em></td>
+          </tr>
+        </table>
       </div>
+
+      <!-- DAY 3 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Tue Mar 31</div>
+            <div class="day-city">Houston → San Antonio</div>
+          </div>
+          <span class="day-drive-badge">🚗 ~200 mi · ~3 hrs</span>
+        </div>
+        <table class="activity-table">
+          <tr>
+            <td class="act-time">9:00–12:00 PM</td>
+            <td class="act-text">Houston Museum of Natural Science</td>
+          </tr>
+          <tr>
+            <td class="act-time">12:00 PM</td>
+            <td class="act-text">Lunch — Cafe Lili <em>Lebanese, near Galleria</em></td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">1:30 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Houston → San Antonio</span><span class="drive-stats">~200 mi · ~3 hrs · via I-10 W</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">4:30 PM</td>
+            <td class="act-text">Check in Hyatt Regency SA Riverwalk <em>Breakfast included!</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">7:00 PM</td>
+            <td class="act-text">Dinner — Margaritaville on the Riverwalk <em>OR 2M Smokehouse (Michelin BBQ)</em></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- DAY 4 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Wed Apr 1</div>
+            <div class="day-city">San Antonio · Zoo Day</div>
+          </div>
+          <span class="day-drive-badge">🚗 ~5 mi local</span>
+        </div>
+        <table class="activity-table">
+          <tr>
+            <td class="act-time">8:30 AM</td>
+            <td class="act-text">Breakfast at hotel <em>(included)</em></td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">9:00 AM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Hotel → San Antonio Zoo</span><span class="drive-stats">~5 mi · ~10 min</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">9:00–1:00 PM</td>
+            <td class="act-text">San Antonio Zoo <em>Walk-in</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">4:00 PM</td>
+            <td class="act-text">GO RIO Riverboat Cruise <em>(included with hotel)</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">7:00 PM</td>
+            <td class="act-text">Dinner — Mi Tierra (iconic 24hr Tex-Mex) <em>OR 2M Smokehouse</em></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- DAY 5 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Thu Apr 2</div>
+            <div class="day-city">San Antonio → Kalahari Round Rock</div>
+          </div>
+          <span class="day-drive-badge">🚗 ~90 mi · ~2 hrs</span>
+        </div>
+        <table class="activity-table">
+          <tr>
+            <td class="act-time">8:00 AM</td>
+            <td class="act-text">Breakfast at hotel <em>(included — last morning)</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">9:00 AM</td>
+            <td class="act-text">Check out Hyatt Regency</td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">9:00 AM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Hotel → Natural Bridge Caverns</span><span class="drive-stats">~30 min</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">9:30–11:30 AM</td>
+            <td class="act-text">Natural Bridge Caverns tour <em>Walk-in</em></td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">11:30 AM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Caverns → Austin/Round Rock area</span><span class="drive-stats">~55 min · via I-35 N</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">12:30 PM</td>
+            <td class="act-text">Lunch with Austin friend <em>Coordinate near I-35 / Austin area</em></td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">2:00 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Austin area → Kalahari Round Rock</span><span class="drive-stats">~15–20 min</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">2:30 PM</td>
+            <td class="act-text">Arrive Kalahari Round Rock · Pre-register · Get wristbands</td>
+          </tr>
+          <tr>
+            <td class="act-time">3:00–8:00 PM</td>
+            <td class="act-text">Water Park Day 1 — indoor slides, wave pool, lazy river</td>
+          </tr>
+          <tr>
+            <td class="act-time">8:00 PM</td>
+            <td class="act-text">Dinner on-site at Kalahari</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- DAY 6 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Fri Apr 3</div>
+            <div class="day-city">Kalahari → Fort Worth Stockyards + Rodeo</div>
+          </div>
+          <span class="day-drive-badge">🚗 ~185 mi · ~2.5 hrs</span>
+        </div>
+        <table class="activity-table">
+          <tr>
+            <td class="act-time">9:00–11:00 AM</td>
+            <td class="act-text">Indoor Water Park</td>
+          </tr>
+          <tr>
+            <td class="act-time">11:00 AM</td>
+            <td class="act-text">Check out · Keep wristbands — outdoor park access continues!</td>
+          </tr>
+          <tr>
+            <td class="act-time">11:00 AM–3:00 PM</td>
+            <td class="act-text">Outdoor Water Park</td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">3:30 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Kalahari → Fort Worth</span><span class="drive-stats">~185 mi · ~2.5 hrs</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">6:00 PM</td>
+            <td class="act-text">Check in SpringHill Suites Fort Worth Historic Stockyards</td>
+          </tr>
+          <tr>
+            <td class="act-time">6:30 PM</td>
+            <td class="act-text">Dinner — H3 Ranch <em>OR Goldee's BBQ (TX Monthly #3)</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">7:30 PM</td>
+            <td class="act-text">Stockyards Championship Rodeo <span class="booked-tag">Pre-booked</span><em>Cowtown Coliseum</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">9:30 PM</td>
+            <td class="act-text">Walk back to hotel</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- DAY 7 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Sat Apr 4</div>
+            <div class="day-city">Fort Worth → Dallas + NBA + Austin Friend Dinner</div>
+          </div>
+          <span class="day-drive-badge">🚗 ~45 mi</span>
+        </div>
+        <table class="activity-table">
+          <tr>
+            <td class="act-time">8:00 AM</td>
+            <td class="act-text">Free breakfast at SpringHill Suites</td>
+          </tr>
+          <tr>
+            <td class="act-time">9:00 AM</td>
+            <td class="act-text">(Optional) Exchange Ave — Billy Bob's, Cowboy Hall of Fame, cattle drive</td>
+          </tr>
+          <tr>
+            <td class="act-time">12:00 PM</td>
+            <td class="act-text">Lunch — Love Shack (Stockyards burger)</td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">1:00 PM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Fort Worth → Dallas</span><span class="drive-stats">~35 mi · ~45 min · via I-30 E</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">2:00 PM</td>
+            <td class="act-text">(Optional) Perot Museum of Nature &amp; Science <em>~2 hrs · Walk-in</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">4:00 PM</td>
+            <td class="act-text">Check in at DAL area hotel</td>
+          </tr>
+          <tr>
+            <td class="act-time">5:00 PM</td>
+            <td class="act-text">Netflix House at Galleria Dallas <em>Free entry · Rideshare ~20 min</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">6:30 PM</td>
+            <td class="act-text">NBA: LA Lakers vs. Dallas Mavericks <span class="booked-tag">Pre-booked</span><em>American Airlines Center · NBC/Peacock</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">9:30 PM</td>
+            <td class="act-text">Dinner with Austin friend — Cattleack Barbeque (Michelin) <em>or Victory Park</em></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- DAY 8 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div>
+            <div class="day-date">Sun Apr 5</div>
+            <div class="day-city">Fly Home · Dallas → SFO</div>
+          </div>
+          <span class="day-drive-badge">✈️ 7:30 AM departure</span>
+        </div>
+        <table class="activity-table">
+          <tr>
+            <td class="act-time">5:00 AM</td>
+            <td class="act-text">Wake up</td>
+          </tr>
+          <tr class="drive-row">
+            <td class="act-time">5:30 AM</td>
+            <td><div class="drive-block"><span class="drive-icon">🚗</span><span class="drive-route">Hotel → DAL Love Field</span><span class="drive-stats">~5 mi · ~10 min · Drop off Hertz</span></div></td>
+          </tr>
+          <tr>
+            <td class="act-time">6:00 AM</td>
+            <td class="act-text">Southwest check-in at DAL <em>Check-in opened Apr 4 @ 7:30 AM</em></td>
+          </tr>
+          <tr>
+            <td class="act-time">7:30 AM</td>
+            <td class="act-text">Depart DAL Love Field</td>
+          </tr>
+          <tr>
+            <td class="act-time">9:30 AM</td>
+            <td class="act-text">Arrive SFO · Welcome home!</td>
+          </tr>
+        </table>
+      </div>
+
+    </div><!-- /days-grid -->
+  </div><!-- /container -->
+</div><!-- /page-days -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: HOUSTON BBQ
+══════════════════════════════════════ -->
+<div id="page-houston" class="page">
+
+  <div class="bbq-page-header">
+    <div class="bbq-page-eyebrow">Mar 29 – 31 · Base: Westin Galleria</div>
+    <div class="bbq-page-title">Houston BBQ</div>
+    <div class="bbq-page-sub">Click any restaurant to zoom the map · Ranked by prestige + proximity</div>
+  </div>
+
+  <div class="content-grid">
+
+    <!-- MAP -->
+    <div class="map-pane">
+      <div class="map-label">Houston · Westin Galleria Area</div>
+      <iframe id="map-houston"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-95.65%2C29.55%2C-95.25%2C30.10&layer=mapnik"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;">
+      </iframe>
+      <div class="map-hint">← Click a restaurant to zoom in</div>
     </div>
 
-    <!-- TRIP NOTE -->
-    <div class="trip-note">
-      <div class="note-card">
-        <div class="note-icon">🗓️</div>
-        <div>
-          <div class="note-label">Your San Antonio Schedule — Apr 1–2</div>
-          <div class="note-text">
-            <strong>Best no-effort pick (Wed Apr 1 or Thu Apr 2):</strong> Pinkerton's — 3-min walk from hotel, open Wed–Sun, no planning needed.<br>
-            <strong>Lunch after the zoo (Wed Apr 1):</strong> Curry Boys or Smoke Shack — both 8–12 min, open daily.<br>
-            <strong>Thu morning before checkout:</strong> Reese Bros — opens 11 AM, 10 min away, highest rated. Go early before it sells out.
+    <!-- LIST -->
+    <div class="list-pane">
+      <div class="list-header">
+        <div class="list-header-label">Ranked by prestige + proximity</div>
+        <div class="list-header-title">Houston's Finest Pits</div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--michelin)"></div>Michelin Star</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e8956d"></div>Bib Gourmand</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5bbfb5"></div>Recommended</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>TX Monthly</div>
+      </div>
+
+      <div class="bbq-item featured" onclick="selectRestaurant('map-houston', 30.0807, -95.4199, this)">
+        <div class="rank-num">1</div>
+        <div class="bbq-info">
+          <div class="bbq-name">CorkScrew BBQ</div>
+          <div class="bbq-tags">
+            <span class="tag tag-michelin">⭐ Michelin Star</span>
+            <span class="tag tag-tm">TX Monthly Top 50</span>
           </div>
+          <div class="bbq-desc">Only Michelin-starred BBQ near Houston. Melt-in-mouth brisket from Creekstone Farms, jalapeño sausage. Arrive before 11 AM.</div>
+          <div class="bbq-hours">Wed–Sat · 11 AM–4 PM · Spring, TX</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~45 min N</div>
+          <div class="bbq-rating"><span>4.7</span> ★ · 4,344</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7693, -95.3976, this)">
+        <div class="rank-num">2</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Truth BBQ</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+            <span class="tag tag-tm">TX Monthly #9</span>
+          </div>
+          <div class="bbq-desc">Pork ribs, garlic sausage, Saturday beef rib. Dinner service Tue–Fri — best evening option near hotel.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–8 PM · Heights</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~15 min</div>
+          <div class="bbq-rating"><span>4.5</span> ★ · 3,881</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7323, -95.4117, this)">
+        <div class="rank-num">3</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Pinkerton's Barbecue</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+            <span class="tag tag-tm">TX Monthly Top 50</span>
+          </div>
+          <div class="bbq-desc">Closest Michelin spot. Legendary glazed St. Louis ribs, beef rib, candy-paint pork. New 2026 Montrose location.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Montrose</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~8 min</div>
+          <div class="bbq-rating"><span>4.5</span> ★ · 104</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7342, -95.3941, this)">
+        <div class="rank-num">4</div>
+        <div class="bbq-info">
+          <div class="bbq-name">The Pit Room</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+          </div>
+          <div class="bbq-desc">Open 7 days — most flexible hours. Brisket, wagyu ribs, venison sausage, elote. Also serves breakfast tacos.</div>
+          <div class="bbq-hours">Daily · 7 AM–9 PM · Montrose</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~12 min</div>
+          <div class="bbq-rating"><span>4.5</span> ★ · 7,483</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7052, -95.4755, this)">
+        <div class="rank-num">5</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Blood Bros. BBQ</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+          </div>
+          <div class="bbq-desc">Asian-Texan fusion. Brisket fried rice, gochujang glazed ribs, pork belly bao buns. Totally unique in Houston.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Bellaire</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~10 min</div>
+          <div class="bbq-rating"><span>4.3</span> ★ · 1,199</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.5607, -95.3357, this)">
+        <div class="rank-num">6</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Killen's Barbecue</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+          </div>
+          <div class="bbq-desc">Famous pork belly burnt ends and monster beef rib. Open 7 days including dinner. Worth the drive south to Pearland.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Pearland</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~35 min S</div>
+          <div class="bbq-rating"><span>4.4</span> ★ · 6,010</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 30.0969, -95.6156, this)">
+        <div class="rank-num">7</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Tejas Chocolate + Barbecue</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+          </div>
+          <div class="bbq-desc">Unique: artisan chocolate shop + award BBQ. Chile relleno sausage, brisket nachos. Open daily in Tomball.</div>
+          <div class="bbq-hours">Daily · 11 AM–9 PM · Tomball</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~45 min NW</div>
+          <div class="bbq-rating"><span>4.5</span> ★ · 1,543</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7799, -95.5003, this)">
+        <div class="rank-num">8</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Feges BBQ</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Fine dining meets BBQ. Kid play area — great for family. Banana caramel pie, hog fat cornbread. Dinner Tue–Sat.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Spring Branch</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~15 min</div>
+          <div class="bbq-rating"><span>4.4</span> ★ · 865</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.7523, -95.6275, this)">
+        <div class="rank-num">9</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Brisket &amp; Rice</div>
+          <div class="bbq-tags">
+            <span class="tag tag-rec">Michelin Rec</span>
+          </div>
+          <div class="bbq-desc">Vietnamese-Texan fusion. Signature brisket fried rice, fall-off-the-bone ribs. Highest rating (4.7) on this list.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–7 PM · Energy Corridor</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~30 min W</div>
+          <div class="bbq-rating"><span>4.7</span> ★ · 1,296</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-houston', 29.8017, -95.4373, this)">
+        <div class="rank-num">10</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Gatlin's BBQ</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Houston institution since 2010. Opens 7 AM — only place for BBQ breakfast. East Texas style dirty rice, collards.</div>
+          <div class="bbq-hours">Mon–Sat · 7 AM–6 PM · Oak Forest</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~20 min</div>
+          <div class="bbq-rating"><span>4.4</span> ★ · 2,932</div>
+        </div>
+      </div>
+
+    </div><!-- /list-pane -->
+  </div><!-- /content-grid -->
+
+  <div class="trip-note">
+    <div class="note-card">
+      <div class="note-icon">🗓️</div>
+      <div>
+        <div class="note-label">Your Houston Schedule — Mar 29–31</div>
+        <div class="note-text">
+          <strong>Best fit for Mon Mar 30 dinner</strong> (after Space Center): Truth BBQ — dinner service, 15 min from hotel, Bib Gourmand.<br>
+          <strong>Quick grab on Mar 29 arrival evening:</strong> Pinkerton's Montrose — 8 min, open until 9 PM Sunday.<br>
+          <strong>If you want the #1:</strong> CorkScrew is 45 min north — plan a dedicated morning trip Wed–Sat before 11 AM.
         </div>
       </div>
     </div>
   </div>
-</div>
+</div><!-- /page-houston -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: SAN ANTONIO BBQ
+══════════════════════════════════════ -->
+<div id="page-sanantonio" class="page">
+
+  <div class="bbq-page-header">
+    <div class="bbq-page-eyebrow">Mar 31 – Apr 2 · Base: Hyatt Regency Riverwalk</div>
+    <div class="bbq-page-title">San Antonio BBQ</div>
+    <div class="bbq-page-sub">Click any restaurant to zoom the map · Ranked by prestige + proximity</div>
+  </div>
+
+  <div class="content-grid">
+
+    <!-- MAP -->
+    <div class="map-pane">
+      <div class="map-label">San Antonio · Riverwalk Area</div>
+      <iframe id="map-sanantonio"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-98.65%2C29.30%2C-98.35%2C29.55&layer=mapnik"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;">
+      </iframe>
+      <div class="map-hint">← Click a restaurant to zoom in</div>
+    </div>
+
+    <!-- LIST -->
+    <div class="list-pane">
+      <div class="list-header">
+        <div class="list-header-label">Ranked by prestige + proximity</div>
+        <div class="list-header-title">San Antonio's Finest Pits</div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--michelin)"></div>Michelin Star</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e8956d"></div>Bib Gourmand</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5bbfb5"></div>Recommended</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7baee8"></div>Day Trip</div>
+      </div>
+
+      <div class="bbq-item featured" onclick="selectRestaurant('map-sanantonio', 29.5686, -97.9640, this)">
+        <div class="rank-num">1</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Burnt Bean Co.</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+            <span class="tag tag-tm">TX Monthly #1 State</span>
+            <span class="tag tag-daytrip">Day Trip</span>
+          </div>
+          <div class="bbq-desc">#1 BBQ in all of Texas. Melt-in-mouth brisket, Korean beef ribs, queso mac, banana pudding. Worth every mile east to Seguin.</div>
+          <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Seguin, TX</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~45 min E</div>
+          <div class="bbq-rating"><span>4.7</span> ★ · 1,682</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4104, -98.4790, this)">
+        <div class="rank-num">2</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Reese Bros Barbecue</div>
+          <div class="bbq-tags">
+            <span class="tag tag-rec">Michelin Rec</span>
+            <span class="tag tag-tm">TX Monthly Top 50</span>
+          </div>
+          <div class="bbq-desc">Highest rated on list at 4.8. Tex-Mex twist: queso fundido sausage, house-made flour tortillas, poblano mac. Sells out by 3 PM.</div>
+          <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Southtown</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~10 min</div>
+          <div class="bbq-rating"><span>4.8</span> ★ · 736</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.3825, -98.4049, this)">
+        <div class="rank-num">3</div>
+        <div class="bbq-info">
+          <div class="bbq-name">2M Smokehouse</div>
+          <div class="bbq-tags">
+            <span class="tag tag-rec">Michelin Rec</span>
+            <span class="tag tag-tm">TX Monthly Top 50</span>
+          </div>
+          <div class="bbq-desc">James Beard semifinalist. 18-hour smoked fatty brisket, pork ribs, chicharron mac. BYOB. Thu–Sun, arrive before 11 AM.</div>
+          <div class="bbq-hours">Thu–Sun · 11 AM–4 PM · East SA</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~18 min</div>
+          <div class="bbq-rating"><span>4.4</span> ★ · 1,962</div>
+        </div>
+      </div>
+
+      <div class="bbq-item featured" onclick="selectRestaurant('map-sanantonio', 29.4271, -98.4941, this)">
+        <div class="rank-num">4</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Pinkerton's Barbecue</div>
+          <div class="bbq-tags">
+            <span class="tag tag-bib">Bib Gourmand</span>
+          </div>
+          <div class="bbq-desc">3-minute walk from your Hyatt! Glazed pork ribs, beef rib, duck jambalaya, full bar with beer garden. Open Tue–Sun.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Downtown</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">3 min walk</div>
+          <div class="bbq-rating"><span>4.6</span> ★ · 3,967</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4479, -98.4880, this)">
+        <div class="rank-num">5</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Curry Boys BBQ</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Tied for highest rating at 4.8. Thai-Texan fusion: brisket curry bowl, pork belly dunkers. Open 7 days until 10 PM.</div>
+          <div class="bbq-hours">Daily · 11 AM–10 PM · St. Mary's Strip</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~8 min</div>
+          <div class="bbq-rating"><span>4.8</span> ★ · 1,403</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4661, -98.4919, this)">
+        <div class="rank-num">6</div>
+        <div class="bbq-info">
+          <div class="bbq-name">South Barbecue</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Most flexible hours in SA — open daily until 10 PM. Full bar. Chopped brisket sandwich, borracho beans, homemade pickles.</div>
+          <div class="bbq-hours">Daily · 11 AM–10 PM · North Main</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~8 min</div>
+          <div class="bbq-rating"><span>4.5</span> ★ · 694</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4611, -98.4664, this)">
+        <div class="rank-num">7</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Smoke Shack BBQ</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Most reviews on this list. Featured on Food Network. Brisket grilled cheese on Texas toast, spicy creamed corn. Mon–Sat.</div>
+          <div class="bbq-hours">Mon–Sat · 11 AM–9 PM · Broadway</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~12 min</div>
+          <div class="bbq-rating"><span>4.4</span> ★ · 4,781</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.4868, -98.4003, this)">
+        <div class="rank-num">8</div>
+        <div class="bbq-info">
+          <div class="bbq-name">The Barbecue Station</div>
+          <div class="bbq-tags">
+            <span class="tag tag-rec">Michelin Rec</span>
+          </div>
+          <div class="bbq-desc">Converted gas station since 1992. Michelin Recommended despite wallet-friendly prices. Excellent brisket. Mon–Sat only.</div>
+          <div class="bbq-hours">Mon–Sat · 11 AM–6 PM · NE 410</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~20 min</div>
+          <div class="bbq-rating"><span>4.4</span> ★ · 2,450</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.5498, -98.4751, this)">
+        <div class="rank-num">9</div>
+        <div class="bbq-info">
+          <div class="bbq-name">Two Bros. BBQ Market</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Opens earliest at 10:30 AM daily. Family-friendly live oak patio, casual atmosphere. Cherry-glazed ribs, marbled brisket.</div>
+          <div class="bbq-hours">Daily · 10:30 AM–9 PM · North SA</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~25 min N</div>
+          <div class="bbq-rating"><span>4.2</span> ★ · 3,731</div>
+        </div>
+      </div>
+
+      <div class="bbq-item" onclick="selectRestaurant('map-sanantonio', 29.5750, -98.6946, this)">
+        <div class="rank-num">10</div>
+        <div class="bbq-info">
+          <div class="bbq-name">B-Daddy's BBQ</div>
+          <div class="bbq-tags"></div>
+          <div class="bbq-desc">Hill Country setting with playground — perfect for kids. Jalapeño cheddar brisket sandwich, cream corn. Tue–Sun.</div>
+          <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Helotes</div>
+        </div>
+        <div class="bbq-meta">
+          <div class="bbq-drive">~35 min NW</div>
+          <div class="bbq-rating"><span>4.5</span> ★ · 1,941</div>
+        </div>
+      </div>
+
+    </div><!-- /list-pane -->
+  </div><!-- /content-grid -->
+
+  <div class="trip-note">
+    <div class="note-card">
+      <div class="note-icon">🗓️</div>
+      <div>
+        <div class="note-label">Your San Antonio Schedule — Mar 31 – Apr 2</div>
+        <div class="note-text">
+          <strong>Best no-effort pick (Wed Apr 1 or Thu Apr 2):</strong> Pinkerton's — 3-min walk from hotel, open Wed–Sun, no planning needed.<br>
+          <strong>Lunch after the zoo (Wed Apr 1):</strong> Curry Boys or Smoke Shack — both 8–12 min, open daily.<br>
+          <strong>Thu morning before checkout:</strong> Reese Bros — opens 11 AM, 10 min away, highest rated. Go early before it sells out.
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-sanantonio -->
+
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">Texas BBQ Explorer</div>
-  <div class="footer-meta">Qian Family · Spring Break 2026 · Mar 29 – Apr 5 · SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</div>
+  <div class="footer-meta">Family Trip · Spring Break 2026 · Mar 29 – Apr 5 · SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</div>
 </footer>
 
+
 <script>
-  function switchCity(city) {
-    document.querySelectorAll('.city-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + city).classList.add('active');
-    event.target.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  function showPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (el) el.classList.add('active');
+  }
+
+  function selectRestaurant(mapId, lat, lon, el) {
+    const off = 0.018;
+    const bbox = (lon - off) + '%2C' + (lat - off) + '%2C' + (lon + off) + '%2C' + (lat + off);
+    document.getElementById(mapId).src =
+      'https://www.openstreetmap.org/export/embed.html?bbox=' + bbox + '&layer=mapnik&marker=' + lat + '%2C' + lon;
+
+    // highlight selection within current page
+    const page = document.getElementById(mapId).closest('.page');
+    page.querySelectorAll('.bbq-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
   }
 </script>
 
