@@ -1210,7 +1210,7 @@
       radial-gradient(ellipse 90% 70% at 50% 110%, rgba(0,113,227,0.22) 0%, transparent 65%),
       radial-gradient(ellipse 50% 50% at 85% 10%, rgba(52,199,89,0.08) 0%, transparent 60%),
       linear-gradient(148deg, #080c18 0%, #0c1a32 38%, #101f2e 65%, #0a1208 100%);
-    padding: 96px 40px 0;
+    padding: 96px 40px 48px;
     border-bottom: none;
     position: relative;
     overflow: hidden;
@@ -1320,12 +1320,10 @@
     transform: translateY(-2px);
   }
 
-  /* ── Overview container — flush to hero ── */
+  /* ── Overview container ── */
   #page-overview .container { padding-top: 0; }
   #page-overview .trip-summary-card {
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    border-top: none;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05);
   }
 
   /* ── Conversation thread — white surface so turns read clearly ── */
@@ -1405,6 +1403,7 @@
   <div class="container">
 
     <!-- Trip Summary -->
+    <div class="section-label" style="margin-top:36px;">Overview</div>
     <div class="trip-summary-card">
       <div class="trip-summary-headline">Eight days across Texas — NASA, a rodeo, a waterpark, and the Lakers.</div>
       <div class="trip-summary-body">Landing in Houston for two days at Space Center including a pre-booked Apollo Mission Control tram tour, then a 200-mile drive south to San Antonio for the Riverwalk, the zoo, and a riverboat cruise. Out via Natural Bridge Caverns and lunch with a friend in Austin, then two days at Kalahari Round Rock's indoor waterpark. A 185-mile push to Fort Worth's Historic Stockyards for the Championship Rodeo before crossing to Dallas for pre-booked NBA seats — LA Lakers vs. Dallas Mavericks at American Airlines Center. Five hotels, one rental car, and 20 Michelin-ranked BBQ spots researched across the route.</div>
