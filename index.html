@@ -1221,7 +1221,7 @@
   .trip-summary-highlights {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
   }
-  @media (max-width: 600px) { .trip-summary-highlights { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .trip-summary-highlights { grid-template-columns: 1fr; } }
   .trip-highlight {
     background: var(--smoke); border-radius: var(--radius-sm);
     padding: 12px 14px;
@@ -1412,6 +1412,52 @@
   .option-title { font-size: 13px; font-weight: 600; color: var(--cream); margin-bottom: 4px; letter-spacing: -0.1px; }
   .option-detail { font-size: 12px; color: var(--ash); line-height: 1.55; margin-bottom: 6px; }
   .option-meta { font-size: 11px; color: var(--ash); font-style: italic; }
+
+  /* ── ACTIVITY LINK ── */
+  .ticket-name a { color: var(--cream); text-decoration: none; }
+  .ticket-name a:hover { color: var(--ember); text-decoration: underline; }
+
+  /* ── YELP BUTTON ── */
+  .yelp-btn {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 3px 9px; border-radius: 4px; margin-top: 6px;
+    background: rgba(196,18,48,0.1); color: #c41230;
+    text-decoration: none; white-space: nowrap; letter-spacing: 0.02em;
+    transition: background 0.15s ease;
+  }
+  .yelp-btn:hover { background: rgba(196,18,48,0.2); }
+
+  /* ── GITHUB LINK ── */
+  .github-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: var(--ash);
+    text-decoration: none; padding: 6px 14px; border-radius: 8px;
+    border: 1px solid var(--bark); margin-top: 16px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .github-link:hover { color: var(--cream); border-color: var(--ash); }
+
+  /* ── MOBILE OVERVIEW FIXES ── */
+  @media (max-width: 600px) {
+    /* Badges — fit-content so they don't stretch */
+    .badge-booked, .badge-walkin, .badge-optional { display: inline-block; width: fit-content; }
+
+    /* Stat chips — 3 per row */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-chip { justify-content: center; text-align: center; }
+
+    /* Driving table — hide Est. Time column, tighten padding */
+    .drive-summary-table th:last-child,
+    .drive-summary-table td:last-child { display: none; }
+    .drive-summary-table td, .drive-summary-table th { padding: 10px 8px; }
+    .drive-summary-table { font-size: 12px; }
+
+    /* Hotels table — tighten */
+    .data-table td, .data-table th { padding: 10px 8px; }
+    .data-table { font-size: 13px; }
+    .hotel-name { font-size: 13px; }
+    .hotel-detail { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -1559,7 +1605,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Mon Mar 30</div>
         <div>
-          <div class="ticket-name">Space Center Houston</div>
+          <div class="ticket-name"><a href="https://www.spacecenter.org/" target="_blank" rel="noopener">Space Center Houston</a></div>
           <div class="ticket-detail">GA 10:00 AM + Apollo Mission Control Tram 12:40 PM</div>
         </div>
         <span class="badge-booked">Pre-booked</span>
@@ -1567,7 +1613,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Fri Apr 3</div>
         <div>
-          <div class="ticket-name">Stockyards Championship Rodeo</div>
+          <div class="ticket-name"><a href="https://www.cowtowncoliseum.com/" target="_blank" rel="noopener">Stockyards Championship Rodeo</a></div>
           <div class="ticket-detail">Cowtown Coliseum · 7:30 PM · Fort Worth</div>
         </div>
         <span class="badge-booked">Pre-booked</span>
@@ -1575,7 +1621,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">NBA: Lakers vs. Mavericks</div>
+          <div class="ticket-name"><a href="https://www.americanairlinescenter.com/" target="_blank" rel="noopener">NBA: Lakers vs. Mavericks</a></div>
           <div class="ticket-detail">American Airlines Center · 6:30 PM · NBC/Peacock</div>
         </div>
         <span class="badge-booked">Pre-booked</span>
@@ -1583,7 +1629,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">Netflix House Dallas</div>
+          <div class="ticket-name"><a href="https://www.netflix.com/tudum/articles/netflix-house-dallas" target="_blank" rel="noopener">Netflix House Dallas</a></div>
           <div class="ticket-detail">Galleria Dallas · ~5:00 PM · Free entry</div>
         </div>
         <span class="badge-walkin">Walk-in</span>
@@ -1591,7 +1637,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Wed Apr 1</div>
         <div>
-          <div class="ticket-name">San Antonio Zoo</div>
+          <div class="ticket-name"><a href="https://www.sazoo.org/" target="_blank" rel="noopener">San Antonio Zoo</a></div>
           <div class="ticket-detail">Full day visit</div>
         </div>
         <span class="badge-walkin">Walk-in</span>
@@ -1599,7 +1645,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Thu Apr 2</div>
         <div>
-          <div class="ticket-name">Natural Bridge Caverns</div>
+          <div class="ticket-name"><a href="https://www.naturalbridgecaverns.com/" target="_blank" rel="noopener">Natural Bridge Caverns</a></div>
           <div class="ticket-detail">~30 min from hotel · Morning tour</div>
         </div>
         <span class="badge-walkin">Walk-in</span>
@@ -1607,7 +1653,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">Perot Museum of Nature &amp; Science</div>
+          <div class="ticket-name"><a href="https://www.perotmuseum.org/" target="_blank" rel="noopener">Perot Museum of Nature &amp; Science</a></div>
           <div class="ticket-detail">Dallas · ~2 hrs · Optional</div>
         </div>
         <span class="badge-optional">Optional</span>
@@ -1615,7 +1661,7 @@
       <div class="ticket-item">
         <div class="ticket-date">Sat Apr 4</div>
         <div>
-          <div class="ticket-name">Stockyards Morning</div>
+          <div class="ticket-name"><a href="https://www.billybobstexas.com/" target="_blank" rel="noopener">Stockyards Morning</a></div>
           <div class="ticket-detail">Billy Bob's · Fort Worth Cattle Drive · Optional</div>
         </div>
         <span class="badge-optional">Optional</span>
@@ -1643,7 +1689,7 @@
           </tr>
           <tr>
             <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Mar 30</td>
-            <td>Hotel ↔ Space Center (RT)</td>
+            <td>Hotel ↔ Space Center (round trip)</td>
             <td class="dist">~60 mi</td>
             <td class="dur">~1 hr</td>
           </tr>
@@ -1679,7 +1725,7 @@
           </tr>
           <tr>
             <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ash);">Apr 5</td>
-            <td>Hotel → DAL drop-off</td>
+            <td>Hotel → Dallas Airport</td>
             <td class="dist">~5 mi</td>
             <td class="dur">~10 min</td>
           </tr>
@@ -2082,6 +2128,7 @@
           </div>
           <div class="bbq-desc">Only Michelin-starred BBQ near Houston. Melt-in-mouth brisket from Creekstone Farms, jalapeño sausage. Arrive before 11 AM.</div>
           <div class="bbq-hours">Wed–Sat · 11 AM–4 PM · Spring, TX</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=CorkScrew+BBQ&find_loc=Spring%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~45 min N</div>
@@ -2099,6 +2146,7 @@
           </div>
           <div class="bbq-desc">Pork ribs, garlic sausage, Saturday beef rib. Dinner service Tue–Fri — best evening option near hotel.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–8 PM · Heights</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Truth+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~15 min</div>
@@ -2116,6 +2164,7 @@
           </div>
           <div class="bbq-desc">Closest Michelin spot. Legendary glazed St. Louis ribs, beef rib, candy-paint pork. New 2026 Montrose location.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Montrose</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Pinkerton%27s+Barbecue&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~8 min</div>
@@ -2132,6 +2181,7 @@
           </div>
           <div class="bbq-desc">Open 7 days — most flexible hours. Brisket, wagyu ribs, venison sausage, elote. Also serves breakfast tacos.</div>
           <div class="bbq-hours">Daily · 7 AM–9 PM · Montrose</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=The+Pit+Room&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~12 min</div>
@@ -2148,6 +2198,7 @@
           </div>
           <div class="bbq-desc">Asian-Texan fusion. Brisket fried rice, gochujang glazed ribs, pork belly bao buns. Totally unique in Houston.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Bellaire</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Blood+Bros+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~10 min</div>
@@ -2164,6 +2215,7 @@
           </div>
           <div class="bbq-desc">Famous pork belly burnt ends and monster beef rib. Open 7 days including dinner. Worth the drive south to Pearland.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Pearland</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Killen%27s+Barbecue&find_loc=Pearland%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~35 min S</div>
@@ -2180,6 +2232,7 @@
           </div>
           <div class="bbq-desc">Unique: artisan chocolate shop + award BBQ. Chile relleno sausage, brisket nachos. Open daily in Tomball.</div>
           <div class="bbq-hours">Daily · 11 AM–9 PM · Tomball</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Tejas+Chocolate+Barbecue&find_loc=Tomball%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~45 min NW</div>
@@ -2194,6 +2247,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Fine dining meets BBQ. Kid play area — great for family. Banana caramel pie, hog fat cornbread. Dinner Tue–Sat.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Spring Branch</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Feges+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~15 min</div>
@@ -2210,6 +2264,7 @@
           </div>
           <div class="bbq-desc">Vietnamese-Texan fusion. Signature brisket fried rice, fall-off-the-bone ribs. Highest rating (4.7) on this list.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–7 PM · Energy Corridor</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Brisket+and+Rice&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~30 min W</div>
@@ -2224,6 +2279,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Houston institution since 2010. Opens 7 AM — only place for BBQ breakfast. East Texas style dirty rice, collards.</div>
           <div class="bbq-hours">Mon–Sat · 7 AM–6 PM · Oak Forest</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Gatlin%27s+BBQ&find_loc=Houston%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~20 min</div>
@@ -2295,6 +2351,7 @@
           </div>
           <div class="bbq-desc">#1 BBQ in all of Texas. Melt-in-mouth brisket, Korean beef ribs, queso mac, banana pudding. Worth every mile east to Seguin.</div>
           <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Seguin, TX</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Burnt+Bean+Co&find_loc=Seguin%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~45 min E</div>
@@ -2312,6 +2369,7 @@
           </div>
           <div class="bbq-desc">Highest rated on list at 4.8. Tex-Mex twist: queso fundido sausage, house-made flour tortillas, poblano mac. Sells out by 3 PM.</div>
           <div class="bbq-hours">Thu–Sun · 11 AM–3 PM · Southtown</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Reese+Bros+Barbecue&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~10 min</div>
@@ -2329,6 +2387,7 @@
           </div>
           <div class="bbq-desc">James Beard semifinalist. 18-hour smoked fatty brisket, pork ribs, chicharron mac. BYOB. Thu–Sun, arrive before 11 AM.</div>
           <div class="bbq-hours">Thu–Sun · 11 AM–4 PM · East SA</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=2M+Smokehouse&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~18 min</div>
@@ -2345,6 +2404,7 @@
           </div>
           <div class="bbq-desc">3-minute walk from your Hyatt! Glazed pork ribs, beef rib, duck jambalaya, full bar with beer garden. Open Tue–Sun.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–10 PM · Downtown</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Pinkerton%27s+Barbecue&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">3 min walk</div>
@@ -2359,6 +2419,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Tied for highest rating at 4.8. Thai-Texan fusion: brisket curry bowl, pork belly dunkers. Open 7 days until 10 PM.</div>
           <div class="bbq-hours">Daily · 11 AM–10 PM · St. Mary's Strip</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Curry+Boys+BBQ&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~8 min</div>
@@ -2373,6 +2434,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Most flexible hours in SA — open daily until 10 PM. Full bar. Chopped brisket sandwich, borracho beans, homemade pickles.</div>
           <div class="bbq-hours">Daily · 11 AM–10 PM · North Main</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=South+Barbecue&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~8 min</div>
@@ -2387,6 +2449,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Most reviews on this list. Featured on Food Network. Brisket grilled cheese on Texas toast, spicy creamed corn. Mon–Sat.</div>
           <div class="bbq-hours">Mon–Sat · 11 AM–9 PM · Broadway</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Smoke+Shack+BBQ&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~12 min</div>
@@ -2403,6 +2466,7 @@
           </div>
           <div class="bbq-desc">Converted gas station since 1992. Michelin Recommended despite wallet-friendly prices. Excellent brisket. Mon–Sat only.</div>
           <div class="bbq-hours">Mon–Sat · 11 AM–6 PM · NE 410</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=The+Barbecue+Station&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~20 min</div>
@@ -2417,6 +2481,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Opens earliest at 10:30 AM daily. Family-friendly live oak patio, casual atmosphere. Cherry-glazed ribs, marbled brisket.</div>
           <div class="bbq-hours">Daily · 10:30 AM–9 PM · North SA</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=Two+Bros+BBQ+Market&find_loc=San+Antonio%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~25 min N</div>
@@ -2431,6 +2496,7 @@
           <div class="bbq-tags"></div>
           <div class="bbq-desc">Hill Country setting with playground — perfect for kids. Jalapeño cheddar brisket sandwich, cream corn. Tue–Sun.</div>
           <div class="bbq-hours">Tue–Sun · 11 AM–9 PM · Helotes</div>
+          <a class="yelp-btn" href="https://www.yelp.com/search?find_desc=B-Daddy%27s+BBQ&find_loc=Helotes%2C+TX" target="_blank" rel="noopener">Yelp →</a>
         </div>
         <div class="bbq-meta">
           <div class="bbq-drive">~35 min NW</div>
@@ -2466,6 +2532,10 @@
     <div class="hero-eyebrow">Case Study · March 2026</div>
     <h1 class="hero-title">Planning a Trip<em>with Claude</em></h1>
     <p class="hero-sub">From a blank conversation to a fully planned, deployed, shareable road trip — in one extended session</p>
+    <a class="github-link" href="https://github.com/EvanCarson/texas-bbq-explorer" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      View on GitHub
+    </a>
   </div>
 
   <div class="container">
