@@ -1437,6 +1437,30 @@
   }
   .github-link:hover { color: var(--cream); border-color: var(--ash); }
 
+  /* ── LANG TOGGLE ── */
+  .lang-toggle {
+    background: none; border: 1px solid rgba(0,0,0,0.18); border-radius: 6px;
+    font-size: 11px; font-weight: 700; color: rgba(0,0,0,0.5);
+    padding: 3px 9px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    font-family: var(--font); letter-spacing: 0.04em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .lang-toggle:hover { color: var(--cream); border-color: rgba(0,0,0,0.4); }
+
+  /* ── MAP MOBILE — padding + rounded border ── */
+  @media (max-width: 900px) {
+    .map-pane {
+      margin: 16px 16px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--bark);
+      border-right: 1px solid var(--bark);
+      min-height: 360px;
+    }
+    #map-houston, #map-sanantonio { min-height: 360px; }
+    .list-pane { max-height: none; }
+  }
+
   /* ── MOBILE OVERVIEW FIXES ── */
   @media (max-width: 600px) {
     /* Badges — fit-content so they don't stretch */
@@ -1466,12 +1490,13 @@
 <nav class="top-nav">
   <div class="nav-logo">AI Trip Planning</div>
   <div class="nav-links">
-    <div class="nav-link active" data-page="overview" onclick="showPage('overview', this)">Overview</div>
-    <div class="nav-link" data-page="days" onclick="showPage('days', this)">Day by Day</div>
-    <div class="nav-link" data-page="houston" onclick="showPage('houston', this)">Houston BBQ</div>
-    <div class="nav-link" data-page="sanantonio" onclick="showPage('sanantonio', this)">SA BBQ</div>
-    <div class="nav-link" data-page="techblog" onclick="showPage('techblog', this)">Tech Blog</div>
+    <div class="nav-link active" data-page="overview" data-i18n="nav.overview" onclick="showPage('overview', this)">Overview</div>
+    <div class="nav-link" data-page="days" data-i18n="nav.days" onclick="showPage('days', this)">Day by Day</div>
+    <div class="nav-link" data-page="houston" data-i18n="nav.houston" onclick="showPage('houston', this)">Houston BBQ</div>
+    <div class="nav-link" data-page="sanantonio" data-i18n="nav.sa" onclick="showPage('sanantonio', this)">SA BBQ</div>
+    <div class="nav-link" data-page="techblog" data-i18n="nav.tech" onclick="showPage('techblog', this)">Tech Blog</div>
   </div>
+  <button class="lang-toggle" onclick="setLang(currentLang==='en'?'zh':'en')">中</button>
 </nav>
 
 
@@ -1489,7 +1514,7 @@
   <div class="container">
 
     <!-- Trip Summary -->
-    <div class="section-label" style="margin-top:36px;">Overview</div>
+    <div class="section-label" data-i18n="sec.overview" style="margin-top:36px;">Overview</div>
     <div class="trip-summary-card">
       <div class="trip-summary-headline">Eight days across Texas — NASA, a rodeo, a waterpark, and the Lakers.</div>
       <div class="trip-summary-body">Landing in Houston for two days at Space Center including a pre-booked Apollo Mission Control tram tour, then a 200-mile drive south to San Antonio for the Riverwalk, the zoo, and a riverboat cruise. Out via Natural Bridge Caverns and lunch with a friend in Austin, then two days at Kalahari Round Rock's indoor waterpark. A 185-mile push to Fort Worth's Historic Stockyards for the Championship Rodeo before crossing to Dallas for pre-booked NBA seats — LA Lakers vs. Dallas Mavericks at American Airlines Center. Five hotels, one rental car, and 20 Michelin-ranked BBQ spots researched across the route.</div>
@@ -1514,7 +1539,7 @@
     </div>
 
     <!-- Transportation -->
-    <div class="section-label">Transportation</div>
+    <div class="section-label" data-i18n="sec.transport">Transportation</div>
     <div class="transport-grid">
       <div class="info-card">
         <div class="transport-icon">✈️</div>
@@ -1544,7 +1569,7 @@
     </div>
 
     <!-- Hotels -->
-    <div class="section-label">Hotels</div>
+    <div class="section-label" data-i18n="sec.hotels">Hotels</div>
     <div style="background:var(--char);border:1px solid var(--bark);border-radius:4px;overflow:hidden;">
       <table class="data-table">
         <thead>
@@ -1600,7 +1625,7 @@
     </div>
 
     <!-- Confirmed Activities -->
-    <div class="section-label">Confirmed Tickets &amp; Activities</div>
+    <div class="section-label" data-i18n="sec.activities">Confirmed Tickets &amp; Activities</div>
     <div class="ticket-grid">
       <div class="ticket-item">
         <div class="ticket-date">Mon Mar 30</div>
@@ -1669,7 +1694,7 @@
     </div>
 
     <!-- Drive Summary -->
-    <div class="section-label">Driving Summary</div>
+    <div class="section-label" data-i18n="sec.driving">Driving Summary</div>
     <div style="background:var(--char);border:1px solid var(--bark);border-radius:4px;overflow:hidden;">
       <table class="drive-summary-table">
         <thead>
@@ -1734,7 +1759,7 @@
     </div>
 
     <!-- To-Do -->
-    <div class="section-label">Remaining To-Do</div>
+    <div class="section-label" data-i18n="sec.todo">Remaining To-Do</div>
     <div class="todo-list">
       <div class="todo-item">
         <div class="todo-num">1</div>
@@ -2534,19 +2559,19 @@
     <p class="hero-sub">From a blank conversation to a fully planned, deployed, shareable road trip — in one extended session</p>
     <a class="github-link" href="https://github.com/EvanCarson/texas-bbq-explorer" target="_blank" rel="noopener">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      View on GitHub
+      <span data-i18n="tech.github">View on GitHub</span>
     </a>
   </div>
 
   <div class="container">
 
-    <div class="section-label">How It Started</div>
+    <div class="section-label" data-i18n="sec.started">How It Started</div>
     <div class="blog-card">
       <p class="blog-p">We had a week-long Texas road trip roughed out — flights booked, some hotels confirmed, a list of BBQ spots, and a bunch of open questions: are the tickets booked? Where do the kids play? Does the route even make sense? What we didn't have was anyone — or anything — to look at the whole picture at once and tell us if it held together.</p>
       <p class="blog-p">So we turned to Claude. Not just to generate text, but to act as a trip agent: ingest the raw plan, surface gaps, validate the routing, suggest options, and eventually produce this interactive page the whole family can reference. The conversation below is how it actually went.</p>
     </div>
 
-    <div class="section-label">What Made This Work</div>
+    <div class="section-label" data-i18n="sec.made">What Made This Work</div>
     <div class="capability-grid">
       <div class="cap-card">
         <div class="cap-icon">🗂️</div>
@@ -2580,7 +2605,7 @@
       </div>
     </div>
 
-    <div class="section-label" style="margin-top:48px;">Trip Planning — Filling the Gap</div>
+    <div class="section-label" data-i18n="sec.convo1" style="margin-top:48px;">Trip Planning — Filling the Gap</div>
     <p class="convo-section-desc">Claude ingests the raw itinerary, spots an unscheduled stretch between San Antonio and Fort Worth, and offers water park options ranked by route fit and season — then books the hotel and updates the plan.</p>
     <div class="convo-thread">
 
@@ -2672,7 +2697,7 @@
 
     </div><!-- /convo-thread -->
 
-    <div class="section-label" style="margin-top:48px;">Live Event Discovery — NBA on the Route</div>
+    <div class="section-label" data-i18n="sec.convo2" style="margin-top:48px;">Live Event Discovery — NBA on the Route</div>
     <p class="convo-section-desc">Claude cross-references the trip dates and cities against the NBA schedule to surface games you can actually attend — ranked by schedule fit, not just proximity.</p>
     <div class="convo-thread">
 
@@ -2826,6 +2851,130 @@
 
     if (name === 'houston')    setTimeout(() => { initLeafletMap('houston');    maps['houston']?.invalidateSize();    }, 60);
     if (name === 'sanantonio') setTimeout(() => { initLeafletMap('sanantonio'); maps['sanantonio']?.invalidateSize(); }, 60);
+  }
+
+  /* ── LANGUAGE SWITCHER ── */
+  let currentLang = 'en';
+
+  const T = {
+    en: {
+      'nav.overview':'Overview','nav.days':'Day by Day','nav.houston':'Houston BBQ','nav.sa':'SA BBQ','nav.tech':'Tech Blog',
+      'ov.eyebrow':'Family Trip · Spring Break 2026 · Mar 29 – Apr 5',
+      'ov.title':'Texas<em>Spring Break</em>',
+      'ov.sub':'Family of Four \u00a0·\u00a0 Mar 29 – Apr 5, 2026',
+      'sum.headline':'Eight days across Texas — NASA, a rodeo, a waterpark, and the Lakers.',
+      'sum.body':'Landing in Houston for two days at Space Center including a pre-booked Apollo Mission Control tram tour, then a 200-mile drive south to San Antonio for the Riverwalk, the zoo, and a riverboat cruise. Out via Natural Bridge Caverns and lunch with a friend in Austin, then two days at Kalahari Round Rock\'s indoor waterpark. A 185-mile push to Fort Worth\'s Historic Stockyards for the Championship Rodeo before crossing to Dallas for pre-booked NBA seats — LA Lakers vs. Dallas Mavericks at American Airlines Center. Five hotels, one rental car, and 20 Michelin-ranked BBQ spots researched across the route.',
+      'hl.1.l':'Houston · Mar 29–31','hl.1.v':'Westin Galleria · Space Center · Apollo Tram',
+      'hl.2.l':'San Antonio · Mar 31–Apr 2','hl.2.v':'Hyatt Riverwalk · Zoo · Riverboat Cruise',
+      'hl.3.l':'En Route · Apr 2','hl.3.v':'Natural Bridge Caverns · Lunch in Austin',
+      'hl.4.l':'Round Rock · Apr 2–4','hl.4.v':'Kalahari · Indoor + Outdoor Waterpark',
+      'hl.5.l':'Fort Worth · Apr 3–4','hl.5.v':'SpringHill Stockyards · Championship Rodeo',
+      'hl.6.l':'Dallas · Apr 4–5','hl.6.v':'Lakers vs. Mavericks · Fly home DAL → SFO',
+      'st.1':'<strong>8</strong> Days','st.2':'<strong>5</strong> Cities','st.3':'<strong>2</strong> Flights',
+      'st.4':'<strong>5</strong> Hotels','st.5':'<strong>4</strong> Pre-booked Activities','st.6':'<strong>~735</strong> mi Driving',
+      'sec.overview':'Overview','sec.transport':'Transportation','sec.hotels':'Hotels',
+      'sec.activities':'Confirmed Tickets & Activities','sec.driving':'Driving Summary','sec.todo':'Remaining To-Do',
+      'sec.started':'How It Started','sec.made':'What Made This Work',
+      'sec.convo1':'Trip Planning — Filling the Gap','sec.convo2':'Live Event Discovery — NBA on the Route',
+      'tr.1':'Outbound · United Airlines','tr.2':'Car Rental · Hertz','tr.3':'Return · Southwest Airlines',
+      'th.nights':'Nights','th.hotel':'Hotel','th.status':'Status',
+      'th.date':'Date','th.route':'Route','th.dist':'Distance',
+      'todo.task':'Book hotel near DAL Airport (Apr 4–5)','todo.sub':'Need to secure before trip',
+      'badge.booked':'Booked','badge.walkin':'Walk-in','badge.optional':'Optional','badge.booknow':'Book Now',
+      'days.eyebrow':'Mar 29 – Apr 5 · 8 Days','days.title':'Day by<em>Day</em>',
+      'days.sub':'Full itinerary with driving segments highlighted',
+      'hou.eyebrow':'Mar 29 – 31 · Base: Westin Galleria','hou.title':'Houston BBQ',
+      'hou.sub':'Click any restaurant to zoom the map · Ranked by prestige + proximity',
+      'hou.listlabel':'Ranked by prestige + proximity','hou.listtitle':"Houston's Finest Pits",
+      'sa.eyebrow':'Mar 31 – Apr 2 · Base: Hyatt Regency Riverwalk','sa.title':'San Antonio BBQ',
+      'sa.sub':'Click any restaurant to zoom the map · Ranked by prestige + proximity',
+      'sa.listlabel':'Ranked by prestige + proximity','sa.listtitle':"San Antonio's Finest Pits",
+      'tech.eyebrow':'Case Study · March 2026','tech.title':'Planning a Trip<em>with Claude</em>',
+      'tech.sub':'From a blank conversation to a fully planned, deployed, shareable road trip — in one extended session',
+      'tech.github':'View on GitHub',
+    },
+    zh: {
+      'nav.overview':'概览','nav.days':'每日行程','nav.houston':'休斯顿烧烤','nav.sa':'圣安东尼奥烧烤','nav.tech':'技术博客',
+      'ov.eyebrow':'家庭旅行 · 2026年春假 · 3月29日–4月5日',
+      'ov.title':'德克萨斯<em>春假之旅</em>',
+      'ov.sub':'四口之家 \u00a0·\u00a0 2026年3月29日–4月5日',
+      'sum.headline':'横跨德克萨斯八天——NASA太空中心、竞技表演、水上乐园和湖人队。',
+      'sum.body':'首站休斯顿驻留两天，参观太空中心并乘坐阿波罗任务控制中心观光车（已预订）；随后驱车约320公里南下圣安东尼奥，漫步河滨步道，游览动物园，乘坐游船。途经天然桥洞穴并在奥斯汀用餐，再前往朗德罗克卡拉哈里度假村畅玩室内外水上乐园。随后驱车约300公里抵达沃斯堡历史牧场区，观看冠军竞技表演；最后进入达拉斯观看已预订的NBA比赛——洛杉矶湖人对阵达拉斯独行侠。全程五家酒店、一辆租车，沿途调研了20家米其林推荐烧烤餐厅。',
+      'hl.1.l':'休斯顿 · 3月29–31日','hl.1.v':'威斯汀购物中心 · 太空中心 · 阿波罗导览',
+      'hl.2.l':'圣安东尼奥 · 3月31日–4月2日','hl.2.v':'凯悦河畔 · 动物园 · 游船',
+      'hl.3.l':'途中 · 4月2日','hl.3.v':'天然桥洞穴 · 奥斯汀午餐',
+      'hl.4.l':'朗德罗克 · 4月2–4日','hl.4.v':'卡拉哈里 · 室内外水上乐园',
+      'hl.5.l':'沃斯堡 · 4月3–4日','hl.5.v':'斯托克亚德斯 · 冠军竞技',
+      'hl.6.l':'达拉斯 · 4月4–5日','hl.6.v':'湖人vs独行侠 · 返程DAL→SFO',
+      'st.1':'<strong>8</strong> 天','st.2':'<strong>5</strong> 城市','st.3':'<strong>2</strong> 航班',
+      'st.4':'<strong>5</strong> 酒店','st.5':'<strong>4</strong> 已预订活动','st.6':'<strong>~735</strong> 英里驾车',
+      'sec.overview':'概览','sec.transport':'交通','sec.hotels':'酒店',
+      'sec.activities':'已确认票务与活动','sec.driving':'驾车摘要','sec.todo':'待办事项',
+      'sec.started':'起源','sec.made':'为何有效',
+      'sec.convo1':'旅行规划对话','sec.convo2':'NBA比赛搜寻',
+      'tr.1':'去程 · 美联航','tr.2':'租车 · 赫兹','tr.3':'返程 · 西南航空',
+      'th.nights':'日期','th.hotel':'酒店','th.status':'状态',
+      'th.date':'日期','th.route':'路线','th.dist':'距离',
+      'todo.task':'预订达拉斯机场附近酒店（4月4–5日）','todo.sub':'出行前需确认',
+      'badge.booked':'已预订','badge.walkin':'直接入场','badge.optional':'可选','badge.booknow':'立即预订',
+      'days.eyebrow':'3月29日–4月5日 · 8天','days.title':'每日<em>行程</em>',
+      'days.sub':'详细行程，含每段驾车路段标注',
+      'hou.eyebrow':'3月29–31日 · 驻地：威斯汀购物中心','hou.title':'休斯顿烧烤',
+      'hou.sub':'点击餐厅可在地图上定位 · 按声望+距离排名',
+      'hou.listlabel':'按声望+距离排名','hou.listtitle':'休斯顿顶级烤肉店',
+      'sa.eyebrow':'3月31日–4月2日 · 驻地：凯悦河畔','sa.title':'圣安东尼奥烧烤',
+      'sa.sub':'点击餐厅可在地图上定位 · 按声望+距离排名',
+      'sa.listlabel':'按声望+距离排名','sa.listtitle':'圣安东尼奥顶级烤肉店',
+      'tech.eyebrow':'案例研究 · 2026年3月','tech.title':'用Claude<em>规划旅行</em>',
+      'tech.sub':'从一次对话，到一个完整规划、发布、可分享的公路旅行——在一次扩展会话中完成',
+      'tech.github':'在GitHub上查看',
+    }
+  };
+
+  const SEL_TEXT = [
+    ['#page-overview .hero-eyebrow','ov.eyebrow'],['#page-overview .hero-sub','ov.sub'],
+    ['.trip-summary-headline','sum.headline'],['.trip-summary-body','sum.body'],
+    ['.trip-highlight:nth-child(1) .trip-highlight-label','hl.1.l'],['.trip-highlight:nth-child(1) .trip-highlight-value','hl.1.v'],
+    ['.trip-highlight:nth-child(2) .trip-highlight-label','hl.2.l'],['.trip-highlight:nth-child(2) .trip-highlight-value','hl.2.v'],
+    ['.trip-highlight:nth-child(3) .trip-highlight-label','hl.3.l'],['.trip-highlight:nth-child(3) .trip-highlight-value','hl.3.v'],
+    ['.trip-highlight:nth-child(4) .trip-highlight-label','hl.4.l'],['.trip-highlight:nth-child(4) .trip-highlight-value','hl.4.v'],
+    ['.trip-highlight:nth-child(5) .trip-highlight-label','hl.5.l'],['.trip-highlight:nth-child(5) .trip-highlight-value','hl.5.v'],
+    ['.trip-highlight:nth-child(6) .trip-highlight-label','hl.6.l'],['.trip-highlight:nth-child(6) .trip-highlight-value','hl.6.v'],
+    ['.transport-grid .info-card:nth-child(1) .card-eyebrow','tr.1'],
+    ['.transport-grid .info-card:nth-child(2) .card-eyebrow','tr.2'],
+    ['.transport-grid .info-card:nth-child(3) .card-eyebrow','tr.3'],
+    ['.data-table th:nth-child(1)','th.nights'],['.data-table th:nth-child(2)','th.hotel'],['.data-table th:nth-child(3)','th.status'],
+    ['.drive-summary-table th:nth-child(1)','th.date'],['.drive-summary-table th:nth-child(2)','th.route'],['.drive-summary-table th:nth-child(3)','th.dist'],
+    ['.todo-task','todo.task'],['.todo-sub','todo.sub'],
+    ['#page-days .hero-eyebrow','days.eyebrow'],['#page-days .hero-sub','days.sub'],
+    ['#page-houston .bbq-page-eyebrow','hou.eyebrow'],['#page-houston .bbq-page-title','hou.title'],['#page-houston .bbq-page-sub','hou.sub'],
+    ['#page-houston .list-header-label','hou.listlabel'],['#page-houston .list-header-title','hou.listtitle'],
+    ['#page-sanantonio .bbq-page-eyebrow','sa.eyebrow'],['#page-sanantonio .bbq-page-title','sa.title'],['#page-sanantonio .bbq-page-sub','sa.sub'],
+    ['#page-sanantonio .list-header-label','sa.listlabel'],['#page-sanantonio .list-header-title','sa.listtitle'],
+    ['#page-techblog .hero-eyebrow','tech.eyebrow'],['#page-techblog .hero-sub','tech.sub'],
+  ];
+  const SEL_HTML = [
+    ['#page-overview .hero-title','ov.title'],
+    ['.stat-row .stat-chip:nth-child(1)','st.1'],['.stat-row .stat-chip:nth-child(2)','st.2'],
+    ['.stat-row .stat-chip:nth-child(3)','st.3'],['.stat-row .stat-chip:nth-child(4)','st.4'],
+    ['.stat-row .stat-chip:nth-child(5)','st.5'],['.stat-row .stat-chip:nth-child(6)','st.6'],
+    ['#page-days .hero-title','days.title'],['#page-techblog .hero-title','tech.title'],
+  ];
+  const SEL_ALL = [
+    ['.badge-booked','badge.booked'],['.badge-walkin','badge.walkin'],
+    ['.badge-optional','badge.optional'],['.card-status.status-booked','badge.booked'],
+    ['.priority-high','badge.booknow'],
+  ];
+
+  function setLang(lang) {
+    currentLang = lang;
+    const t = T[lang];
+    SEL_TEXT.forEach(([s,k]) => { const el=document.querySelector(s); if(el&&t[k]!==undefined) el.textContent=t[k]; });
+    SEL_HTML.forEach(([s,k]) => { const el=document.querySelector(s); if(el&&t[k]!==undefined) el.innerHTML=t[k]; });
+    SEL_ALL.forEach(([s,k]) => document.querySelectorAll(s).forEach(el => { el.textContent=t[k]; }));
+    document.querySelectorAll('[data-i18n]').forEach(el => { const k=el.dataset.i18n; if(t[k]!==undefined) el.textContent=t[k]; });
+    document.querySelector('.lang-toggle').textContent = lang==='zh' ? 'EN' : '中';
+    document.documentElement.lang = lang==='zh' ? 'zh' : 'en';
   }
 </script>
 
