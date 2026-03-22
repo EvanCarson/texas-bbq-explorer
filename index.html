@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Texas BBQ Explorer — Family Trip 2026</title>
+<title>AI Trip Planning — Family Trip 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -760,6 +760,156 @@
   /* ── ANIMATIONS ── */
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+  /* ── TECH BLOG ── */
+  .blog-card {
+    background: var(--char);
+    border: 1px solid var(--bark);
+    border-radius: 6px;
+    padding: 28px 32px;
+  }
+
+  .blog-p {
+    font-size: 14px;
+    color: var(--ash);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .blog-p:last-child { margin-bottom: 0; }
+  .blog-p strong { color: var(--cream); font-weight: 500; }
+  .blog-p code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.06);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--gold);
+  }
+
+  .blog-steps { display: flex; flex-direction: column; gap: 16px; }
+
+  .blog-step {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 20px;
+    align-items: start;
+    background: var(--char);
+    border: 1px solid var(--bark);
+    border-radius: 6px;
+    padding: 22px 26px;
+    transition: border-color 0.2s;
+  }
+
+  .blog-step:hover { border-color: rgba(201,79,26,0.4); }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--bark);
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--ash);
+    line-height: 1.7;
+  }
+
+  .step-desc code {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--gold);
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media(max-width:800px) { .capability-grid { grid-template-columns: 1fr 1fr; } }
+  @media(max-width:500px) { .capability-grid { grid-template-columns: 1fr; } }
+
+  .cap-card {
+    background: var(--char);
+    border: 1px solid var(--bark);
+    border-radius: 6px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .cap-card:hover { border-color: rgba(212,168,83,0.4); }
+
+  .cap-icon { font-size: 22px; margin-bottom: 10px; }
+
+  .cap-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .cap-desc { font-size: 12px; color: var(--ash); line-height: 1.6; }
+
+  .convo-block {
+    background: rgba(26,20,16,0.7);
+    border: 1px solid var(--bark);
+    border-radius: 6px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .convo-user, .convo-ai {
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .convo-user {
+    background: rgba(201,79,26,0.12);
+    border-left: 3px solid var(--ember);
+    color: var(--cream);
+    font-style: italic;
+    align-self: flex-start;
+    max-width: 85%;
+  }
+
+  .convo-ai {
+    background: rgba(212,168,83,0.08);
+    border-left: 3px solid var(--gold);
+    color: var(--ash);
+    align-self: flex-end;
+    max-width: 90%;
+  }
+
+  .convo-ai strong { color: var(--cream); font-weight: 500; }
+  .convo-ai code {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--gold);
+  }
+
   /* ── DRIVE SUMMARY TABLE ── */
   .drive-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
@@ -802,12 +952,13 @@
 
 <!-- TOP NAV -->
 <nav class="top-nav">
-  <div class="nav-logo">Texas BBQ Explorer</div>
+  <div class="nav-logo">AI Trip Planning</div>
   <div class="nav-links">
     <div class="nav-link active" data-page="overview" onclick="showPage('overview', this)">Overview</div>
     <div class="nav-link" data-page="days" onclick="showPage('days', this)">Day by Day</div>
     <div class="nav-link" data-page="houston" onclick="showPage('houston', this)">Houston BBQ</div>
     <div class="nav-link" data-page="sanantonio" onclick="showPage('sanantonio', this)">SA BBQ</div>
+    <div class="nav-link" data-page="techblog" onclick="showPage('techblog', this)">Tech Blog</div>
   </div>
 </nav>
 
@@ -1852,9 +2003,153 @@
 </div><!-- /page-sanantonio -->
 
 
+<!-- ══════════════════════════════════════
+     PAGE: TECH BLOG
+══════════════════════════════════════ -->
+<div id="page-techblog" class="page">
+
+  <div class="page-hero">
+    <div class="hero-eyebrow">Behind the Build · March 2026</div>
+    <h1 class="hero-title">Built with<em>Claude Code</em></h1>
+    <p class="hero-sub">How an AI agent planned a family road trip and built the site to go with it</p>
+  </div>
+
+  <div class="container">
+
+    <div class="section-label">The Idea</div>
+    <div class="blog-card">
+      <p class="blog-p">Planning a week-long Texas road trip with four people, five cities, five hotels, two flights, pre-booked activities, and a Michelin BBQ shortlist is genuinely complex. Spreadsheets help, but they don't surface conflicts, highlight drive times, or tell you which BBQ joint closes before you arrive.</p>
+      <p class="blog-p">We wanted a single shareable page the whole family could reference — not a PDF, not a shared notes doc, but a real interactive site. So we handed the planning to <strong>Claude Code</strong>, Anthropic's agentic CLI, and let it do the work end to end.</p>
+    </div>
+
+    <div class="section-label">What Claude Code Did</div>
+    <div class="blog-steps">
+
+      <div class="blog-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Ingested raw trip data</div>
+          <p class="step-desc">We pasted an unstructured markdown trip summary — flights, hotels, confirmed tickets, day-by-day notes, BBQ research — as a single block of text. Claude Code parsed it, identified structure, and used it as the authoritative source throughout the build without ever writing it to disk or pushing it to git.</p>
+        </div>
+      </div>
+
+      <div class="blog-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Architected a 4-page SPA</div>
+          <p class="step-desc">Given the data shape, Claude Code chose a single-file SPA (no framework, no build step) with JS-driven navigation between four views: Overview, Day-by-Day, Houston BBQ, and San Antonio BBQ. Zero dependencies — just HTML, CSS, and vanilla JS. It reasoned that this matched the Vercel static deployment already in place and avoided unnecessary complexity.</p>
+        </div>
+      </div>
+
+      <div class="blog-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Designed the visual system</div>
+          <p class="step-desc">The smoky dark-mode aesthetic — ember oranges, charcoal blacks, gold accents, Playfair Display headlines — was generated from scratch to match the Texas BBQ theme. Claude Code wrote ~500 lines of CSS including a sticky nav, responsive grid layouts, animated day cards, and a custom drive-time highlight treatment using amber border accents.</p>
+        </div>
+      </div>
+
+      <div class="blog-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Fixed the map interaction</div>
+          <p class="step-desc">The original page embedded Google Maps iframes with manually constructed <code>pb=</code> state parameters — a fragile format that broke without an API key. Claude Code diagnosed the root cause, switched to OpenStreetMap embed URLs (no key required), and wired each restaurant card's <code>onclick</code> to update the iframe's <code>src</code> with a bounding box and marker centred on that location's coordinates.</p>
+        </div>
+      </div>
+
+      <div class="blog-step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Handled privacy</div>
+          <p class="step-desc">When asked to remove sensitive information, Claude Code searched the full document for the family surname and replaced every instance — in the page title, hero eyebrow, and footer — with "Family Trip". It didn't touch surrounding content or restructure anything unnecessarily.</p>
+        </div>
+      </div>
+
+      <div class="blog-step">
+        <div class="step-num">06</div>
+        <div class="step-content">
+          <div class="step-title">Deployed to Vercel autonomously</div>
+          <p class="step-desc">Claude Code installed the Vercel CLI, authenticated, linked the project, and deployed to production — all from the terminal. After each round of changes it redeployed and returned a live URL. The full cycle from "here's the markdown" to "here's the URL" ran in under two minutes per iteration.</p>
+        </div>
+      </div>
+
+      <div class="blog-step">
+        <div class="step-num">07</div>
+        <div class="step-content">
+          <div class="step-title">Maintained a git worktree</div>
+          <p class="step-desc">All work happened in an isolated git worktree (<code>claude/dreamy-cartwright</code>) branched off main. Each logical change was committed with a descriptive message. When the work was complete, Claude Code merged the branch into main — keeping the history clean without ever touching the user's working directory.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-label">Key Capabilities Demonstrated</div>
+    <div class="capability-grid">
+      <div class="cap-card">
+        <div class="cap-icon">🧠</div>
+        <div class="cap-title">Structured data extraction</div>
+        <div class="cap-desc">Parsed freeform markdown into typed data: flights, hotels, activities, drive segments, restaurant rankings.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🎨</div>
+        <div class="cap-title">Full-stack UI generation</div>
+        <div class="cap-desc">Wrote complete HTML/CSS/JS from scratch, including responsive layouts, animations, and interactive state management.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🔍</div>
+        <div class="cap-title">Root cause diagnosis</div>
+        <div class="cap-desc">Identified why the Google Maps embed was broken, chose an appropriate fix, and applied it without over-engineering.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🚀</div>
+        <div class="cap-title">Autonomous deployment</div>
+        <div class="cap-desc">Installed tooling, authenticated, deployed, and managed a live Vercel project across multiple iterations.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🔒</div>
+        <div class="cap-title">Privacy awareness</div>
+        <div class="cap-desc">Identified and removed PII (family name) across all occurrences when asked, without disrupting surrounding content.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🌿</div>
+        <div class="cap-title">Git-native workflow</div>
+        <div class="cap-desc">Worked in isolated worktrees, committed incrementally with meaningful messages, and merged cleanly to main.</div>
+      </div>
+    </div>
+
+    <div class="section-label">The Conversation</div>
+    <div class="blog-card">
+      <p class="blog-p">The entire site was built through a natural back-and-forth conversation with no special syntax, no prompt engineering, and no templates. A typical exchange looked like:</p>
+      <div class="convo-block">
+        <div class="convo-user">deploy this and show me the URL</div>
+        <div class="convo-ai">Deployed. <strong>https://dreamy-cartwright.vercel.app</strong></div>
+        <div class="convo-user">remove sensitive information like the family name. also the google map seems to not be working, try to fix it</div>
+        <div class="convo-ai">Replaced all instances of the family name with "Family Trip". Diagnosed the Google Maps embed issue — the <code>pb=</code> parameters were manually constructed and don't work without an API key. Switched to OpenStreetMap which requires no key. Redeployed.</div>
+        <div class="convo-user">adding this MD, refactor this website to contain the trip information. trip overview page, day by day with highlighted drive time, two pages for dinner options. Last fix the google mapping connection when user clicks each item.</div>
+        <div class="convo-ai">Read the existing code, ingested the markdown, planned a 4-page architecture, rewrote the file with all trip data, wired map click interactions, committed, merged, deployed.</div>
+      </div>
+      <p class="blog-p" style="margin-top:20px;">Each instruction was a plain English sentence. Claude Code handled the implementation details — reading files, planning the structure, writing the code, deploying — without requiring step-by-step direction.</p>
+    </div>
+
+    <div class="section-label">Takeaway</div>
+    <div class="note-card" style="margin-bottom:0;">
+      <div class="note-icon">💡</div>
+      <div>
+        <div class="note-label">What this means for trip planning</div>
+        <div class="note-text">
+          <strong>AI agents are no longer just content generators.</strong> Claude Code didn't just write text about the trip — it built the infrastructure around it. It read files, managed git, deployed to a CDN, and iterated on a live production URL based on conversational feedback.<br><br>
+          The same workflow applies to any structured planning problem: conference schedules, wedding timelines, moving checklists. If the data has shape, an AI agent can build the right interface for it — and have it live on the web in minutes.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page-techblog -->
+
+
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">Texas BBQ Explorer</div>
+  <div class="footer-brand">AI Trip Planning</div>
   <div class="footer-meta">Family Trip · Spring Break 2026 · Mar 29 – Apr 5 · SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</div>
 </footer>
 
