@@ -2241,7 +2241,41 @@
       <p class="blog-p">We had a week-long Texas road trip roughed out — flights booked, some hotels confirmed, a list of BBQ spots. What we didn't have was a single place to see it all. So we opened Claude Code and pasted in our notes. Here's how it went.</p>
     </div>
 
-    <div class="section-label">The Conversation</div>
+    <div class="section-label">What Made This Work</div>
+    <div class="capability-grid">
+      <div class="cap-card">
+        <div class="cap-icon">🗂️</div>
+        <div class="cap-title">Structured data from messy notes</div>
+        <div class="cap-desc">Pasted an unstructured markdown dump — flights, hotels, research, day notes — and Claude extracted it into typed, navigable trip data.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🗺️</div>
+        <div class="cap-title">Route-aware suggestions</div>
+        <div class="cap-desc">Kalahari was recommended not just for quality, but because Round Rock was already on the routing. Claude cross-checked geography before suggesting.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🎨</div>
+        <div class="cap-title">Full interactive site, zero frameworks</div>
+        <div class="cap-desc">Built a 5-tab SPA with Leaflet maps, animated day cards, and hotel-to-restaurant directions. Vanilla HTML/CSS/JS — no build step, no dependencies.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🚀</div>
+        <div class="cap-title">Live URL in minutes</div>
+        <div class="cap-desc">Deployed to Vercel autonomously. Each round of changes produced a new production URL in under two minutes.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🔒</div>
+        <div class="cap-title">Privacy by default</div>
+        <div class="cap-desc">When asked to remove the family name, Claude found every instance across the document and replaced them — without touching surrounding content.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🌿</div>
+        <div class="cap-title">Clean git history</div>
+        <div class="cap-desc">All work in an isolated worktree. Incremental commits. Merged to main when done. The repo stays clean throughout.</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:48px;">The Conversation</div>
     <div class="convo-thread">
 
       <!-- Turn 1: Claude sends initial plan -->
@@ -2249,16 +2283,14 @@
         <div class="convo-avatar">C</div>
         <div class="convo-body">
           <div class="convo-speaker">Claude</div>
-          <p class="convo-text">Here's what I've put together from your notes. I've organised the trip into five segments and flagged the long drive days.</p>
+          <p class="convo-text">Here's what I've put together from your notes. Five segments, eight days.</p>
           <div class="convo-plan-card">
             <div class="convo-plan-title">Texas Family Road Trip · Mar 29 – Apr 5, 2026</div>
             <div class="convo-plan-row"><span class="convo-plan-label">Flights</span><span>SFO → IAH Mar 29 · DAL → SFO Apr 5</span></div>
             <div class="convo-plan-row"><span class="convo-plan-label">Mar 29–31</span><span>Houston · Westin Galleria · Space Center + Kemah Boardwalk</span></div>
             <div class="convo-plan-row"><span class="convo-plan-label">Mar 31–Apr 2</span><span>San Antonio · Hyatt Regency Riverwalk · San Antonio Zoo</span></div>
-            <div class="convo-plan-row convo-plan-row-drive"><span class="convo-plan-label">Drive</span><span>SA → Austin ~1.5 hr · Austin → Round Rock ~25 min · Round Rock → Fort Worth ~3.5 hr</span></div>
-            <div class="convo-plan-row"><span class="convo-plan-label">Apr 2–3</span><span>Austin / Round Rock area — currently unscheduled</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Apr 2–3</span><span>Round Rock area — currently unscheduled</span></div>
             <div class="convo-plan-row"><span class="convo-plan-label">Apr 3–5</span><span>Fort Worth / Dallas · Omni Fort Worth · Stockyards + Rangers game</span></div>
-            <div class="convo-plan-row"><span class="convo-plan-label">BBQ</span><span>20 restaurants researched across Houston and San Antonio (Michelin-ranked)</span></div>
             <div class="convo-plan-note">Apr 2–3 in Round Rock has no hotel or activities booked yet. Want me to suggest options for that gap?</div>
           </div>
         </div>
@@ -2278,28 +2310,26 @@
         <div class="convo-avatar">C</div>
         <div class="convo-body">
           <div class="convo-speaker">Claude</div>
-          <p class="convo-text">Perfect timing — Round Rock sits right in that gap. I found three options that fit the routing and the age range. I've flagged the one I'd recommend.</p>
+          <p class="convo-text">Perfect timing — Round Rock sits right in that gap. Three options, ranked by fit for your dates and ages.</p>
           <div class="convo-options">
             <div class="option-card recommended">
               <div class="option-badge">Recommended</div>
               <div class="option-title">A · Kalahari Resorts Round Rock</div>
-              <div class="option-detail">America's largest indoor waterpark. 220,000 sq ft — fully indoor so weather doesn't matter. On-site hotel means no driving after a full day. Round Rock is already on your route between SA and Fort Worth.</div>
-              <div class="option-meta">~$240–280/night including park passes · Round Rock, TX</div>
+              <div class="option-detail">America's largest indoor waterpark — fully climate-controlled so weather doesn't matter. On-site hotel, no driving after a full day. Already on your route between SA and Fort Worth.</div>
+              <div class="option-meta">Round Rock, TX · park passes included with stay</div>
             </div>
             <div class="option-card">
               <div class="option-title">B · Schlitterbahn New Braunfels</div>
-              <div class="option-detail">Classic Texas outdoor waterpark, rated #1 in the US for years. But it's seasonal — closed in late March/early April. Would need a schedule shift.</div>
-              <div class="option-meta">Closed Mar–Apr · New Braunfels (SA to Austin route)</div>
+              <div class="option-detail">Texas institution, rated #1 in the US for years — but seasonal. Closed in late March/early April. Would need a schedule shift.</div>
+              <div class="option-meta">New Braunfels · closed Mar–Apr</div>
             </div>
             <div class="option-card">
               <div class="option-title">C · Hawaiian Falls Garland</div>
-              <div class="option-detail">Outdoor park near Dallas. Closer to your Fort Worth end than Round Rock. Smaller than Kalahari, lower price point, but again weather-dependent and early-season hours are limited.</div>
-              <div class="option-meta">~$30–45/person · Garland (near Dallas)</div>
+              <div class="option-detail">Outdoor park near Dallas, lower price point. Weather-dependent and early-season hours are limited.</div>
+              <div class="option-meta">Garland (near Dallas) · outdoor, weather-dependent</div>
             </div>
           </div>
-          <p class="convo-text" style="margin-top:16px;">A couple of questions before I update the plan:<br>
-          1. How many nights at Kalahari — one or two?<br>
-          2. Any room preferences (suite, connecting rooms, resort-view)?</p>
+          <p class="convo-text" style="margin-top:14px;">How many nights — one or two? Any room preferences?</p>
         </div>
       </div>
 
@@ -2317,63 +2347,61 @@
         <div class="convo-avatar">C</div>
         <div class="convo-body">
           <div class="convo-speaker">Claude</div>
-          <p class="convo-text">Done. I've updated the plan and noted the hotel details below.</p>
+          <p class="convo-text">Done. Plan updated.</p>
           <div class="convo-booking-result">
             <div class="convo-booking-title">Kalahari Resorts Round Rock · Apr 2–4</div>
-            <div class="convo-booking-row"><span>Room type</span><span>2× Connecting Deluxe Rooms</span></div>
-            <div class="convo-booking-row"><span>Rate</span><span>$243.99/night per room · 2 nights</span></div>
+            <div class="convo-booking-row"><span>Room type</span><span>2 Queen Sofa</span></div>
             <div class="convo-booking-row"><span>Park access</span><span>Included for all registered guests</span></div>
             <div class="convo-booking-row"><span>Check-in / out</span><span>Apr 2 · Apr 4 (2 nights)</span></div>
           </div>
-          <div class="convo-plan-card" style="margin-top:16px;">
-            <div class="convo-plan-title">Updated Itinerary · Texas Family Road Trip</div>
-            <div class="convo-plan-row"><span class="convo-plan-label">Mar 29–31</span><span>Houston · Westin Galleria · Space Center + Kemah Boardwalk</span></div>
-            <div class="convo-plan-row"><span class="convo-plan-label">Mar 31–Apr 2</span><span>San Antonio · Hyatt Regency Riverwalk · San Antonio Zoo</span></div>
-            <div class="convo-plan-row convo-plan-row-drive"><span class="convo-plan-label">Drive</span><span>SA → Round Rock · ~1.5 hr</span></div>
-            <div class="convo-plan-row" style="background:rgba(0,113,227,0.06); border-radius:8px; padding:8px 10px;"><span class="convo-plan-label" style="color:var(--ember);">Apr 2–4 NEW</span><span>Round Rock · <strong>Kalahari Resorts</strong> · Indoor waterpark — 2 nights</span></div>
-            <div class="convo-plan-row convo-plan-row-drive"><span class="convo-plan-label">Drive</span><span>Round Rock → Fort Worth · ~3.5 hr</span></div>
-            <div class="convo-plan-row"><span class="convo-plan-label">Apr 4–5</span><span>Fort Worth / Dallas · Omni Fort Worth · Stockyards + Rangers game</span></div>
-            <div class="convo-plan-note">Total trip: 7 nights · 5 hotels · 2 flights · 1 waterpark · 20 BBQ spots researched</div>
+          <div class="convo-plan-card" style="margin-top:14px;">
+            <div class="convo-plan-title">Updated Itinerary</div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Mar 29–31</span><span>Houston · Westin Galleria</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Mar 31–Apr 2</span><span>San Antonio · Hyatt Regency Riverwalk</span></div>
+            <div class="convo-plan-row" style="background:rgba(0,113,227,0.06);"><span class="convo-plan-label" style="color:var(--ember);">Apr 2–4 NEW</span><span><strong>Kalahari Resorts</strong> · Round Rock · Indoor waterpark</span></div>
+            <div class="convo-plan-row"><span class="convo-plan-label">Apr 4–5</span><span>Fort Worth / Dallas · Omni Fort Worth</span></div>
           </div>
-          <p class="convo-text" style="margin-top:16px;">I've also updated the Day-by-Day page on the site to reflect the new Kalahari stop. The live URL is unchanged — refresh and it'll be there.</p>
+        </div>
+      </div>
+
+      <!-- Turn 6: User asks for NBA -->
+      <div class="convo-turn user-turn">
+        <div class="convo-avatar">U</div>
+        <div class="convo-body">
+          <div class="convo-speaker">User</div>
+          <p class="convo-text">Can you find an NBA game I can watch based on this trip?</p>
+        </div>
+      </div>
+
+      <!-- Turn 7: Claude finds NBA options -->
+      <div class="convo-turn claude-turn">
+        <div class="convo-avatar">C</div>
+        <div class="convo-body">
+          <div class="convo-speaker">Claude</div>
+          <p class="convo-text">Checked the NBA schedule against your cities and dates. One clear match — and it's a good one.</p>
+          <div class="convo-options">
+            <div class="option-card recommended">
+              <div class="option-badge">Best Match</div>
+              <div class="option-title">Houston Rockets vs. San Antonio Spurs</div>
+              <div class="option-detail">Mon Mar 30 · Toyota Center, Houston · 7:30 PM CT. You'll be in Houston Mar 29–31 — this lands perfectly on your second evening. Rockets vs. Spurs is a natural Texas rivalry. Victor Wembanyama will be on the floor.</div>
+              <div class="option-meta">Toyota Center · 1510 Polk St, Houston · ~10 min from your hotel</div>
+            </div>
+            <div class="option-card">
+              <div class="option-title">San Antonio Spurs home game</div>
+              <div class="option-detail">Spurs play at the Frost Bank Center. Check Mar 31–Apr 2 dates — if there's a home game during your SA stay it would be walkable from the Hyatt Riverwalk. Lineup varies week to week.</div>
+              <div class="option-meta">Frost Bank Center · San Antonio · subject to schedule</div>
+            </div>
+            <div class="option-card">
+              <div class="option-title">Dallas Mavericks</div>
+              <div class="option-detail">American Airlines Center is ~35 min from your Fort Worth hotel. Mavericks schedule Apr 4–5 may have a home game — worth checking if the Rangers game doesn't fill that evening.</div>
+              <div class="option-meta">American Airlines Center · Dallas · ~35 min from Omni FW</div>
+            </div>
+          </div>
+          <p class="convo-text" style="margin-top:14px;">Want me to add the Rockets game to the Day-by-Day for Mar 30?</p>
         </div>
       </div>
 
     </div><!-- /convo-thread -->
-
-    <div class="section-label" style="margin-top:48px;">What Made This Work</div>
-    <div class="capability-grid">
-      <div class="cap-card">
-        <div class="cap-icon">🗂️</div>
-        <div class="cap-title">Structured data from messy notes</div>
-        <div class="cap-desc">Pasted an unstructured markdown dump — flights, hotels, BBQ research, day notes — and Claude extracted it into typed, navigable trip data.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">🗺️</div>
-        <div class="cap-title">Route-aware suggestions</div>
-        <div class="cap-desc">Kalahari was recommended not just for quality, but because Round Rock was already on the routing. Claude Cross-checked geography before suggesting.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">🎨</div>
-        <div class="cap-title">Full interactive site, zero frameworks</div>
-        <div class="cap-desc">Built a 5-tab SPA with Leaflet maps, animated day cards, and hotel-to-BBQ directions. Vanilla HTML/CSS/JS — no build step, no dependencies.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">🚀</div>
-        <div class="cap-title">Live URL in minutes</div>
-        <div class="cap-desc">Deployed to Vercel autonomously. Each round of changes produced a new production URL in under two minutes.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">🔒</div>
-        <div class="cap-title">Privacy by default</div>
-        <div class="cap-desc">When asked to remove the family name, Claude found every instance across the document and replaced them — without touching surrounding content.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">🌿</div>
-        <div class="cap-title">Clean git history</div>
-        <div class="cap-desc">All work in an isolated worktree. Incremental commits. Merged to main when done. The repo stays clean throughout.</div>
-      </div>
-    </div>
 
   </div>
 </div><!-- /page-techblog -->
@@ -2382,7 +2410,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">AI Trip Planning</div>
-  <div class="footer-meta">Family Trip · Spring Break 2026 · Mar 29 – Apr 5 · SFO → Houston → SA → Round Rock → Fort Worth → Dallas → SFO</div>
+  <div class="footer-meta">Family Trip · Spring Break 2026</div>
 </footer>
 
 
