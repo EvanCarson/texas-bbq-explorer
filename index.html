@@ -67,6 +67,13 @@
     gap: 16px;
   }
 
+  .nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
   .nav-logo {
     font-size: 17px;
     font-weight: 600;
@@ -1488,7 +1495,10 @@
 
 <!-- TOP NAV -->
 <nav class="top-nav">
-  <div class="nav-logo">AI Trip Planning</div>
+  <div class="nav-left">
+    <div class="nav-logo">AI Trip Planning</div>
+    <button class="lang-toggle" onclick="setLang(currentLang==='en'?'zh':'en')">中</button>
+  </div>
   <div class="nav-links">
     <div class="nav-link active" data-page="overview" data-i18n="nav.overview" onclick="showPage('overview', this)">Overview</div>
     <div class="nav-link" data-page="days" data-i18n="nav.days" onclick="showPage('days', this)">Day by Day</div>
@@ -1496,7 +1506,6 @@
     <div class="nav-link" data-page="sanantonio" data-i18n="nav.sa" onclick="showPage('sanantonio', this)">SA BBQ</div>
     <div class="nav-link" data-page="techblog" data-i18n="nav.tech" onclick="showPage('techblog', this)">Tech Blog</div>
   </div>
-  <button class="lang-toggle" onclick="setLang(currentLang==='en'?'zh':'en')">中</button>
 </nav>
 
 
