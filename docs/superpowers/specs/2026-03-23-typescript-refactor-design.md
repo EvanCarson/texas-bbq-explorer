@@ -25,29 +25,31 @@ Refactor the monolithic `index.html` (~2900 lines of vanilla HTML/CSS/JS) into a
 
 ```
 texas-bbq-explorer/
+├── middleware.ts               # next-intl locale detection
 ├── app/
-│   ├── layout.tsx              # Root layout: TopNav + i18n provider
-│   ├── page.tsx                # Overview
-│   ├── days/
-│   │   └── page.tsx            # Day by Day
-│   ├── places/
-│   │   └── page.tsx            # Places Explorer
-│   ├── blog/
-│   │   └── page.tsx            # Tech Blog
-│   └── api/                    # Future backend API routes
+│   ├── [locale]/
+│   │   ├── layout.tsx          # Locale layout: NextIntlClientProvider
+│   │   ├── page.tsx            # Overview
+│   │   ├── days/
+│   │   │   └── page.tsx        # Day by Day
+│   │   ├── places/
+│   │   │   └── page.tsx        # Places Explorer
+│   │   └── blog/
+│   │       └── page.tsx        # Tech Blog
+│   └── api/                    # Future backend routes (not locale-scoped)
 │       ├── places/route.ts
 │       ├── stays/route.ts
 │       └── itinerary/route.ts
 ├── components/
 │   ├── ui/                     # Shared: Button, Card, Badge
 │   ├── nav/                    # TopNav, LangSwitcher
-│   ├── overview/               # StatChip, StayTable, ActivityCard
+│   ├── overview/               # StatChip, StayTable, ConfirmedActivities, ActivityCard
 │   ├── places/                 # PlaceCard, DistanceTag, FilterBar, MapView
 │   └── days/                   # DayCard, DriveSegment
 ├── lib/
 │   ├── data/
-│   │   ├── places.ts           # getPlaces(), getPlacesByCity(), getPlacesByType()
-│   │   └── itinerary.ts        # getDays(), getStays(), getStayForDate(), getCities()
+│   │   ├── places.ts           # getPlaces(filters?), getPlaceById(id)
+│   │   └── itinerary.ts        # getDays(), getStays(), getStayForDate(), getCities(), getActivities()
 │   └── distance.ts             # haversine(a, b): number — returns miles
 ├── types/
 │   ├── place.ts
@@ -155,6 +157,8 @@ Future implementation: `fetch('/api/...')` — function signatures unchanged, co
 ### Overview (`/`)
 Trip summary: stat chips (days, cities, flights, hotels, miles), transportation cards, stay table, confirmed activities, driving summary. Mirrors current Overview tab content, migrated to React components.
 
+`ConfirmedActivities` (container) in `components/overview/` consumes `getActivities(): Activity[]` and renders a list of `ActivityCard` sub-components, each showing name, status badge (Booked / Walk-in / Optional), and optional website link. `Day.activities` remains `string[]` for the Day by Day page (simple text list per day); the standalone `Activity` type is used only on the Overview page where status and URLs matter.
+
 ### Day by Day (`/days`)
 Full itinerary rendered as a list of `DayCard` components. Drive segments highlighted. Data from `getDays()`.
 
@@ -197,17 +201,20 @@ t('distance', { miles: 2.3 })  // → "2.3 mi" or "2.3 英里"
 
 **Language switching:**
 - EN / 中 toggle in `TopNav` (preserved from current design)
-- Preference stored in a cookie
-- No URL change, no page reload
-- `next-intl` provider in `app/layout.tsx` reads cookie on render
+- Uses next-intl with URL-based locale routing: `/en/...` and `/zh/...`
+- `middleware.ts` reads the locale from the URL and sets it for the request
+- The `LangSwitcher` component in `TopNav` navigates to the equivalent path in the other locale (e.g., `/en/places` ↔ `/zh/places`) — no full reload, just a Next.js route change
+- Default locale is `en`; locale prefix always present in URL for clarity
 
-The current ~300 lines of translation logic in `index.html` is replaced by two JSON files and a single provider.
+The `[locale]` dynamic segment is already reflected in the Project Structure section above. `app/api/` routes live outside `[locale]/` since they are not locale-specific.
+
+The current ~300 lines of translation logic in `index.html` is replaced by two JSON files, a middleware file, and a single locale-aware layout.
 
 ---
 
 ## Styling
 
-The existing Apple-inspired CSS design tokens are preserved and migrated to a global CSS file (or Tailwind with custom tokens). The visual design does not change.
+The existing Apple-inspired CSS design tokens are preserved and migrated to a global CSS file (`app/globals.css`). No Tailwind — the tokens are already defined as CSS custom properties and the visual design does not change, so plain CSS is the lower-friction path.
 
 ```css
 --smoke, --char, --ember, --flame, --ash, --bark, --michelin, --teal
