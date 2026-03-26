@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "days": "Day by Day",
+    "places": "Places",
+    "blog": "Tech Blog"
+  },
+  "overview": {
+    "title": "Texas BBQ Explorer",
+    "subtitle": "Spring Break 2026 · Mar 29 – Apr 5",
+    "statDays": "{count} Days",
+    "statCities": "{count} Cities",
+    "statFlights": "{count} Flights",
+    "statHotels": "{count} Hotels",
+    "statMiles": "~{count} mi Driving",
+    "statActivities": "{count} Pre-booked Activities",
+    "sectionTransport": "Transportation",
+    "sectionStays": "Stays",
+    "sectionActivities": "Confirmed Tickets & Activities",
+    "sectionDriving": "Driving Summary"
+  },
+  "days": {
+    "title": "Day by Day",
+    "subtitle": "Full itinerary with driving segments highlighted"
+  },
+  "places": {
+    "title": "Places Explorer",
+    "subtitle": "Restaurants, activities, and attractions across the trip",
+    "filterAll": "All",
+    "filterCity": "City",
+    "filterType": "Type",
+    "filterTag": "Tag",
+    "typeRestaurant": "Restaurant",
+    "typeActivity": "Activity",
+    "typeAttraction": "Attraction",
+    "distance": "{miles} mi",
+    "fromStay": "from {stay}",
+    "michelin": "Michelin Star",
+    "bibGourmand": "Bib Gourmand",
+    "recommended": "Michelin Rec",
+    "booked": "Pre-booked",
+    "walkIn": "Walk-in",
+    "optional": "Optional",
+    "yelpLink": "Yelp →",
+    "websiteLink": "Website →"
+  },
+  "blog": {
+    "title": "Tech Blog",
+    "subtitle": "How this trip planner was built"
+  },
+  "badge": {
+    "booked": "Pre-booked",
+    "walkIn": "Walk-in",
+    "optional": "Optional"
+  }
+}

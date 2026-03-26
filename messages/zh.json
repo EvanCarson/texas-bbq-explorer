@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "overview": "概览",
+    "days": "每日行程",
+    "places": "地点",
+    "blog": "技术博客"
+  },
+  "overview": {
+    "title": "德州烤肉探索",
+    "subtitle": "春假 2026 · 3月29日 – 4月5日",
+    "statDays": "{count} 天",
+    "statCities": "{count} 个城市",
+    "statFlights": "{count} 个航班",
+    "statHotels": "{count} 个酒店",
+    "statMiles": "约 {count} 英里驾车",
+    "statActivities": "{count} 个预订活动",
+    "sectionTransport": "交通",
+    "sectionStays": "住宿",
+    "sectionActivities": "已确认门票与活动",
+    "sectionDriving": "驾车摘要"
+  },
+  "days": {
+    "title": "每日行程",
+    "subtitle": "完整行程，驾车路段高亮显示"
+  },
+  "places": {
+    "title": "地点探索",
+    "subtitle": "旅途中的餐厅、活动和景点",
+    "filterAll": "全部",
+    "filterCity": "城市",
+    "filterType": "类型",
+    "filterTag": "标签",
+    "typeRestaurant": "餐厅",
+    "typeActivity": "活动",
+    "typeAttraction": "景点",
+    "distance": "{miles} 英里",
+    "fromStay": "距 {stay}",
+    "michelin": "米其林一星",
+    "bibGourmand": "必比登推介",
+    "recommended": "米其林推荐",
+    "booked": "已预订",
+    "walkIn": "现场购票",
+    "optional": "可选",
+    "yelpLink": "Yelp →",
+    "websiteLink": "官网 →"
+  },
+  "blog": {
+    "title": "技术博客",
+    "subtitle": "这个旅行计划是如何构建的"
+  },
+  "badge": {
+    "booked": "已预订",
+    "walkIn": "现场购票",
+    "optional": "可选"
+  }
+}
