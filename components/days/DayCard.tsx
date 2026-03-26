@@ -6,58 +6,86 @@ interface DayCardProps {
   index: number
 }
 
-const BORDER_COLORS = [
-  '#0071e3', // blue
-  '#34c759', // green
-  '#ff9500', // orange
-  '#ff6b35', // deep orange
-  '#5e5ce6', // purple
-  '#ff2d55', // red
-  '#30d158', // mint
-  '#bf5af2', // indigo
-]
-
 export default function DayCard({ day, index }: DayCardProps) {
-  const borderColor = BORDER_COLORS[index % BORDER_COLORS.length]
   const dateLabel = formatDate(day.date)
 
   return (
     <div style={{
-      background: 'var(--char)',
+      background: 'var(--surface)',
       borderRadius: 'var(--radius-md)',
+      border: '1px solid var(--bark)',
       boxShadow: 'var(--shadow-sm)',
-      borderLeft: `4px solid ${borderColor}`,
       overflow: 'hidden',
+      display: 'grid',
+      gridTemplateColumns: '72px 1fr',
     }}>
+      {/* Day number sidebar */}
       <div style={{
-        padding: '16px 20px 12px',
-        borderBottom: '1px solid var(--bark)',
+        background: index === 0 ? 'var(--ember)' : 'rgba(196,56,12,0.07)',
+        borderRight: '1px solid var(--bark)',
         display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        gap: 12,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px 0',
+        gap: 2,
       }}>
-        <div>
-          <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ash)', letterSpacing: '0.02em' }}>{dateLabel}</div>
-          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--cream)', letterSpacing: '-0.4px', marginTop: 2 }}>{day.title}</div>
-          <div style={{ fontSize: 12, color: 'var(--ash)', marginTop: 2 }}>{day.city}</div>
-        </div>
-        {day.driveSegment && (
-          <DriveSegmentBadge segment={day.driveSegment} />
-        )}
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 38,
+          fontWeight: 600,
+          lineHeight: 1,
+          color: index === 0 ? '#fff' : 'var(--ember)',
+          letterSpacing: '-1px',
+        }}>{index + 1}</div>
+        <div style={{
+          fontSize: 9,
+          fontWeight: 700,
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: index === 0 ? 'rgba(255,255,255,0.7)' : 'var(--smoke)',
+        }}>Day</div>
       </div>
-      <div style={{ padding: '12px 0' }}>
-        {day.activities.map((activity, i) => (
-          <div key={i} style={{
-            padding: '8px 20px',
-            fontSize: 13,
-            color: 'var(--cream)',
-            borderBottom: i < day.activities.length - 1 ? '1px solid var(--bark)' : 'none',
-            lineHeight: 1.5,
-          }}>
-            {activity}
+
+      {/* Content */}
+      <div>
+        <div style={{
+          padding: '16px 20px 12px',
+          borderBottom: '1px solid var(--bark)',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          gap: 12,
+        }}>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--smoke)' }}>{dateLabel} · {day.city}</div>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 20,
+              fontWeight: 600,
+              color: 'var(--ink)',
+              letterSpacing: '-0.3px',
+              lineHeight: 1.2,
+              marginTop: 4,
+            }}>{day.title}</div>
           </div>
-        ))}
+          {day.driveSegment && (
+            <DriveSegmentBadge segment={day.driveSegment} />
+          )}
+        </div>
+        <div style={{ padding: '10px 0' }}>
+          {day.activities.map((activity, i) => (
+            <div key={i} style={{
+              padding: '7px 20px',
+              fontSize: 13,
+              color: 'var(--ink)',
+              borderBottom: i < day.activities.length - 1 ? '1px solid var(--bark)' : 'none',
+              lineHeight: 1.5,
+            }}>
+              {activity}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

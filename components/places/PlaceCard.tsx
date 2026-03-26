@@ -28,17 +28,17 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
     <div
       onClick={onSelect}
       style={{
-        background: selected ? 'linear-gradient(135deg, #f0f6ff 0%, #f8f4ff 100%)' : 'var(--char)',
+        background: selected ? 'rgba(196,56,12,0.05)' : 'var(--surface)',
         borderRadius: 'var(--radius-md)',
-        boxShadow: selected ? '0 0 0 2px #0066cc, var(--shadow-md)' : 'var(--shadow-sm)',
+        border: selected ? '1px solid rgba(196,56,12,0.35)' : '1px solid var(--bark)',
+        boxShadow: selected ? '0 0 0 2px rgba(196,56,12,0.15), var(--shadow-md)' : 'var(--shadow-sm)',
         padding: '16px 18px',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
         cursor: 'pointer',
-        transition: 'box-shadow 0.15s, transform 0.1s',
+        transition: 'box-shadow 0.15s, transform 0.1s, background 0.15s, border-color 0.15s',
         transform: selected ? 'translateY(-2px)' : 'none',
-        border: selected ? 'none' : '1px solid transparent',
       }}
     >
       {/* Header row: number + name + distance */}
@@ -63,10 +63,10 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--cream)', letterSpacing: '-0.3px', lineHeight: 1.3 }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
             {place.name}
           </div>
-          <div style={{ fontSize: 12, color: 'var(--ash)', marginTop: 2 }}>{place.city}</div>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--smoke)', marginTop: 2 }}>{place.city}</div>
         </div>
 
         {distanceMiles !== undefined && <DistanceTag miles={distanceMiles} />}
@@ -82,12 +82,12 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: 12, color: 'var(--ash)', lineHeight: 1.55, letterSpacing: '-0.1px' }}>
+      <p style={{ fontSize: 12, color: 'var(--smoke)', lineHeight: 1.6, letterSpacing: '-0.1px' }}>
         {place.description}
       </p>
 
       {place.hours && (
-        <div style={{ fontSize: 11, color: 'var(--ash)', fontFamily: 'var(--mono)' }}>{place.hours}</div>
+        <div style={{ fontSize: 11, color: 'var(--smoke)', fontFamily: 'var(--mono)' }}>{place.hours}</div>
       )}
 
       {/* Links */}

@@ -8,37 +8,53 @@ interface StatChipsProps {
 }
 
 export default function StatChips({ days, cities, flights, hotels, miles, activities }: StatChipsProps) {
-  const chips = [
-    { value: days, label: 'Days' },
-    { value: cities, label: 'Cities' },
-    { value: flights, label: 'Flights' },
-    { value: hotels, label: 'Hotels' },
-    { value: `~${miles}`, label: 'mi Driving' },
-    { value: activities, label: 'Pre-booked Activities' },
+  const stats = [
+    { value: days,       label: 'Days' },
+    { value: cities,     label: 'Cities' },
+    { value: flights,    label: 'Flights' },
+    { value: hotels,     label: 'Hotels' },
+    { value: `~${miles}`, label: 'Miles' },
+    { value: activities, label: 'Activities' },
   ]
 
   return (
     <div style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: 10,
-      marginBottom: 32,
+      display: 'grid',
+      gridTemplateColumns: 'repeat(6, 1fr)',
+      gap: 0,
+      background: 'var(--surface)',
+      borderRadius: 'var(--radius-lg)',
+      border: '1px solid var(--bark)',
+      boxShadow: 'var(--shadow-sm)',
+      overflow: 'hidden',
+      marginBottom: 48,
     }}>
-      {chips.map(chip => (
-        <div key={chip.label} style={{
-          background: 'var(--char)',
-          borderRadius: 'var(--radius-sm)',
-          boxShadow: 'var(--shadow-sm)',
-          padding: '10px 18px',
-          fontSize: 13,
-          fontWeight: 500,
-          color: 'var(--ash)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 5,
+      {stats.map((stat, i) => (
+        <div key={stat.label} style={{
+          padding: '24px 16px 20px',
+          textAlign: 'center',
+          borderRight: i < stats.length - 1 ? '1px solid var(--bark)' : 'none',
         }}>
-          <strong style={{ color: 'var(--cream)', fontSize: 15, fontWeight: 700 }}>{chip.value}</strong>
-          {chip.label}
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 42,
+            fontWeight: 600,
+            lineHeight: 1,
+            color: 'var(--ink)',
+            letterSpacing: '-1px',
+            marginBottom: 7,
+          }}>
+            {stat.value}
+          </div>
+          <div style={{
+            fontSize: 10,
+            fontWeight: 600,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--smoke)',
+          }}>
+            {stat.label}
+          </div>
         </div>
       ))}
     </div>

@@ -90,13 +90,12 @@ export default function MapView({ places, currentStay, selectedIndex, onMarkerCl
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Pan + open popup when selectedIndex changes
+  // Fly to + center selected marker (no popup — popup auto-pans and shifts the marker off-center)
   useEffect(() => {
     if (selectedIndex === undefined || !mapRef.current) return
     const marker = markersRef.current[selectedIndex]
     if (!marker) return
-    mapRef.current.setView(marker.getLatLng(), 14, { animate: true })
-    marker.openPopup()
+    mapRef.current.flyTo(marker.getLatLng(), 14)
   }, [selectedIndex])
 
   return (

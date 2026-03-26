@@ -9,15 +9,20 @@ export default function PlacesPage() {
   const currentStay = getStayForDate(today)
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '36px 24px 80px' }}>
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ash)', marginBottom: 8 }}>
-          {currentStay.city} · {currentStay.name}
-        </div>
-        <h1 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-1.5px', color: 'var(--cream)', lineHeight: 1.1 }}>
-          Places Explorer
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
+      <div style={{ padding: '52px 0 40px' }}>
+        <div className="hero-eyebrow">{currentStay.city} · {currentStay.name}</div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(44px, 7vw, 76px)',
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          lineHeight: 1.05,
+          color: 'var(--ink)',
+        }}>
+          Places <em style={{ fontStyle: 'italic', color: 'var(--ember)' }}>Explorer</em>
         </h1>
-        <p style={{ marginTop: 12, fontSize: 16, color: 'var(--ash)' }}>
+        <p style={{ marginTop: 14, fontSize: 16, color: 'var(--smoke)', lineHeight: 1.65, maxWidth: 500 }}>
           Restaurants, activities, and attractions across the trip
         </p>
       </div>

@@ -52,21 +52,22 @@ export default function FilterBar({
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
-  fontSize: 11,
-  fontWeight: 600,
-  letterSpacing: '0.05em',
+  fontSize: 10,
+  fontWeight: 700,
+  letterSpacing: '0.1em',
   textTransform: 'uppercase',
-  color: 'var(--ash)',
-  marginBottom: 5,
+  color: 'var(--smoke)',
+  marginBottom: 6,
 }
 
 const selectStyle: React.CSSProperties = {
-  background: 'var(--char)',
+  background: 'var(--surface)',
   border: '1px solid var(--bark)',
   borderRadius: 'var(--radius-sm)',
   padding: '8px 12px',
   fontSize: 13,
-  color: 'var(--cream)',
+  color: 'var(--ink)',
   cursor: 'pointer',
   minWidth: 140,
+  boxShadow: 'var(--shadow-sm)',
 }

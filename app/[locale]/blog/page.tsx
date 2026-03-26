@@ -1,40 +1,36 @@
-const sectionLabel: React.CSSProperties = {
-  fontSize: 11,
-  fontWeight: 700,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  color: 'var(--ash)',
-  marginBottom: 14,
-  marginTop: 48,
-}
-
 const blogCard: React.CSSProperties = {
-  background: 'var(--char)',
+  background: 'var(--surface)',
   borderRadius: 'var(--radius-md)',
+  border: '1px solid var(--bark)',
   boxShadow: 'var(--shadow-sm)',
   padding: '24px 28px',
 }
 
 const blogP: React.CSSProperties = {
   fontSize: 15,
-  color: 'var(--cream)',
-  lineHeight: 1.65,
+  color: 'var(--ink)',
+  lineHeight: 1.7,
   letterSpacing: '-0.1px',
   marginBottom: 16,
 }
 
 export default function BlogPage() {
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '36px 24px 80px' }}>
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
       {/* Hero */}
-      <div style={{ marginBottom: 48 }}>
-        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ash)', marginBottom: 8 }}>
-          Case Study · March 2026
-        </div>
-        <h1 style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-1.5px', color: 'var(--cream)', lineHeight: 1.1 }}>
+      <div style={{ padding: '52px 0 40px' }}>
+        <div className="hero-eyebrow">Case Study · March 2026</div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(44px, 7vw, 76px)',
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          lineHeight: 1.05,
+          color: 'var(--ink)',
+        }}>
           Planning a Trip <em style={{ fontStyle: 'italic', color: 'var(--ember)' }}>with Claude</em>
         </h1>
-        <p style={{ marginTop: 12, fontSize: 16, color: 'var(--ash)' }}>
+        <p style={{ marginTop: 14, fontSize: 16, color: 'var(--smoke)', lineHeight: 1.65, maxWidth: 520 }}>
           From a blank conversation to a fully planned, deployed, shareable road trip — in one extended session
         </p>
         <a
@@ -45,14 +41,15 @@ export default function BlogPage() {
             display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
-            marginTop: 16,
-            padding: '8px 16px',
-            background: 'var(--char)',
+            marginTop: 20,
+            padding: '9px 18px',
+            background: 'var(--surface)',
+            border: '1px solid var(--bark)',
             borderRadius: 'var(--radius-sm)',
             boxShadow: 'var(--shadow-sm)',
             fontSize: 13,
             fontWeight: 600,
-            color: 'var(--cream)',
+            color: 'var(--ink)',
             textDecoration: 'none',
           }}
         >
@@ -61,7 +58,7 @@ export default function BlogPage() {
       </div>
 
       {/* How It Started */}
-      <div style={sectionLabel}>How It Started</div>
+      <div className="section-label">How It Started</div>
       <div style={blogCard}>
         <p style={blogP}>
           We had a week-long Texas road trip roughed out — flights booked, some hotels confirmed, a list of BBQ spots, and a bunch of open questions: are the tickets booked? Where do the kids play? Does the route even make sense? What we didn't have was anyone — or anything — to look at the whole picture at once and tell us if it held together.
@@ -72,32 +69,33 @@ export default function BlogPage() {
       </div>
 
       {/* What Made This Work */}
-      <div style={sectionLabel}>What Made This Work</div>
+      <div className="section-label">What Made This Work</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
         {CAPABILITIES.map(cap => (
           <div key={cap.title} style={{
-            background: 'var(--char)',
+            background: 'var(--surface)',
             borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--bark)',
             boxShadow: 'var(--shadow-sm)',
             padding: '20px',
           }}>
             <div style={{ fontSize: 28, marginBottom: 10 }}>{cap.icon}</div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--cream)', marginBottom: 6 }}>{cap.title}</div>
-            <div style={{ fontSize: 13, color: 'var(--ash)', lineHeight: 1.55 }}>{cap.desc}</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)', marginBottom: 6 }}>{cap.title}</div>
+            <div style={{ fontSize: 13, color: 'var(--smoke)', lineHeight: 1.55 }}>{cap.desc}</div>
           </div>
         ))}
       </div>
 
       {/* Conversation: Trip Planning */}
-      <div style={sectionLabel}>Trip Planning — Filling the Gap</div>
-      <p style={{ fontSize: 14, color: 'var(--ash)', marginBottom: 20 }}>
+      <div className="section-label">Trip Planning — Filling the Gap</div>
+      <p style={{ fontSize: 14, color: 'var(--smoke)', marginBottom: 20 }}>
         Claude ingests the raw itinerary, spots an unscheduled stretch between San Antonio and Fort Worth, and offers water park options ranked by route fit and season — then books the hotel and updates the plan.
       </p>
       <ConvoThread turns={TRIP_PLANNING_TURNS} />
 
       {/* Conversation: NBA */}
-      <div style={sectionLabel}>Live Event Discovery — NBA on the Route</div>
-      <p style={{ fontSize: 14, color: 'var(--ash)', marginBottom: 20 }}>
+      <div className="section-label">Live Event Discovery — NBA on the Route</div>
+      <p style={{ fontSize: 14, color: 'var(--smoke)', marginBottom: 20 }}>
         Claude cross-references the trip dates and cities against the NBA schedule to surface games you can actually attend — ranked by schedule fit.
       </p>
       <ConvoThread turns={NBA_TURNS} />
@@ -145,15 +143,16 @@ function ConvoThread({ turns }: { turns: Turn[] }) {
           </div>
           <div style={{
             maxWidth: '75%',
-            background: 'var(--char)',
+            background: 'var(--surface)',
             borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--bark)',
             boxShadow: 'var(--shadow-sm)',
             padding: '14px 16px',
           }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--ash)', marginBottom: 8 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--smoke)', marginBottom: 8 }}>
               {turn.role === 'claude' ? 'Claude' : 'User'}
             </div>
-            {turn.text && <p style={{ fontSize: 14, color: 'var(--cream)', lineHeight: 1.6, margin: 0 }}>{turn.text}</p>}
+            {turn.text && <p style={{ fontSize: 14, color: 'var(--ink)', lineHeight: 1.6, margin: 0 }}>{turn.text}</p>}
             {turn.children}
           </div>
         </div>
@@ -164,12 +163,12 @@ function ConvoThread({ turns }: { turns: Turn[] }) {
 
 function PlanCard({ title, rows, note }: { title: string; rows: [string, string][]; note?: string }) {
   return (
-    <div style={{ background: 'rgba(0,113,227,0.04)', borderRadius: 10, padding: '14px 16px', marginTop: 12, border: '1px solid rgba(0,113,227,0.12)' }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cream)', marginBottom: 10 }}>{title}</div>
+    <div style={{ background: 'rgba(196,56,12,0.04)', borderRadius: 10, padding: '14px 16px', marginTop: 12, border: '1px solid rgba(196,56,12,0.15)' }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink)', marginBottom: 10 }}>{title}</div>
       {rows.map(([label, value], i) => (
         <div key={i} style={{ display: 'flex', gap: 12, fontSize: 12, padding: '4px 0', borderBottom: i < rows.length - 1 ? '1px solid var(--bark)' : 'none' }}>
-          <span style={{ fontWeight: 600, color: 'var(--ash)', minWidth: 100 }}>{label}</span>
-          <span style={{ color: 'var(--cream)' }}>{value}</span>
+          <span style={{ fontWeight: 600, color: 'var(--smoke)', minWidth: 100 }}>{label}</span>
+          <span style={{ color: 'var(--ink)' }}>{value}</span>
         </div>
       ))}
       {note && <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ember)', fontStyle: 'italic' }}>{note}</div>}
@@ -182,17 +181,17 @@ function OptionCards({ options }: { options: { recommended?: boolean; title: str
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
       {options.map((opt, i) => (
         <div key={i} style={{
-          background: opt.recommended ? 'rgba(0,113,227,0.06)' : 'var(--smoke)',
+          background: opt.recommended ? 'rgba(196,56,12,0.06)' : 'transparent',
           borderRadius: 10,
           padding: '14px 16px',
-          border: opt.recommended ? '1px solid rgba(0,113,227,0.2)' : '1px solid var(--bark)',
+          border: opt.recommended ? '1px solid rgba(196,56,12,0.2)' : '1px solid var(--bark)',
         }}>
           {opt.recommended && (
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ember)', marginBottom: 4 }}>Recommended</div>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ember)', marginBottom: 4 }}>Recommended</div>
           )}
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cream)', marginBottom: 6 }}>{opt.title}</div>
-          <div style={{ fontSize: 12, color: 'var(--cream)', lineHeight: 1.55, marginBottom: 6 }}>{opt.detail}</div>
-          <div style={{ fontSize: 11, color: 'var(--ash)', fontStyle: 'italic' }}>{opt.meta}</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', marginBottom: 6 }}>{opt.title}</div>
+          <div style={{ fontSize: 12, color: 'var(--ink)', lineHeight: 1.55, marginBottom: 6 }}>{opt.detail}</div>
+          <div style={{ fontSize: 11, color: 'var(--smoke)', fontStyle: 'italic' }}>{opt.meta}</div>
         </div>
       ))}
     </div>
