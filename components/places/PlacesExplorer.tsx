@@ -19,6 +19,7 @@ interface PlacesExplorerProps {
 export default function PlacesExplorer({ allPlaces, currentStay, cities }: PlacesExplorerProps) {
   const [city, setCity] = useState('')
   const [type, setType] = useState('')
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined)
 
   const filtered = allPlaces.filter(p => {
     if (city && p.city !== city) return false
@@ -31,21 +32,47 @@ export default function PlacesExplorer({ allPlaces, currentStay, cities }: Place
     miles: haversine(currentStay.coordinates, p.coordinates),
   }))
 
+  function handleFilterCity(c: string) {
+    setCity(c)
+    setSelectedIndex(undefined)
+  }
+
+  function handleFilterType(t: string) {
+    setType(t)
+    setSelectedIndex(undefined)
+  }
+
+  // key forces MapView remount when filters change so markers stay in sync
+  const mapKey = `${city}|${type}`
+
   return (
     <div>
       <FilterBar
         cities={cities}
         selectedCity={city}
         selectedType={type}
-        onCityChange={setCity}
-        onTypeChange={setType}
+        onCityChange={handleFilterCity}
+        onTypeChange={handleFilterType}
       />
 
-      <MapView places={filtered} currentStay={currentStay} />
+      <MapView
+        key={mapKey}
+        places={filtered}
+        currentStay={currentStay}
+        selectedIndex={selectedIndex}
+        onMarkerClick={setSelectedIndex}
+      />
 
-      <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
-        {withDistance.map(({ place, miles }) => (
-          <PlaceCard key={place.id} place={place} distanceMiles={miles} />
+      <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
+        {withDistance.map(({ place, miles }, i) => (
+          <PlaceCard
+            key={place.id}
+            place={place}
+            number={i + 1}
+            distanceMiles={miles}
+            selected={selectedIndex === i}
+            onSelect={() => setSelectedIndex(selectedIndex === i ? undefined : i)}
+          />
         ))}
       </div>
 
