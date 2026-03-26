@@ -15,11 +15,13 @@ export default function MapView({ places, currentStay }: MapViewProps) {
   const mapRef = useRef<any>(null)
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return
+    if (!containerRef.current) return
+    let cancelled = false
 
     // Dynamic import so Leaflet never runs on the server
     import('leaflet').then(L => {
-      const map = L.map(containerRef.current!).setView(currentStay.coordinates, 11)
+      if (cancelled || !containerRef.current || mapRef.current) return
+      const map = L.map(containerRef.current).setView(currentStay.coordinates, 11)
       mapRef.current = map
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -66,6 +68,7 @@ export default function MapView({ places, currentStay }: MapViewProps) {
     })
 
     return () => {
+      cancelled = true
       if (mapRef.current) {
         mapRef.current.remove()
         mapRef.current = null
