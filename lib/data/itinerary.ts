@@ -231,7 +231,12 @@ export function getStayForDate(date: string): Stay {
 }
 
 export function getCities(): string[] {
-  return [...new Set(STAYS.map(s => s.city))]
+  const seen: Record<string, boolean> = {}
+  return STAYS.map(s => s.city).filter(c => {
+    if (seen[c]) return false
+    seen[c] = true
+    return true
+  })
 }
 
 export function getActivities(): Activity[] {
