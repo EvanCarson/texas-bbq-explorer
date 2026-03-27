@@ -1,3 +1,6 @@
 .vercel
 .claude
 .env.local
+.next/
+node_modules/
+.superpowers/

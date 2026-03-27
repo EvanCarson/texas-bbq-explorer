@@ -1,0 +1,35 @@
+import { useTranslations } from 'next-intl'
+import { getDays } from '@/lib/data/itinerary'
+import DayCard from '@/components/days/DayCard'
+
+export default function DaysPage() {
+  const t = useTranslations('days')
+  const days = getDays()
+
+  return (
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
+      <div style={{ padding: '52px 0 40px' }}>
+        <div className="hero-eyebrow">Mar 29 – Apr 5 · 8 Days</div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(44px, 7vw, 76px)',
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          lineHeight: 1.05,
+          color: 'var(--ink)',
+        }}>
+          Day by <em style={{ fontStyle: 'italic', color: 'var(--ember)' }}>Day</em>
+        </h1>
+        <p style={{ marginTop: 14, fontSize: 16, color: 'var(--smoke)', lineHeight: 1.65, maxWidth: 500 }}>
+          {t('subtitle')}
+        </p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {days.map((day, i) => (
+          <DayCard key={day.date} day={day} index={i} />
+        ))}
+      </div>
+    </div>
+  )
+}
