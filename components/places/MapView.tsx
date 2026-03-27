@@ -16,6 +16,7 @@ function markerColor(place: Place): string {
   if (place.michelinRating === 'star') return '#dc2626'
   if (place.michelinRating === 'bib-gourmand') return '#ea7c2b'
   if (place.michelinRating === 'recommended') return '#0d9488'
+  if (place.type === 'hotel') return '#a0711a'
   if (place.type === 'activity') return '#7c3aed'
   if (place.type === 'attraction') return '#0891b2'
   return '#6b7280'

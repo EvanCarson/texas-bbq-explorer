@@ -1,4 +1,4 @@
-export type PlaceType = 'restaurant' | 'activity' | 'attraction'
+export type PlaceType = 'restaurant' | 'activity' | 'attraction' | 'hotel'
 export type MichelinRating = 'star' | 'bib-gourmand' | 'recommended'
 
 export interface Place {

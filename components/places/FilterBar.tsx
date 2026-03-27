@@ -22,6 +22,7 @@ export default function FilterBar({
     { value: 'restaurant', label: 'Restaurants' },
     { value: 'activity', label: 'Activities' },
     { value: 'attraction', label: 'Attractions' },
+    { value: 'hotel', label: 'Hotels' },
   ]
 
   return (
