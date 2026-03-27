@@ -1,3 +1,7 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
+
 interface StatChipsProps {
   days: number
   cities: number
@@ -8,19 +12,19 @@ interface StatChipsProps {
 }
 
 export default function StatChips({ days, cities, flights, hotels, miles, activities }: StatChipsProps) {
+  const t = useTranslations('overview')
+
   const stats = [
-    { value: days,       label: 'Days' },
-    { value: cities,     label: 'Cities' },
-    { value: flights,    label: 'Flights' },
-    { value: hotels,     label: 'Hotels' },
-    { value: `~${miles}`, label: 'Miles' },
-    { value: activities, label: 'Activities' },
+    { value: days,        label: t('statDays') },
+    { value: cities,      label: t('statCities') },
+    { value: flights,     label: t('statFlights') },
+    { value: hotels,      label: t('statHotels') },
+    { value: `~${miles}`, label: t('statMiles') },
+    { value: activities,  label: t('statActivities') },
   ]
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(6, 1fr)',
+    <div className="stat-chips-grid" style={{
       gap: 0,
       background: 'var(--surface)',
       borderRadius: 'var(--radius-lg)',

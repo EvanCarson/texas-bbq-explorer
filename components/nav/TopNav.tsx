@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
+import { useState } from 'react'
 import LangSwitcher from './LangSwitcher'
 
 export default function TopNav() {
   const t = useTranslations('nav')
   const locale = useLocale()
   const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const links = [
     { href: `/${locale}`, label: t('overview') },
@@ -16,6 +18,12 @@ export default function TopNav() {
     { href: `/${locale}/places`, label: t('places') },
     { href: `/${locale}/blog`, label: t('blog') },
   ]
+
+  function isActive(href: string) {
+    return href === `/${locale}`
+      ? pathname === `/${locale}` || pathname === `/${locale}/`
+      : pathname.startsWith(href)
+  }
 
   return (
     <nav style={{
@@ -27,7 +35,8 @@ export default function TopNav() {
       WebkitBackdropFilter: 'blur(24px)',
       borderBottom: '1px solid rgba(212,175,110,0.12)',
     }}>
-      <div style={{
+      {/* Main bar */}
+      <div className="safe-nav" style={{
         maxWidth: 900,
         margin: '0 auto',
         padding: '0 24px',
@@ -51,36 +60,58 @@ export default function TopNav() {
           </span>
         </Link>
 
-        {/* Nav links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
-          {links.map(link => {
-            const isActive = link.href === `/${locale}`
-              ? pathname === `/${locale}` || pathname === `/${locale}/`
-              : pathname.startsWith(link.href)
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="nav-link-hover"
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 6,
-                  fontSize: 13,
-                  fontWeight: isActive ? 600 : 400,
-                  letterSpacing: isActive ? '0' : '0.01em',
-                  color: isActive ? 'var(--ember)' : 'var(--smoke)',
-                  textDecoration: 'none',
-                  background: 'transparent',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {link.label}
-              </Link>
-            )
-          })}
+        {/* Desktop nav links */}
+        <div className="nav-links-desktop">
+          {links.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="nav-link-hover"
+              style={{
+                padding: '6px 14px',
+                borderRadius: 6,
+                fontSize: 13,
+                fontWeight: isActive(link.href) ? 600 : 400,
+                letterSpacing: isActive(link.href) ? '0' : '0.01em',
+                color: isActive(link.href) ? 'var(--ember)' : 'var(--smoke)',
+                textDecoration: 'none',
+                background: 'transparent',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         <LangSwitcher />
+
+        {/* Hamburger — mobile only */}
+        <button
+          className="nav-hamburger"
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+      </div>
+
+      {/* Mobile dropdown */}
+      <div className={`nav-mobile-menu${menuOpen ? ' open' : ''}`}>
+        {links.map(link => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`nav-mobile-link${isActive(link.href) ? ' active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            {link.label}
+          </Link>
+        ))}
+        <div style={{ padding: '12px 24px' }}>
+          <LangSwitcher />
+        </div>
       </div>
     </nav>
   )

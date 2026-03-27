@@ -7,7 +7,7 @@ export default function DaysPage() {
   const days = getDays()
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
+    <div className="page-container" style={{ maxWidth: 900, margin: '0 auto' }}>
       <div style={{ padding: '52px 0 40px' }}>
         <div className="hero-eyebrow">Mar 29 – Apr 5 · 8 Days</div>
         <h1 style={{

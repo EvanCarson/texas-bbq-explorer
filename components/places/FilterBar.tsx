@@ -1,6 +1,6 @@
 'use client'
 
-import { PlaceType } from '@/types/place'
+import { useTranslations } from 'next-intl'
 
 interface FilterBarProps {
   cities: string[]
@@ -17,21 +17,23 @@ export default function FilterBar({
   onCityChange,
   onTypeChange,
 }: FilterBarProps) {
-  const types: { value: string; label: string }[] = [
-    { value: '', label: 'All' },
-    { value: 'restaurant', label: 'Restaurants' },
-    { value: 'activity', label: 'Activities' },
-    { value: 'attraction', label: 'Attractions' },
-    { value: 'hotel', label: 'Hotels' },
+  const t = useTranslations('places')
+
+  const types = [
+    { value: '', label: t('filterAll') },
+    { value: 'restaurant', label: t('typeRestaurant') },
+    { value: 'activity', label: t('typeActivity') },
+    { value: 'attraction', label: t('typeAttraction') },
+    { value: 'hotel', label: t('typeHotel') },
   ]
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
       {/* City filter */}
       <div>
-        <label style={labelStyle}>City</label>
+        <label style={labelStyle}>{t('filterCity')}</label>
         <select value={selectedCity} onChange={e => onCityChange(e.target.value)} style={selectStyle}>
-          <option value="">All Cities</option>
+          <option value="">{t('filterAllCities')}</option>
           {cities.map(city => (
             <option key={city} value={city}>{city}</option>
           ))}
@@ -40,10 +42,10 @@ export default function FilterBar({
 
       {/* Type filter */}
       <div>
-        <label style={labelStyle}>Type</label>
+        <label style={labelStyle}>{t('filterType')}</label>
         <select value={selectedType} onChange={e => onTypeChange(e.target.value)} style={selectStyle}>
-          {types.map(t => (
-            <option key={t.value} value={t.value}>{t.label}</option>
+          {types.map(type => (
+            <option key={type.value} value={type.value}>{type.label}</option>
           ))}
         </select>
       </div>

@@ -8,7 +8,7 @@ export default function OverviewPage() {
   const t = useTranslations('overview')
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
+    <div className="page-container" style={{ maxWidth: 900, margin: '0 auto' }}>
 
       {/* Hero */}
       <div style={{ padding: '52px 0 40px' }}>
@@ -24,7 +24,7 @@ export default function OverviewPage() {
           AI <em style={{ fontStyle: 'italic', color: 'var(--ember)' }}>Trip</em>
         </h1>
         <p style={{ marginTop: 14, fontSize: 16, color: 'var(--smoke)', lineHeight: 1.65, maxWidth: 500 }}>
-          Eight days across Texas — NASA, Zoo, Caverns, a rodeo, a waterpark, and the Netflix.
+          {t('heroDesc')}
         </p>
       </div>
 
@@ -34,9 +34,9 @@ export default function OverviewPage() {
       {/* Transportation */}
       <div className="section-label">{t('sectionTransport')}</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
-        <TransportCard icon="✈️" label="Outbound Flight" route="SFO → IAH" detail="Sun Mar 29 · 7:00 AM → 1:00 PM" sub="4 seats reserved · Row 32" />
-        <TransportCard icon="🚗" label="Rental Car" route="Genesis G70" detail="IAH pickup Mar 29 @ 2:00 PM" sub="DAL drop-off Apr 5 @ 6:00 AM" />
-        <TransportCard icon="✈️" label="Return Flight" route="DAL → SFO" detail="Sun Apr 5 · 7:30 AM → 9:30 AM" sub="Love Field · Non-stop · Southwest" />
+        <TransportCard icon="✈️" label={t('outboundFlight')} route={t('outboundRoute')} detail={t('outboundDetail')} sub={t('outboundSub')} bookedLabel={t('transportBooked')} />
+        <TransportCard icon="🚗" label={t('rentalCar')} route={t('rentalRoute')} detail={t('rentalDetail')} sub={t('rentalSub')} bookedLabel={t('transportBooked')} />
+        <TransportCard icon="✈️" label={t('returnFlight')} route={t('returnRoute')} detail={t('returnDetail')} sub={t('returnSub')} bookedLabel={t('transportBooked')} />
       </div>
 
       {/* Stays */}
@@ -54,8 +54,8 @@ export default function OverviewPage() {
   )
 }
 
-function TransportCard({ icon, label, route, detail, sub }: {
-  icon: string; label: string; route: string; detail: string; sub: string
+function TransportCard({ icon, label, route, detail, sub, bookedLabel }: {
+  icon: string; label: string; route: string; detail: string; sub: string; bookedLabel: string
 }) {
   return (
     <div style={{
@@ -93,7 +93,7 @@ function TransportCard({ icon, label, route, detail, sub }: {
         background: 'rgba(15,118,110,0.1)',
         color: 'var(--teal)',
         alignSelf: 'flex-start',
-      }}>Booked</span>
+      }}>{bookedLabel}</span>
     </div>
   )
 }

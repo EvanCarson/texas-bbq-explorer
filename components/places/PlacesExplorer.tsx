@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { Place } from '@/types/place'
 import { Stay } from '@/types/itinerary'
+import { useTranslations } from 'next-intl'
 import { haversine } from '@/lib/distance'
 import FilterBar from './FilterBar'
 import PlaceCard from './PlaceCard'
@@ -18,6 +19,7 @@ interface PlacesExplorerProps {
 }
 
 export default function PlacesExplorer({ allPlaces, currentStay, cities, stays }: PlacesExplorerProps) {
+  const t = useTranslations('places')
   const [city, setCity] = useState('')
   const [type, setType] = useState('')
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined)
@@ -72,7 +74,7 @@ export default function PlacesExplorer({ allPlaces, currentStay, cities, stays }
           <span style={{ fontSize: 16 }}>🏨</span>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ember)' }}>
-              Your hotel in {cityStay.city}
+              {t('yourHotelIn', { city: cityStay.city })}
             </div>
             <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', marginTop: 1 }}>
               {cityStay.name}
@@ -92,7 +94,7 @@ export default function PlacesExplorer({ allPlaces, currentStay, cities, stays }
         onMarkerClick={setSelectedIndex}
       />
 
-      <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
+      <div className="places-grid" style={{ marginTop: 20 }}>
         {withDistance.map(({ place, miles }, i) => (
           <PlaceCard
             key={place.id}
@@ -107,7 +109,7 @@ export default function PlacesExplorer({ allPlaces, currentStay, cities, stays }
 
       {filtered.length === 0 && (
         <p style={{ color: 'var(--ash)', textAlign: 'center', padding: '40px 0', fontSize: 14 }}>
-          No places match your filters.
+          {t('noResults')}
         </p>
       )}
     </div>
