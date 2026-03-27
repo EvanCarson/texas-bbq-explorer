@@ -18,14 +18,15 @@ export default function LangSwitcher() {
   return (
     <button
       onClick={toggle}
+      className="btn-hover"
       style={{
         background: 'none',
-        border: '1px solid var(--bark)',
+        border: '1px solid rgba(212,175,110,0.35)',
         borderRadius: '980px',
         padding: '4px 14px',
         fontSize: '13px',
         fontWeight: 600,
-        color: 'var(--cream)',
+        color: 'var(--ember)',
         cursor: 'pointer',
         letterSpacing: '-0.1px',
       }}

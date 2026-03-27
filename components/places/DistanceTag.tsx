@@ -7,8 +7,9 @@ export default function DistanceTag({ miles }: DistanceTagProps) {
     <span style={{
       fontSize: 11,
       fontWeight: 600,
-      color: 'var(--ash)',
-      background: 'var(--smoke)',
+      color: 'var(--ember)',
+      background: 'rgba(212,175,110,0.1)',
+      border: '1px solid rgba(212,175,110,0.2)',
       borderRadius: 980,
       padding: '3px 10px',
       whiteSpace: 'nowrap',

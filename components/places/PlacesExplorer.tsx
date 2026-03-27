@@ -14,12 +14,15 @@ interface PlacesExplorerProps {
   allPlaces: Place[]
   currentStay: Stay
   cities: string[]
+  stays: Stay[]
 }
 
-export default function PlacesExplorer({ allPlaces, currentStay, cities }: PlacesExplorerProps) {
+export default function PlacesExplorer({ allPlaces, currentStay, cities, stays }: PlacesExplorerProps) {
   const [city, setCity] = useState('')
   const [type, setType] = useState('')
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined)
+
+  const cityStay = city ? stays.find(s => s.city === city) : undefined
 
   const filtered = allPlaces.filter(p => {
     if (city && p.city !== city) return false
@@ -55,10 +58,36 @@ export default function PlacesExplorer({ allPlaces, currentStay, cities }: Place
         onTypeChange={handleFilterType}
       />
 
+      {cityStay && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          background: 'rgba(212,175,110,0.07)',
+          border: '1px solid rgba(212,175,110,0.25)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '10px 16px',
+          marginBottom: 16,
+        }}>
+          <span style={{ fontSize: 16 }}>🏨</span>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ember)' }}>
+              Your hotel in {cityStay.city}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', marginTop: 1 }}>
+              {cityStay.name}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--smoke)', marginTop: 1 }}>
+              {cityStay.checkIn} → {cityStay.checkOut}
+            </div>
+          </div>
+        </div>
+      )}
+
       <MapView
         key={mapKey}
         places={filtered}
-        currentStay={currentStay}
+        currentStay={cityStay ?? currentStay}
         selectedIndex={selectedIndex}
         onMarkerClick={setSelectedIndex}
       />

@@ -10,7 +10,7 @@ export default function DayCard({ day, index }: DayCardProps) {
   const dateLabel = formatDate(day.date)
 
   return (
-    <div style={{
+    <div className="card-hover" style={{
       background: 'var(--surface)',
       borderRadius: 'var(--radius-md)',
       border: '1px solid var(--bark)',

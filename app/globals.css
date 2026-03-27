@@ -1,28 +1,28 @@
 :root {
-  /* Smokehouse Journal palette */
-  --bg:       #f7f2e8;
-  --surface:  #fffdf6;
-  --ink:      #1c1108;
-  --smoke:    #7a6855;
-  --ember:    #c4380c;
-  --gold:     #a0711a;
-  --bark:     #ddd0b8;
-  --teal:     #0f766e;
-  --michelin: #b91c1c;
-  --blue:     #1d4ed8;
-  --green:    #15803d;
+  /* Smoked Slate & Champagne palette */
+  --bg:       #0e1015;
+  --surface:  #141820;
+  --ink:      #e8e0d0;
+  --smoke:    #5a6070;
+  --ember:    #d4af6e;
+  --gold:     #f0d898;
+  --bark:     rgba(212,175,110,0.13);
+  --teal:     #5eead4;
+  --michelin: #f87171;
+  --blue:     #60a5fa;
+  --green:    #4ade80;
 
   /* Legacy aliases — keeps existing components working */
   --cream:    var(--ink);
   --char:     var(--surface);
   --ash:      var(--smoke);
   --flame:    var(--ember);
-  --smoke-ui: #f0ebe0;
+  --smoke-ui: #1a1f2e;
 
-  /* Layered warm shadows */
-  --shadow-sm: 0 1px 2px rgba(28,17,8,0.04), 0 4px 14px rgba(28,17,8,0.05);
-  --shadow-md: 0 4px 8px rgba(28,17,8,0.05), 0 12px 28px rgba(28,17,8,0.07);
-  --shadow-lg: 0 10px 20px rgba(28,17,8,0.06), 0 28px 56px rgba(28,17,8,0.09);
+  /* Dark layered shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.35), 0 12px 28px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.4), 0 28px 56px rgba(0,0,0,0.35);
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -65,7 +65,73 @@ a { color: inherit; text-decoration: none; }
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: rgba(212,175,110,0.25); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212,175,110,0.45); }
+
+/* ── Hover utilities ── */
+
+/* Card: champagne glow ring + lift */
+.card-hover {
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 0 0 1px rgba(212,175,110,0.3), 0 8px 32px rgba(212,175,110,0.1), 0 2px 8px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+  border-color: rgba(212,175,110,0.35) !important;
+  background: rgba(212,175,110,0.03) !important;
+}
+
+/* Nav link: champagne underline slide-in */
+.nav-link-hover {
+  position: relative;
+  transition: color 0.2s ease;
+}
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
+  height: 1.5px;
+  background: var(--ember);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+.nav-link-hover:hover {
+  color: var(--ember) !important;
+}
+.nav-link-hover:hover::after {
+  transform: scaleX(1);
+}
+
+/* Button: gold fill on hover */
+.btn-hover {
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.btn-hover:hover {
+  color: var(--bg) !important;
+  background: var(--ember) !important;
+  border-color: var(--ember) !important;
+}
+
+/* Stat chip: subtle gold tint on hover */
+.stat-chip-hover {
+  transition: background 0.2s ease;
+  cursor: default;
+}
+.stat-chip-hover:hover {
+  background: rgba(212,175,110,0.06) !important;
+}
+
+/* Gradient gold text for stat numbers */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #d4af6e 0%, #f0d898 60%, #d4af6e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 /* ── Page hero — shared across all pages ── */
 .page-hero {

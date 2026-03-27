@@ -230,6 +230,10 @@ export function getStayForDate(date: string): Stay {
   return found ?? STAYS[0]
 }
 
+export function getStayForCity(city: string): Stay | undefined {
+  return STAYS.find(s => s.city === city)
+}
+
 export function getCities(): string[] {
   const seen: Record<string, boolean> = {}
   return STAYS.map(s => s.city).filter(c => {

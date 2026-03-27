@@ -15,7 +15,7 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
     : 'Optional'
 
   return (
-    <div style={{
+    <div className="card-hover" style={{
       display: 'grid',
       gridTemplateColumns: '100px 1fr auto',
       gap: 16,

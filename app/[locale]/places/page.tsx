@@ -1,10 +1,11 @@
 import { getPlaces } from '@/lib/data/places'
-import { getCities, getStayForDate } from '@/lib/data/itinerary'
+import { getCities, getStayForDate, getStays } from '@/lib/data/itinerary'
 import PlacesExplorer from '@/components/places/PlacesExplorer'
 
 export default function PlacesPage() {
   const places = getPlaces()
   const cities = getCities()
+  const stays = getStays()
   const today = new Date().toISOString().split('T')[0]
   const currentStay = getStayForDate(today)
 
@@ -27,7 +28,7 @@ export default function PlacesPage() {
         </p>
       </div>
 
-      <PlacesExplorer allPlaces={places} currentStay={currentStay} cities={cities} />
+      <PlacesExplorer allPlaces={places} currentStay={currentStay} cities={cities} stays={stays} />
     </div>
   )
 }

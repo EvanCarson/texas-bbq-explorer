@@ -38,7 +38,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={params.locale} className={fontClasses}>
-      <body>
+      <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <TopNav />
           <main>{children}</main>

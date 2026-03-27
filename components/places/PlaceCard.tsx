@@ -28,17 +28,17 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
   return (
     <div
       onClick={onSelect}
+      className="card-hover"
       style={{
-        background: selected ? 'rgba(196,56,12,0.05)' : 'var(--surface)',
+        background: selected ? 'rgba(212,175,110,0.06)' : 'var(--surface)',
         borderRadius: 'var(--radius-md)',
-        border: selected ? '1px solid rgba(196,56,12,0.35)' : '1px solid var(--bark)',
-        boxShadow: selected ? '0 0 0 2px rgba(196,56,12,0.15), var(--shadow-md)' : 'var(--shadow-sm)',
+        border: selected ? '1px solid rgba(212,175,110,0.45)' : '1px solid var(--bark)',
+        boxShadow: selected ? '0 0 0 1px rgba(212,175,110,0.3), var(--shadow-md)' : 'var(--shadow-sm)',
         padding: '16px 18px',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
         cursor: 'pointer',
-        transition: 'box-shadow 0.15s, transform 0.1s, background 0.15s, border-color 0.15s',
         transform: selected ? 'translateY(-2px)' : 'none',
       }}
     >
@@ -99,7 +99,7 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
             target="_blank"
             rel="noopener"
             onClick={e => e.stopPropagation()}
-            style={{ fontSize: 12, fontWeight: 600, color: 'var(--ember)' }}
+            style={{ fontSize: 12, fontWeight: 600, color: 'var(--ember)', transition: 'opacity 0.15s' }}
           >
             Yelp →
           </a>
@@ -110,7 +110,7 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
             target="_blank"
             rel="noopener"
             onClick={e => e.stopPropagation()}
-            style={{ fontSize: 12, fontWeight: 600, color: 'var(--ember)' }}
+            style={{ fontSize: 12, fontWeight: 600, color: 'var(--ember)', transition: 'opacity 0.15s' }}
           >
             Website →
           </a>

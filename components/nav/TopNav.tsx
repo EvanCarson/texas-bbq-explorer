@@ -22,10 +22,10 @@ export default function TopNav() {
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      background: 'rgba(247,242,232,0.88)',
+      background: 'rgba(14,16,21,0.92)',
       backdropFilter: 'blur(24px)',
       WebkitBackdropFilter: 'blur(24px)',
-      borderBottom: '1px solid var(--bark)',
+      borderBottom: '1px solid rgba(212,175,110,0.12)',
     }}>
       <div style={{
         maxWidth: 900,
@@ -61,6 +61,7 @@ export default function TopNav() {
               <Link
                 key={link.href}
                 href={link.href}
+                className="nav-link-hover"
                 style={{
                   padding: '6px 14px',
                   borderRadius: 6,
@@ -69,8 +70,7 @@ export default function TopNav() {
                   letterSpacing: isActive ? '0' : '0.01em',
                   color: isActive ? 'var(--ember)' : 'var(--smoke)',
                   textDecoration: 'none',
-                  background: isActive ? 'rgba(196,56,12,0.08)' : 'transparent',
-                  transition: 'color 0.15s, background 0.15s',
+                  background: 'transparent',
                   whiteSpace: 'nowrap',
                 }}
               >

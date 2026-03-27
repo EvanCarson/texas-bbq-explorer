@@ -30,17 +30,16 @@ export default function StatChips({ days, cities, flights, hotels, miles, activi
       marginBottom: 48,
     }}>
       {stats.map((stat, i) => (
-        <div key={stat.label} style={{
+        <div key={stat.label} className="stat-chip-hover" style={{
           padding: '24px 16px 20px',
           textAlign: 'center',
           borderRight: i < stats.length - 1 ? '1px solid var(--bark)' : 'none',
         }}>
-          <div style={{
+          <div className="gold-gradient-text" style={{
             fontFamily: 'var(--font-display)',
             fontSize: 42,
             fontWeight: 600,
             lineHeight: 1,
-            color: 'var(--ink)',
             letterSpacing: '-1px',
             marginBottom: 7,
           }}>
