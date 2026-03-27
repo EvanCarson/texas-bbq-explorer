@@ -1,8 +1,8 @@
 import { getPlaces, getPlaceById } from '@/lib/data/places'
 
 describe('getPlaces', () => {
-  it('returns all 27 places when no filter', () => {
-    expect(getPlaces()).toHaveLength(27)
+  it('returns all 32 places when no filter', () => {
+    expect(getPlaces()).toHaveLength(32)
   })
 
   it('filters by city', () => {
@@ -27,7 +27,7 @@ describe('getPlaces', () => {
     getPlaces().forEach(p => {
       expect(p.id).toBeTruthy()
       expect(p.name).toBeTruthy()
-      expect(p.type).toMatch(/^(restaurant|activity|attraction)$/)
+      expect(p.type).toMatch(/^(restaurant|activity|attraction|hotel)$/)
       expect(p.city).toBeTruthy()
       expect(p.coordinates).toHaveLength(2)
       expect(p.description).toBeTruthy()
