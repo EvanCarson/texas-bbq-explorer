@@ -21,7 +21,7 @@ export default function OverviewPage() {
           lineHeight: 1.05,
           color: 'var(--ink)',
         }}>
-          Texas BBQ <em style={{ fontStyle: 'italic', color: 'var(--ember)' }}>Explorer</em>
+          AI <em style={{ fontStyle: 'italic', color: 'var(--ember)' }}>Trip</em>
         </h1>
         <p style={{ marginTop: 14, fontSize: 16, color: 'var(--smoke)', lineHeight: 1.65, maxWidth: 500 }}>
           Eight days across Texas — NASA, Zoo, Caverns, a rodeo, a waterpark, and the Netflix.

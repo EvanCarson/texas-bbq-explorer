@@ -38,7 +38,7 @@ export default function TopNav() {
       }}>
         {/* Brand */}
         <Link href={`/${locale}`} style={{ marginRight: 36, display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
-          <span style={{ fontSize: 18 }}>🍖</span>
+          <span style={{ fontSize: 18 }}>✈️</span>
           <span style={{
             fontFamily: 'var(--font-display)',
             fontSize: 18,
@@ -47,7 +47,7 @@ export default function TopNav() {
             color: 'var(--ink)',
             lineHeight: 1,
           }}>
-            TX BBQ
+            AI Trip
           </span>
         </Link>
 
