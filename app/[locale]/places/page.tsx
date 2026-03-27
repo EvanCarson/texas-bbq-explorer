@@ -10,7 +10,7 @@ export default function PlacesPage() {
   const currentStay = getStayForDate(today)
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
+    <div className="page-container" style={{ maxWidth: 900, margin: '0 auto' }}>
       <div style={{ padding: '52px 0 40px' }}>
         <div className="hero-eyebrow">{currentStay.city} · {currentStay.name}</div>
         <h1 style={{

@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Place } from '@/types/place'
 import Badge from '@/components/ui/Badge'
 import DistanceTag from './DistanceTag'
@@ -23,6 +24,7 @@ function markerColor(place: Place): string {
 }
 
 export default function PlaceCard({ place, number, distanceMiles, selected, onSelect }: PlaceCardProps) {
+  const t = useTranslations('places')
   const color = markerColor(place)
 
   return (
@@ -101,7 +103,7 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
             onClick={e => e.stopPropagation()}
             style={{ fontSize: 12, fontWeight: 600, color: 'var(--ember)', transition: 'opacity 0.15s' }}
           >
-            Yelp →
+            {t('yelpLink')}
           </a>
         )}
         {place.websiteUrl && (
@@ -112,7 +114,7 @@ export default function PlaceCard({ place, number, distanceMiles, selected, onSe
             onClick={e => e.stopPropagation()}
             style={{ fontSize: 12, fontWeight: 600, color: 'var(--ember)', transition: 'opacity 0.15s' }}
           >
-            Website →
+            {t('websiteLink')}
           </a>
         )}
       </div>

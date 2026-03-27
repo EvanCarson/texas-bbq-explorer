@@ -38,6 +38,9 @@ export default async function LocaleLayout({
 
   return (
     <html lang={params.locale} className={fontClasses}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      </head>
       <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <TopNav />

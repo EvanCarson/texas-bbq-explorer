@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import Badge from '@/components/ui/Badge'
 import { Activity } from '@/types/itinerary'
 
@@ -6,27 +9,25 @@ interface ActivityCardProps {
 }
 
 export default function ActivityCard({ activity }: ActivityCardProps) {
+  const t = useTranslations('badge')
+
   const variant = activity.status === 'booked' ? 'booked'
     : activity.status === 'walk-in' ? 'walk-in'
     : 'optional'
 
-  const badgeLabel = activity.status === 'booked' ? 'Pre-booked'
-    : activity.status === 'walk-in' ? 'Walk-in'
-    : 'Optional'
+  const badgeLabel = activity.status === 'booked' ? t('booked')
+    : activity.status === 'walk-in' ? t('walkIn')
+    : t('optional')
 
   return (
-    <div className="card-hover" style={{
-      display: 'grid',
-      gridTemplateColumns: '100px 1fr auto',
-      gap: 16,
-      alignItems: 'center',
+    <div className="card-hover activity-card-grid" style={{
       background: 'var(--surface)',
       borderRadius: 'var(--radius-sm)',
       border: '1px solid var(--bark)',
       padding: '14px 16px',
       boxShadow: 'var(--shadow-sm)',
     }}>
-      <div style={{
+      <div className="activity-date-cell" style={{
         fontSize: 10,
         fontWeight: 700,
         letterSpacing: '0.08em',

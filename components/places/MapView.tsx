@@ -102,8 +102,8 @@ export default function MapView({ places, currentStay, selectedIndex, onMarkerCl
   return (
     <div
       ref={containerRef}
+      className="map-container"
       style={{
-        height: 440,
         borderRadius: 'var(--radius-lg)',
         overflow: 'hidden',
         boxShadow: 'var(--shadow-md)',
