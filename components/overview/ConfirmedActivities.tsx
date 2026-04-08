@@ -1,8 +1,8 @@
 import { getActivities } from '@/lib/data/itinerary'
 import ActivityCard from './ActivityCard'
 
-export default function ConfirmedActivities() {
-  const activities = getActivities()
+export default function ConfirmedActivities({ trip }: { trip: string }) {
+  const activities = getActivities(trip)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {activities.map(a => (

@@ -1,12 +1,15 @@
 'use client'
 
 import { useTranslations, useLocale } from 'next-intl'
+import { useParams } from 'next/navigation'
 import { getDays } from '@/lib/data/itinerary'
 
 export default function DrivingSummary() {
   const t = useTranslations('overview')
   const locale = useLocale()
-  const days = getDays().filter(d => d.driveSegment)
+  const params = useParams()
+  const trip = params.trip as string
+  const days = getDays(trip).filter(d => d.driveSegment)
   const dateLocale = locale === 'zh' ? 'zh-CN' : 'en-US'
 
   return (
@@ -46,11 +49,7 @@ const thStyle: React.CSSProperties = {
   textAlign: 'left',
 }
 
-const tdStyle: React.CSSProperties = {
-  padding: '12px 20px',
-  fontSize: 13,
-  color: 'var(--ink)',
-}
+const tdStyle: React.CSSProperties = { padding: '12px 20px', fontSize: 13, color: 'var(--ink)' }
 
 const tdMono: React.CSSProperties = {
   ...tdStyle,
