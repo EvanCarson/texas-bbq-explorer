@@ -1,0 +1,52 @@
+import { Place } from '@/types/place'
+
+export const PLACES: Place[] = [
+  {
+    id: 'andaz-miami-beach',
+    name: 'Andaz Miami Beach Resort & Spa',
+    type: 'hotel',
+    city: 'Miami Beach',
+    coordinates: [25.8134, -80.1218],
+    description: 'Luxury hotel on Collins Ave, South Beach. Confirmation: 56798458.',
+    tags: ['stay'],
+    hours: 'Check-in 4:00 PM · Check-out 11:00 AM',
+  },
+  {
+    id: 'legend-of-the-seas',
+    name: 'Legend of the Seas',
+    type: 'activity',
+    city: 'Fort Lauderdale',
+    coordinates: [26.1002, -80.1150],
+    description: 'Royal Caribbean 6-night cruise departing Port Everglades. Conf: 9633050.',
+    tags: ['pre-booked'],
+  },
+  {
+    id: 'wynwood-walls',
+    name: 'Wynwood Walls',
+    type: 'attraction',
+    city: 'Miami',
+    coordinates: [25.8008, -80.1994],
+    description: 'World-famous outdoor street art museum in the Wynwood Arts District.',
+    tags: [],
+    hours: 'Mon–Thu 11 AM–8 PM · Fri–Sun 11 AM–11 PM',
+  },
+  {
+    id: 'vizcaya-museum',
+    name: 'Vizcaya Museum & Gardens',
+    type: 'attraction',
+    city: 'Miami',
+    coordinates: [25.7444, -80.2089],
+    description: 'Historic Italian Renaissance estate and gardens on Biscayne Bay.',
+    tags: [],
+    hours: 'Wed–Mon 9:30 AM–4:30 PM',
+  },
+  {
+    id: 'south-beach',
+    name: 'South Beach (Ocean Drive)',
+    type: 'attraction',
+    city: 'Miami Beach',
+    coordinates: [25.7826, -80.1301],
+    description: 'Iconic Art Deco strip with beach access, restaurants, and nightlife.',
+    tags: [],
+  },
+]
