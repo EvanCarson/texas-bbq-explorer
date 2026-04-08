@@ -1,4 +1,4 @@
-import { Place, PlaceFilters } from '@/types/place'
+import { Place } from '@/types/place'
 
 export const PLACES: Place[] = [
   // ── Houston BBQ ──
