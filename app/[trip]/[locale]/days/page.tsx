@@ -2,14 +2,14 @@ import { useTranslations } from 'next-intl'
 import { getDays } from '@/lib/data/itinerary'
 import DayCard from '@/components/days/DayCard'
 
-export default function DaysPage() {
+export default function DaysPage({ params }: { params: { trip: string; locale: string } }) {
   const t = useTranslations('days')
-  const days = getDays()
+  const days = getDays(params.trip)
 
   return (
     <div className="page-container" style={{ maxWidth: 900, margin: '0 auto' }}>
       <div style={{ padding: '52px 0 40px' }}>
-        <div className="hero-eyebrow">Mar 29 – Apr 5 · 8 Days</div>
+        <div className="hero-eyebrow">{days.length} Days</div>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(44px, 7vw, 76px)',

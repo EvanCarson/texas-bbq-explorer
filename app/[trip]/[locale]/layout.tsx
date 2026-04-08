@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { Cormorant_Garamond, DM_Sans, DM_Mono } from 'next/font/google'
-import '../globals.css'
+import '../../globals.css'
 import TopNav from '@/components/nav/TopNav'
 
 const cormorant = Cormorant_Garamond({
@@ -31,7 +31,7 @@ export default async function LocaleLayout({
   params,
 }: {
   children: React.ReactNode
-  params: { locale: string }
+  params: { trip: string; locale: string }
 }) {
   const messages = await getMessages()
   const fontClasses = `${cormorant.variable} ${dmSans.variable} ${dmMono.variable}`

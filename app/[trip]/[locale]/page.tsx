@@ -3,16 +3,28 @@ import StatChips from '@/components/overview/StatChips'
 import StayTable from '@/components/overview/StayTable'
 import ConfirmedActivities from '@/components/overview/ConfirmedActivities'
 import DrivingSummary from '@/components/overview/DrivingSummary'
+import { getTransports, getDays, getStays, getActivities, getTotalMiles, getCities } from '@/lib/data/itinerary'
+import { TRIPS, TripId } from '@/lib/trips'
 
-export default function OverviewPage() {
+export default function OverviewPage({ params }: { params: { trip: string; locale: string } }) {
+  const { trip } = params
   const t = useTranslations('overview')
+  const transports = getTransports(trip)
+  const tripConfig = TRIPS[trip as TripId] ?? TRIPS.houston
+
+  const days      = getDays(trip).length
+  const cities    = getCities(trip).length
+  const hotels    = getStays(trip).length
+  const miles     = getTotalMiles(trip)
+  const confirmed = getActivities(trip).filter(a => a.status === 'booked').length
+  const flights   = tripConfig.flights
 
   return (
     <div className="page-container" style={{ maxWidth: 900, margin: '0 auto' }}>
 
       {/* Hero */}
       <div style={{ padding: '52px 0 40px' }}>
-        <div className="hero-eyebrow">{t('subtitle')}</div>
+        <div className="hero-eyebrow">{tripConfig.emoji} {tripConfig.label}</div>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(44px, 7vw, 76px)',
@@ -29,27 +41,35 @@ export default function OverviewPage() {
       </div>
 
       {/* Stats */}
-      <StatChips days={8} cities={5} flights={2} hotels={5} miles={735} activities={4} />
+      <StatChips
+        days={days}
+        cities={cities}
+        flights={flights}
+        hotels={hotels}
+        miles={miles}
+        activities={confirmed}
+      />
 
       {/* Transportation */}
       <div className="section-label">{t('sectionTransport')}</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
-        <TransportCard icon="✈️" label={t('outboundFlight')} route={t('outboundRoute')} detail={t('outboundDetail')} sub={t('outboundSub')} bookedLabel={t('transportBooked')} />
-        <TransportCard icon="🚗" label={t('rentalCar')} route={t('rentalRoute')} detail={t('rentalDetail')} sub={t('rentalSub')} bookedLabel={t('transportBooked')} />
-        <TransportCard icon="✈️" label={t('returnFlight')} route={t('returnRoute')} detail={t('returnDetail')} sub={t('returnSub')} bookedLabel={t('transportBooked')} />
+        {transports.map(tr => (
+          <TransportCard key={tr.label} {...tr} bookedLabel={t('transportBooked')} />
+        ))}
       </div>
 
       {/* Stays */}
       <div className="section-label">{t('sectionStays')}</div>
-      <StayTable />
+      <StayTable trip={trip} />
 
       {/* Activities */}
       <div className="section-label">{t('sectionActivities')}</div>
-      <ConfirmedActivities />
+      <ConfirmedActivities trip={trip} />
 
       {/* Driving */}
       <div className="section-label">{t('sectionDriving')}</div>
       <DrivingSummary />
+
     </div>
   )
 }
