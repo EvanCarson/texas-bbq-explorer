@@ -1,27 +1,30 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import { useState } from 'react'
 import LangSwitcher from './LangSwitcher'
+import TripSwitcher from './TripSwitcher'
 
 export default function TopNav() {
-  const t = useTranslations('nav')
-  const locale = useLocale()
+  const t        = useTranslations('nav')
+  const locale   = useLocale()
+  const params   = useParams()
   const pathname = usePathname()
+  const trip     = (params.trip as string) ?? 'houston'
   const [menuOpen, setMenuOpen] = useState(false)
 
   const links = [
-    { href: `/${locale}`, label: t('overview') },
-    { href: `/${locale}/days`, label: t('days') },
-    { href: `/${locale}/places`, label: t('places') },
-    { href: `/${locale}/blog`, label: t('blog') },
+    { href: `/${trip}/${locale}`,        label: t('overview') },
+    { href: `/${trip}/${locale}/days`,   label: t('days') },
+    { href: `/${trip}/${locale}/places`, label: t('places') },
+    { href: `/${trip}/${locale}/blog`,   label: t('blog') },
   ]
 
   function isActive(href: string) {
-    return href === `/${locale}`
-      ? pathname === `/${locale}` || pathname === `/${locale}/`
+    return href === `/${trip}/${locale}`
+      ? pathname === `/${trip}/${locale}` || pathname === `/${trip}/${locale}/`
       : pathname.startsWith(href)
   }
 
@@ -46,7 +49,7 @@ export default function TopNav() {
         gap: 0,
       }}>
         {/* Brand */}
-        <Link href={`/${locale}`} style={{ marginRight: 36, display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
+        <Link href={`/${trip}/${locale}`} style={{ marginRight: 36, display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
           <span style={{ fontSize: 18 }}>✈️</span>
           <span style={{
             fontFamily: 'var(--font-display)',
@@ -84,7 +87,10 @@ export default function TopNav() {
           ))}
         </div>
 
-        <LangSwitcher />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto' }}>
+          <TripSwitcher />
+          <LangSwitcher />
+        </div>
 
         {/* Hamburger — mobile only */}
         <button
@@ -109,7 +115,8 @@ export default function TopNav() {
             {link.label}
           </Link>
         ))}
-        <div style={{ padding: '12px 24px' }}>
+        <div style={{ padding: '12px 24px', display: 'flex', gap: 10, alignItems: 'center' }}>
+          <TripSwitcher />
           <LangSwitcher />
         </div>
       </div>
