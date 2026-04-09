@@ -6,8 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A Next.js 14+ App Router application for a family Texas Spring Break road trip planner. TypeScript throughout, with a typed data-access layer, next-intl i18n (EN/中), and Leaflet maps.
 
-**Live site:** https://ai-trip-planning-dusky.vercel.app
-**GitHub:** https://github.com/EvanCarson/texas-bbq-explorer
 
 ## Development
 

@@ -104,12 +104,12 @@ Pre-populated with confirmed bookings; placeholders for TBD items:
 | Dec 15–18 | Stay: Andaz Miami Beach Resort & Spa, 4041 Collins Ave, Miami Beach FL |
 | Dec 18–20 | Hotel TBD. Airboat cruise (placeholder). Car rental needed. |
 | Dec 20 | Drive to Fort Lauderdale. Board Royal Caribbean "Legend of the Seas". |
-| Dec 20–26 | 6-night cruise, Fort Lauderdale round-trip (RC conf: 9633050) |
+| Dec 20–26 | 6-night cruise, Fort Lauderdale round-trip |
 | Dec 26 | Disembark Fort Lauderdale. Fly MIA→SFO (AA 2933, 6:01pm–9:39pm). |
 
-**Flights:** AA ref UGQMGX, 4 travelers, $2,527.16
-**Hotel:** Andaz conf 56798458
-**Cruise:** Royal Caribbean conf 9633050
+**Flights:** AA, 4 travelers, $2,527.16
+**Hotel:** Andaz Miami Beach
+**Cruise:** Royal Caribbean
 
 Miami `places.ts` starts with placeholder restaurants and activities; to be populated as the trip is planned.
 

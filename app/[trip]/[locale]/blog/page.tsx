@@ -19,7 +19,7 @@ export default function BlogPage() {
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px' }}>
       {/* Hero */}
       <div style={{ padding: '52px 0 40px' }}>
-        <div className="hero-eyebrow">Case Study · March 2026</div>
+        <div className="hero-eyebrow">Case Study · Updated April 2026</div>
         <h1 style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(44px, 7vw, 76px)',
@@ -99,6 +99,38 @@ export default function BlogPage() {
         Claude cross-references the trip dates and cities against the NBA schedule to surface games you can actually attend — ranked by schedule fit.
       </p>
       <ConvoThread turns={NBA_TURNS} />
+
+      {/* April 2026 Update */}
+      <div className="section-label" style={{ marginTop: 64 }}>April 2026 — Miami Pre-Cruise Planning</div>
+      <div style={blogCard}>
+        <p style={blogP}>
+          Three weeks after the Texas trip wrapped, a second vacation entered the picture: five days in Miami before boarding a Royal Caribbean cruise. Same app, new city, much more data. Rather than starting fresh, we expanded the existing codebase — adding a trip switcher to the nav, refactoring the URL routing from <code style={{ fontFamily: 'monospace', fontSize: 13, background: 'var(--cream)', padding: '1px 5px', borderRadius: 3 }}>[locale]</code> to <code style={{ fontFamily: 'monospace', fontSize: 13, background: 'var(--cream)', padding: '1px 5px', borderRadius: 3 }}>[trip]/[locale]</code>, and standing up a full Miami data layer.
+        </p>
+        <p style={{ ...blogP, marginBottom: 0 }}>
+          The Miami session also pushed into new territory: live web research. Instead of static data we already had, Claude searched Yelp in real time to build out the dining section — and in the process caught that a restaurant on the original plan had permanently closed two months earlier.
+        </p>
+      </div>
+
+      {/* Conversation: Miami Itinerary */}
+      <div className="section-label">Itinerary from a Paste</div>
+      <p style={{ fontSize: 14, color: 'var(--smoke)', marginBottom: 20 }}>
+        A raw planning doc — pacing notes, hotel switches, activity ideas, open items — lands in one message. Claude structures it into typed day cards and activity entries.
+      </p>
+      <ConvoThread turns={MIAMI_PLANNING_TURNS} />
+
+      {/* Conversation: Dining Research */}
+      <div className="section-label">Live Research — Dining + Yelp</div>
+      <p style={{ fontSize: 14, color: 'var(--smoke)', marginBottom: 20 }}>
+        "Find dining options like the Texas ones, with Yelp." Claude searches live, builds the list — and surfaces a closure before it becomes a bad dinner reservation.
+      </p>
+      <ConvoThread turns={MIAMI_DINING_TURNS} />
+
+      {/* Conversation: Privacy */}
+      <div className="section-label">Privacy — Booking Refs Scrubbed</div>
+      <p style={{ fontSize: 14, color: 'var(--smoke)', marginBottom: 20 }}>
+        One message to remove a flight reference number. Claude finds every booking ID across all live data files and strips them cleanly.
+      </p>
+      <ConvoThread turns={PRIVACY_TURNS} />
     </div>
   )
 }
@@ -205,6 +237,9 @@ const CAPABILITIES = [
   { icon: '🚀', title: 'Live URL in minutes', desc: 'Deployed to Vercel autonomously. Each round of changes produced a new production URL in under two minutes.' },
   { icon: '🔒', title: 'Privacy by default', desc: 'When asked to remove the family name, Claude found every instance across the document and replaced them — without touching surrounding content.' },
   { icon: '🌿', title: 'Clean git history', desc: 'All work in an isolated worktree. Incremental commits. Merged to main when done. The repo stays clean throughout.' },
+  { icon: '🏙️', title: 'Multi-trip architecture', desc: 'Adding a second vacation prompted a full routing refactor — [locale] → [trip]/[locale] — with middleware, nav, and all pages updated in a single pass.' },
+  { icon: '🔍', title: 'Live web research', desc: 'Asked to find Miami restaurants with Yelp links. Claude searched live, discovered Juvia had permanently closed Feb 2026, and substituted MILA without being prompted.' },
+  { icon: '🔐', title: 'Booking refs scrubbed', desc: 'One message asking to remove a flight reference number found 6 instances across 2 live data files — flight refs, hotel confirmations, cruise IDs — all stripped.' },
 ]
 
 const TRIP_PLANNING_TURNS: Turn[] = [
@@ -249,6 +284,66 @@ const TRIP_PLANNING_TURNS: Turn[] = [
           ['Park access', 'Included for all registered guests'],
           ['Check-in / out', 'Apr 2 · Apr 4 (2 nights)'],
         ]}
+      />
+    ),
+  },
+]
+
+const MIAMI_PLANNING_TURNS: Turn[] = [
+  {
+    role: 'user',
+    text: '5 Days in Miami — Pre-Cruise Plan. Dates: Dec 15–20. Hotels: Andaz Miami Beach (Dec 15–18) → TBD Mainland (Dec 18–20). Cruise: Legend of the Seas · Departs 4 PM Dec 20. Pacing: front-load action → wind down to embarkation. [full day-by-day pasted]',
+  },
+  {
+    role: 'claude',
+    text: "Structured into 5 day cards, 7 activities, and your 3 stays. Airboat marked as confirmed — everything else flagged as optional until booked.",
+    children: (
+      <PlanCard
+        title="Miami Pre-Cruise · Dec 15–20, 2026"
+        rows={[
+          ['Dec 15 (Tue)', 'Land & Explore · MILA rooftop dinner'],
+          ['Dec 16 (Wed)', 'Frost Museum of Science · Jungle Island · Versailles'],
+          ['Dec 17 (Thu)', 'Crandon Park Beach · Wynwood Walls · Fairchild Holiday Lights'],
+          ['Dec 18 (Fri)', 'Everglades airboat ✅ · Islas Canarias · Zoo Miami'],
+          ['Dec 19 (Sat)', 'Rest day · pack for cruise'],
+          ['Dec 20 (Sun)', 'Hotel pool · Bayside · Board at 2 PM · Sail 4 PM'],
+        ]}
+        note="7 open bookings noted: mainland hotel, Frost timed entry, Jungle Island VIP encounters, Zoo Miami Safari Cycle, MILA dinner reservation, Fairchild holiday lights dates, rental car."
+      />
+    ),
+  },
+]
+
+const MIAMI_DINING_TURNS: Turn[] = [
+  { role: 'user', text: 'find dining options and add the results into places like the texas ones, including yelp page etc.' },
+  {
+    role: 'claude',
+    text: "Searched Yelp for every restaurant in the itinerary. One issue: Juvia permanently closed February 2026. Substituted MILA — same rooftop format, still on the Beach. 9 places added with Yelp URLs.",
+    children: (
+      <OptionCards options={[
+        { recommended: true, title: 'MILA Restaurant · replaces Juvia (closed Feb 2026)', detail: 'MediterrAsian rooftop at 1636 Meridian Ave. Shared izakaya-style dishes, rooftop lounge. Same elevated South Beach experience — Juvia closure caught before anyone tried to book.', meta: 'yelp.com/biz/mila-restaurant-miami-beach-3' },
+        { title: 'Versailles · Little Havana', detail: 'Cuban institution since 1971, 7,000+ Yelp reviews. Hours confirmed: Mon–Thu 8 AM–12 AM.', meta: 'yelp.com/biz/versailles-miami-4' },
+        { title: 'Kyu · Wynwood', detail: 'Wood-fired Asian fusion, James Beard–recognised. Lunch option after Wynwood Walls.', meta: 'yelp.com/biz/kyu-miami-4' },
+        { title: '+ 6 more', detail: 'Coyo Taco, Zak the Baker, Verde at Pérez Art Museum, Havana 1957, Islas Canarias, Yardbird Table & Bar — all with Yelp URLs, coordinates, and hours.', meta: 'All added to places.ts' },
+      ]} />
+    ),
+  },
+]
+
+const PRIVACY_TURNS: Turn[] = [
+  { role: 'user', text: 'remove the sensitive content like Ref number' },
+  {
+    role: 'claude',
+    text: 'Found 6 instances across 2 files. All stripped — flight refs, hotel confirmation numbers, and cruise booking IDs removed from the live data.',
+    children: (
+      <PlanCard
+        title="Booking refs removed from live data"
+        rows={[
+          ['places.ts', 'Hotel conf · Cruise conf (2 descriptions)'],
+          ['itinerary.ts', 'Flight ref ×2 · Cruise conf ×2 (activity + transport)'],
+          ['spec doc', 'All 3 refs from the planning document'],
+        ]}
+        note="Surrounding content untouched. Flight numbers, times, and prices kept — only booking IDs removed."
       />
     ),
   },
