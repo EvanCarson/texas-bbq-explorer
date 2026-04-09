@@ -6,6 +6,8 @@ A family trip planner — planned, built, and iterated with Claude Code.
 
 ---
 
+> **Note:** Feel free to leave a message if you'd like a trip plan generated for you — free to generate, free to host.
+
 ## What This Is
 
 An interactive trip planning site built through conversation with Claude Code. We had rough itineraries — some flights booked, hotels confirmed, activity ideas — but no single place to see it all. So we used Claude as a trip agent: ingest the raw plan, surface gaps, suggest options, and publish a shareable site the whole family can reference.
