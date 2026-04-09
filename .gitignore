@@ -4,3 +4,5 @@
 .next/
 node_modules/
 .superpowers/
+docs/superpowers/
+tsconfig.tsbuildinfo
