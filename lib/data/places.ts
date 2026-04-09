@@ -3,10 +3,12 @@ import type { TripId } from '@/lib/trips'
 
 import { PLACES as houstonPlaces } from './houston/places'
 import { PLACES as miamiPlaces } from './miami/places'
+import { PLACES as seattlePlaces } from './seattle/places'
 
 const TRIP_PLACES: Record<string, Place[]> = {
   houston: houstonPlaces,
   miami: miamiPlaces,
+  seattle: seattlePlaces,
 }
 
 function places(trip: string): Place[] {
