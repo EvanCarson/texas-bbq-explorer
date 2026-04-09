@@ -3,8 +3,9 @@ import type { TripId } from '@/lib/trips'
 
 import * as houston from './houston/itinerary'
 import * as miami from './miami/itinerary'
+import * as seattle from './seattle/itinerary'
 
-const TRIP_DATA = { houston, miami }
+const TRIP_DATA = { houston, miami, seattle }
 
 function data(trip: string) {
   return TRIP_DATA[trip as TripId] ?? TRIP_DATA.houston
