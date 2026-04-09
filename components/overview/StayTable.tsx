@@ -1,8 +1,8 @@
 import Badge from '@/components/ui/Badge'
 import { getStays } from '@/lib/data/itinerary'
 
-export default function StayTable() {
-  const stays = getStays()
+export default function StayTable({ trip }: { trip: string }) {
+  const stays = getStays(trip)
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--bark)', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
       <tbody>

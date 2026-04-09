@@ -4,14 +4,15 @@ import { useLocale } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 
 export default function LangSwitcher() {
-  const locale = useLocale()
+  const locale   = useLocale()
   const pathname = usePathname()
-  const router = useRouter()
+  const router   = useRouter()
 
   function toggle() {
     const next = locale === 'en' ? 'zh' : 'en'
-    // pathname starts with /en or /zh — swap the prefix
-    const newPath = pathname.replace(/^\/(en|zh)/, `/${next}`)
+    // pathname: /houston/en/days → /houston/zh/days
+    // swap the second segment (locale), preserve trip (first segment)
+    const newPath = pathname.replace(/^(\/[^/]+)\/(en|zh)/, `$1/${next}`)
     router.push(newPath)
   }
 

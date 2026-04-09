@@ -2,12 +2,13 @@ import { getPlaces } from '@/lib/data/places'
 import { getCities, getStayForDate, getStays } from '@/lib/data/itinerary'
 import PlacesExplorer from '@/components/places/PlacesExplorer'
 
-export default function PlacesPage() {
-  const places = getPlaces()
-  const cities = getCities()
-  const stays = getStays()
+export default function PlacesPage({ params }: { params: { trip: string; locale: string } }) {
+  const { trip } = params
+  const places = getPlaces(trip)
+  const cities = getCities(trip)
+  const stays = getStays(trip)
   const today = new Date().toISOString().split('T')[0]
-  const currentStay = getStayForDate(today)
+  const currentStay = getStayForDate(trip, today)
 
   return (
     <div className="page-container" style={{ maxWidth: 900, margin: '0 auto' }}>

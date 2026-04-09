@@ -32,3 +32,11 @@ export interface Activity {
   status: 'booked' | 'walk-in' | 'optional'
   detail?: string
 }
+
+export interface Transport {
+  icon: string
+  label: string
+  route: string
+  detail: string
+  sub: string
+}
