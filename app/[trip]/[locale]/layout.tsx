@@ -1,7 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { Cormorant_Garamond, DM_Sans, DM_Mono } from 'next/font/google'
-import Script from 'next/script'
 import '../../globals.css'
 import TopNav from '@/components/nav/TopNav'
 
@@ -41,14 +40,13 @@ export default async function LocaleLayout({
     <html lang={params.locale} className={fontClasses}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-      </head>
-      <body suppressHydrationWarning>
-        <Script
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1021868103456971"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
+      </head>
+      <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <TopNav />
           <main>{children}</main>
