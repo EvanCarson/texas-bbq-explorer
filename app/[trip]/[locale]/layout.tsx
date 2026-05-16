@@ -40,11 +40,6 @@ export default async function LocaleLayout({
     <html lang={params.locale} className={fontClasses}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1021868103456971"
-          crossOrigin="anonymous"
-        />
       </head>
       <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
