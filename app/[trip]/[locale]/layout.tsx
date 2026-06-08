@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { Cormorant_Garamond, DM_Sans, DM_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import '../../globals.css'
 import TopNav from '@/components/nav/TopNav'
 
@@ -46,6 +47,7 @@ export default async function LocaleLayout({
           <TopNav />
           <main>{children}</main>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   )
